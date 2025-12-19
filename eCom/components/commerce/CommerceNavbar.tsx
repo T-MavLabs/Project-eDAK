@@ -179,7 +179,7 @@ export function CommerceNavbar() {
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 vyapar-gentle-transition">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4">
         {/* Logo - Left */}
-        <Link href="/market" className="flex items-center gap-3 vyapar-gentle-transition" aria-label="VYAPAR Home">
+        <Link href="/" className="flex items-center gap-3 vyapar-gentle-transition" aria-label="VYAPAR Home">
           <div className="relative h-10 w-10 rounded-lg overflow-hidden vyapar-soft-shadow vyapar-gentle-transition">
             <Image
               src="/VYAPAR.png"
