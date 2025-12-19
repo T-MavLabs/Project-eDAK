@@ -14,6 +14,8 @@ No shared state, no shared DB, no shared cart/order logic.
 
 ## Folder Structure
 
+
+
 ```text
 EDAK/
 ├── eCom/        → VYAPAR (Client)
