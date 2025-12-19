@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## EDAK (Monorepo)
 
-## Getting Started
+This repository contains **two clearly separated Next.js applications** (monorepo-style layout) to make the hackathon narrative unambiguous:
 
-First, run the development server:
+- **`Backend/`**: **DAKSH – Delivery Analytics & Knowledge System for Shipment** (platform UI)
+- **`eCom/`**: **VYAPAR – Virtual Yet Accessible Postal Aggregated Retail** (client UI powered by India Post / DAKSH)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+They are **logically + visually independent** and only interact via:
+
+- **`tracking_id`** (string)
+- **URL redirect** from VYAPAR (Client) → DAKSH (Platform) tracking page
+
+No shared state, no shared DB, no shared cart/order logic.
+
+## Folder Structure
+
+```text
+EDAK/
+├── eCom/        → VYAPAR (Client)
+└── Backend/     → DAKSH (Platform)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Each folder is a standalone Next.js app with its own `package.json`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Run Locally (Recommended for judges)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1) Start DAKSH (Platform UI)
 
-## Learn More
+```bash
+cd Backend
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+- Runs on `http://localhost:3001`
+- Core routes: `/track`, `/notifications`, `/complaints`, `/admin`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2) Start VYAPAR (Client UI)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open a second terminal:
 
-## Deploy on Vercel
+```bash
+cd eCom
+npm install
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Runs on `http://localhost:3000`
+- Commerce routes: `/market`, `/market/product/[id]`, `/market/cart`, `/market/checkout`, `/market/orders`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## End-to-end flow
+
+- In **VYAPAR (Client)**, place an order in `/market/checkout`.
+- VYAPAR generates a `tracking_id` at order placement.
+- The user is redirected to **DAKSH (Platform)** tracking with:
+  - `/track?tracking_id=<value>`
+
+## Coupling Contract (Intentional)
+
+- **Allowed**
+  - `tracking_id` query param
+  - absolute URL navigation between apps
+- **Disallowed**
+  - shared components
+  - shared state
+  - shared DB
+  - shared cart/order logic
+
+## Notes
+
+- See `Backend/README.md` (DAKSH) and `eCom/README.md` (VYAPAR) for system-specific narratives and integration guidance.
+

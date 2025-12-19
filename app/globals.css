@@ -1,26 +1,608 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.625rem;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Inter, "Noto Sans", "Helvetica Neue", Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  /* India Post + Government-aligned theme tokens */
+  --background: #ffffff;
+  --foreground: #111827;
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+
+  --primary: #c60000; /* India Post Red */
+  --primary-foreground: #ffffff;
+
+  --secondary: #f3f4f6; /* Ash */
+  --secondary-foreground: #111827;
+
+  --muted: #f8fafc; /* Light grey */
+  --muted-foreground: #4b5563;
+
+  --accent: #fff3e6; /* Saffron tint (subtle) */
+  --accent-foreground: #111827;
+
+  --destructive: #b91c1c;
+  --border: rgba(17, 24, 39, 0.12);
+  --input: rgba(17, 24, 39, 0.12);
+  --ring: rgba(198, 0, 0, 0.35);
+
+  --chart-1: #c60000;
+  --chart-2: #ff9933; /* Saffron */
+  --chart-3: #138808; /* India Green */
+  --chart-4: #111827;
+  --chart-5: #9ca3af;
+
+  /* Optional utility tokens */
+  --gov-saffron: #ff9933;
+  --gov-green: #138808;
+  --gov-ash: #6b7280;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+    /* Subtle background texture */
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(17, 24, 39, 0.015) 1px, transparent 0);
+    background-size: 24px 24px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================
+   DAKSH VISUAL ENHANCEMENT SYSTEM
+   ============================================ */
+
+@layer utilities {
+  /* Layered surfaces with depth */
+  .daksh-layered {
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+  }
+
+  .daksh-layered-elevated {
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.6),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .daksh-layered-deep {
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.7),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.03);
+  }
+
+  /* Subtle gradients within color families */
+  .daksh-gradient-primary {
+    background: linear-gradient(135deg, 
+      var(--primary) 0%, 
+      color-mix(in srgb, var(--primary) 95%, #a00000) 100%);
+  }
+
+  .daksh-gradient-muted {
+    background: linear-gradient(135deg, 
+      var(--muted) 0%, 
+      color-mix(in srgb, var(--muted) 98%, var(--background)) 100%);
+  }
+
+  .daksh-gradient-card {
+    background: linear-gradient(135deg, 
+      var(--card) 0%, 
+      color-mix(in srgb, var(--card) 99%, var(--muted)) 100%);
+  }
+
+  /* Typography scale - strong hierarchy */
+  .daksh-text-primary {
+    @apply text-foreground font-semibold;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  .daksh-text-secondary {
+    @apply text-muted-foreground;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .daksh-text-meta {
+    @apply text-muted-foreground;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  .daksh-text-data {
+    @apply text-foreground font-semibold;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .daksh-text-label {
+    @apply text-muted-foreground font-medium;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Micro-interactions - fast and purposeful */
+  .daksh-interactive {
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .daksh-hover-lift {
+    @apply daksh-interactive;
+  }
+
+  .daksh-hover-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      0 6px 12px -2px rgba(0, 0, 0, 0.12),
+      0 3px 6px -1px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+  }
+
+  .daksh-hover-lift:active {
+    transform: translateY(0);
+    transition-duration: 100ms;
+  }
+
+  .daksh-press {
+    @apply daksh-interactive;
+  }
+
+  .daksh-press:active {
+    transform: scale(0.98);
+    transition-duration: 100ms;
+  }
+
+  /* Advisory containers with structured sections */
+  .daksh-advisory {
+    @apply daksh-layered rounded-lg p-4;
+    border-left: 3px solid var(--primary);
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--primary) 3%, var(--card)) 0%,
+      var(--card) 100%);
+  }
+
+  .daksh-advisory-warning {
+    @apply daksh-layered rounded-lg p-4;
+    border-left: 3px solid var(--gov-saffron);
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--gov-saffron) 4%, var(--card)) 0%,
+      var(--card) 100%);
+  }
+
+  .daksh-advisory-success {
+    @apply daksh-layered rounded-lg p-4;
+    border-left: 3px solid var(--gov-green);
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--gov-green) 3%, var(--card)) 0%,
+      var(--card) 100%);
+  }
+
+  /* Intelligence panel styling */
+  .daksh-intelligence-panel {
+    @apply daksh-layered-elevated rounded-lg p-5;
+    background: linear-gradient(135deg, 
+      var(--card) 0%, 
+      color-mix(in srgb, var(--muted) 20%, var(--card)) 100%);
+  }
+
+  /* Sticky contextual headers */
+  .daksh-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--background) 98%, transparent);
+    backdrop-filter: blur(8px);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+  }
+
+  .daksh-rule {
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      var(--border) 20%, 
+      var(--border) 80%, 
+      transparent 100%);
+    margin-bottom: 0.5rem;
+  }
+
+  /* Kicker text */
+  .daksh-kicker {
+    @apply text-muted-foreground font-medium;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Code-style reference fields */
+  .daksh-code {
+    @apply font-mono text-foreground;
+    font-size: 0.875em;
+    background: color-mix(in srgb, var(--muted) 60%, transparent);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--border);
+  }
+
+  /* Status indicators with layered styling */
+  .daksh-status-indicator {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium text-xs;
+    border: 1px solid currentColor;
+    box-shadow: 
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+  }
+
+  /* Fade and slide animations */
+  .daksh-fade-in {
+    animation: dakshFadeIn 300ms ease-out;
+  }
+
+  .daksh-slide-up {
+    animation: dakshSlideUp 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes dakshFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes dakshSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Focus rings */
+  .daksh-focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+  }
+
+  /* Glass morphism effect */
+  .daksh-glass {
+    background: color-mix(in srgb, var(--card) 95%, transparent);
+    backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  }
+
+  /* Enhanced chart containers */
+  .daksh-chart-container {
+    position: relative;
+    background: linear-gradient(135deg, 
+      var(--card) 0%, 
+      color-mix(in srgb, var(--muted) 15%, var(--card)) 100%);
+  }
+
+  /* Refined data visualization */
+  .daksh-data-emphasis {
+    @apply daksh-text-data;
+    background: linear-gradient(135deg, 
+      color-mix(in srgb, var(--primary) 8%, transparent) 0%,
+      transparent 100%);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--primary) 15%, transparent);
+  }
+
+  /* Enhanced section dividers */
+  .daksh-section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      var(--border) 20%, 
+      var(--primary) 50%,
+      var(--border) 80%, 
+      transparent 100%);
+    margin: 2rem 0;
+    opacity: 0.6;
+  }
+
+  /* Status pulse indicator */
+  @keyframes dakshPulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+  }
+
+  .daksh-pulse {
+    animation: dakshPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Enhanced table row states */
+  .daksh-table-row-enhanced {
+    position: relative;
+  }
+
+  .daksh-table-row-enhanced::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--primary);
+    opacity: 0;
+    transition: opacity 150ms;
+  }
+
+  .daksh-table-row-enhanced:hover::before,
+  .daksh-table-row-enhanced:focus-within::before {
+    opacity: 0.6;
+  }
+
+  /* Refined badge with depth */
+  .daksh-badge-enhanced {
+    box-shadow: 
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+  }
+
+  /* ============================================
+     ACETERNITY UI ANIMATIONS
+     ============================================ */
+
+  @keyframes aceternityFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes aceternitySlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes aceternityScaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes aceternityShimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  /* Aceternity card effects */
+  .aceternity-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .aceternity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  .aceternity-card:hover::before {
+    left: 100%;
+  }
+
+  /* Gradient text effect */
+  .aceternity-gradient-text {
+    background: linear-gradient(135deg, var(--primary) 0%, #ff9933 50%, var(--primary) 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: aceternityShimmer 3s ease-in-out infinite;
+  }
+
+  /* Animated border gradient */
+  .aceternity-border-gradient {
+    position: relative;
+    background: var(--card);
+    border-radius: 0.75rem;
+  }
+
+  .aceternity-border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 0.75rem;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--primary), #ff9933, var(--primary));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .aceternity-border-gradient:hover::before {
+    opacity: 1;
+  }
+
+  /* Floating animation */
+  @keyframes aceternityFloat {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .aceternity-float {
+    animation: aceternityFloat 3s ease-in-out infinite;
+  }
+
+  /* Glow effect */
+  .aceternity-glow {
+    box-shadow: 
+      0 0 20px rgba(198, 0, 0, 0.1),
+      0 0 40px rgba(198, 0, 0, 0.05);
+    transition: box-shadow 0.3s;
+  }
+
+  .aceternity-glow:hover {
+    box-shadow: 
+      0 0 30px rgba(198, 0, 0, 0.2),
+      0 0 60px rgba(198, 0, 0, 0.1);
+  }
 }

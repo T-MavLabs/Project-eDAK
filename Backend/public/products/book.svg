@@ -1,0 +1,11 @@
+<svg width="640" height="420" viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Book illustration">
+  <rect width="640" height="420" fill="#F8FAFC"/>
+  <rect x="38" y="38" width="564" height="344" rx="24" fill="#FFFFFF" stroke="rgba(17,24,39,0.12)"/>
+  <rect x="190" y="120" width="260" height="200" rx="16" fill="#111827" opacity="0.08"/>
+  <rect x="210" y="140" width="220" height="160" rx="12" fill="#FFFFFF" stroke="rgba(17,24,39,0.12)"/>
+  <path d="M240 180h160" stroke="#C60000" stroke-width="10" stroke-linecap="round"/>
+  <path d="M240 212h160" stroke="#9CA3AF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M240 242h120" stroke="#9CA3AF" stroke-width="8" stroke-linecap="round"/>
+  <text x="70" y="95" font-family="ui-sans-serif, system-ui" font-size="22" fill="#111827" font-weight="600">India Post Heritage</text>
+  <text x="70" y="128" font-family="ui-sans-serif, system-ui" font-size="14" fill="#4B5563">Book " Delivered by India Post</text>
+</svg>

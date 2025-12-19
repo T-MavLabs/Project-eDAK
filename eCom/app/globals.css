@@ -1,0 +1,288 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  /* UX4G: citizen-service UI (calm, trustworthy, non-decorative) */
+  --radius: 0.5rem;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Inter, "Noto Sans", "Helvetica Neue", Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  /* Neutral base with mild warmth (still compliant) */
+  --background: #ffffff;
+  --foreground: #111827;
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+
+  /* India Post red for trust + key actions (not decorative) */
+  --primary: #c60000;
+  --primary-foreground: #fff7f2;
+
+  --secondary: #f3f4f6;
+  --secondary-foreground: #111827;
+
+  --muted: #f8fafc;
+  --muted-foreground: #4b5563;
+
+  --accent: #f3f4f6;
+  --accent-foreground: #111827;
+
+  --destructive: #b42318;
+  --border: rgba(17, 24, 39, 0.14);
+  --input: rgba(17, 24, 39, 0.14);
+  --ring: rgba(198, 0, 0, 0.35);
+
+  --chart-1: #c60000;
+  --chart-2: #ff9933;
+  --chart-3: #138808;
+  --chart-4: #111827;
+  --chart-5: #9ca3af;
+
+  /* VYAPAR utility tokens */
+  --vyapar-marigold: #ff9933;
+  --vyapar-leaf: #138808;
+  --vyapar-indigo: #1f3a8a;
+  --vyapar-rose: #c60000;
+  --vyapar-paper: #ffffff;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Smooth transitions for interactive elements */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    transition: all 200ms ease-out;
+  }
+  
+  /* Gentle hover states */
+  button:hover,
+  a:hover {
+    transition: all 200ms ease-out;
+  }
+}
+
+@layer utilities {
+  .vyapar-page {
+    background: var(--vyapar-paper);
+  }
+
+  .vyapar-kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: color-mix(in oklab, var(--foreground) 58%, transparent);
+  }
+
+  .vyapar-chip {
+    border-radius: 999px;
+    border: 1px solid rgba(17, 24, 39, 0.14);
+    background: #ffffff;
+  }
+
+  .vyapar-receipt {
+    position: relative;
+    background: #fff;
+    border: 1px dashed rgba(17, 24, 39, 0.22);
+    border-radius: 0.5rem;
+  }
+
+  /* Warm, friendly modern enhancements */
+  .vyapar-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid rgba(17, 24, 39, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: all 200ms ease-out;
+  }
+
+  .vyapar-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+  }
+
+  .vyapar-soft-shadow {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  .vyapar-gentle-transition {
+    transition: all 200ms ease-out;
+  }
+
+  .vyapar-fade-in {
+    animation: vyapar-fade-in 300ms ease-out;
+  }
+
+  @keyframes vyapar-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .vyapar-slide-up {
+    animation: vyapar-slide-up 300ms ease-out;
+  }
+
+  @keyframes vyapar-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Skeleton loader */
+  .vyapar-skeleton {
+    background: linear-gradient(
+      90deg,
+      #f3f4f6 0%,
+      #e5e7eb 50%,
+      #f3f4f6 100%
+    );
+    background-size: 200% 100%;
+    animation: vyapar-skeleton 1.5s ease-in-out infinite;
+  }
+
+  @keyframes vyapar-skeleton {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Success animation (very subtle) */
+  .vyapar-success {
+    animation: vyapar-success 400ms ease-out;
+  }
+
+  @keyframes vyapar-success {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Trust badge styling */
+  .vyapar-trust-badge {
+    background: linear-gradient(135deg, rgba(198, 0, 0, 0.08) 0%, rgba(198, 0, 0, 0.04) 100%);
+    border: 1px solid rgba(198, 0, 0, 0.15);
+    border-radius: 0.75rem;
+  }
+}

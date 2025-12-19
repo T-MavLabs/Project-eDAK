@@ -1,0 +1,11 @@
+<svg width="640" height="420" viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gamosa textile illustration">
+  <rect width="640" height="420" fill="#FFF7ED"/>
+  <rect x="38" y="38" width="564" height="344" rx="24" fill="#FFFFFF" stroke="rgba(17,24,39,0.12)"/>
+  <rect x="120" y="150" width="400" height="150" rx="18" fill="#FEF2F2" stroke="rgba(198,0,0,0.25)"/>
+  <path d="M150 175h340" stroke="#C60000" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
+  <path d="M150 205h340" stroke="#C60000" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+  <path d="M150 235h340" stroke="#C60000" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
+  <path d="M150 265h340" stroke="#C60000" stroke-width="10" stroke-linecap="round" opacity="0.25"/>
+  <text x="70" y="95" font-family="ui-sans-serif, system-ui" font-size="22" fill="#111827" font-weight="600">Assam Handwoven Gamosa</text>
+  <text x="70" y="128" font-family="ui-sans-serif, system-ui" font-size="14" fill="#4B5563">Handicraft " COD Available</text>
+</svg>

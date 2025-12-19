@@ -1,0 +1,318 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  /* UX4G: neutral, high-contrast, non-decorative */
+  --radius: 0.375rem;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Inter, "Noto Sans", "Helvetica Neue", Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  /* Neutral base */
+  --background: #ffffff;
+  --foreground: #111827;
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+
+  /* India Post red ONLY for critical signals (use sparingly in UI) */
+  --primary: #c60000;
+  --primary-foreground: #fff7f2;
+
+  --secondary: #f3f4f6;
+  --secondary-foreground: #111827;
+
+  --muted: #f8fafc;
+  --muted-foreground: #4b5563;
+
+  --accent: #f3f4f6;
+  --accent-foreground: #111827;
+
+  --destructive: #b42318;
+  --border: rgba(17, 24, 39, 0.14);
+  --input: rgba(17, 24, 39, 0.14);
+  --ring: rgba(198, 0, 0, 0.35);
+
+  --chart-1: #c60000;
+  --chart-2: #ff9933;
+  --chart-3: #138808;
+  --chart-4: #111827;
+  --chart-5: #9ca3af;
+
+  /* Keep these for existing UI references */
+  --daksh-notice-red: #c60000;
+  --daksh-notice-amber: #ff9933;
+  --daksh-notice-green: #138808;
+  --daksh-paper: #ffffff;
+  --daksh-ink: #111827;
+  --daksh-rule: rgba(17, 24, 39, 0.14);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Smooth transitions for interactive elements */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    transition: all 175ms ease-out;
+  }
+  
+  /* Refined hover states */
+  button:hover,
+  a:hover {
+    transition: all 150ms ease-out;
+  }
+}
+
+@layer utilities {
+  /* UX4G: no decorative backgrounds; use spacing + dividers */
+  .daksh-page {
+    background: var(--daksh-paper);
+  }
+
+  .daksh-rule {
+    height: 1px;
+    width: 100%;
+    background: var(--daksh-rule);
+  }
+
+  .daksh-kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--foreground) 58%, transparent);
+  }
+
+  .daksh-code {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+
+  .daksh-stamp {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border: 1px solid var(--daksh-rule);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background: #fff;
+  }
+
+  /* Modern GovTech: Glass-like panels with very low opacity */
+  .daksh-glass {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(17, 24, 39, 0.08);
+  }
+
+  .dark .daksh-glass {
+    background: rgba(17, 24, 39, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Soft elevation for active elements only */
+  .daksh-elevated {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+  }
+
+  .daksh-elevated:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  .daksh-elevated:active {
+    transform: translateY(0.5px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Smooth transitions (150-200ms, ease-out) */
+  .daksh-transition {
+    transition: all 175ms ease-out;
+  }
+
+  /* Refined micro-animations */
+  .daksh-fade-in {
+    animation: daksh-fade-in 200ms ease-out;
+  }
+
+  @keyframes daksh-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .daksh-slide-up {
+    animation: daksh-slide-up 200ms ease-out;
+  }
+
+  @keyframes daksh-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Subtle focus rings (accessibility-friendly) */
+  .daksh-focus-ring {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    transition: outline-color 150ms ease-out;
+  }
+
+  .daksh-focus-ring:focus-visible {
+    outline-color: var(--ring);
+  }
+
+  /* Skeleton loader */
+  .daksh-skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--muted) 0%,
+      color-mix(in oklab, var(--muted) 80%, transparent) 50%,
+      var(--muted) 100%
+    );
+    background-size: 200% 100%;
+    animation: daksh-skeleton 1.5s ease-in-out infinite;
+  }
+
+  @keyframes daksh-skeleton {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Expand/collapse smooth motion */
+  .daksh-expand {
+    transition: max-height 200ms ease-out, opacity 200ms ease-out;
+    overflow: hidden;
+  }
+
+  /* Sticky context headers */
+  .daksh-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--daksh-rule);
+  }
+
+  .dark .daksh-sticky-header {
+    background: rgba(17, 24, 39, 0.95);
+  }
+}
