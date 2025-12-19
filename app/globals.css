@@ -48,36 +48,37 @@
 
 :root {
   --radius: 0.625rem;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Inter, "Noto Sans", "Helvetica Neue", Arial,
-    "Apple Color Emoji", "Segoe UI Emoji";
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+  /* UX4G: Noto Sans as base font with fallbacks */
+  --font-sans: var(--font-noto-sans, var(--ux4g-font-family-base, "Noto Sans")), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  --font-mono: var(--ux4g-font-family-mono, ui-monospace), SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
 
-  /* India Post + Government-aligned theme tokens */
-  --background: #ffffff;
-  --foreground: #111827;
-  --card: #ffffff;
-  --card-foreground: #111827;
-  --popover: #ffffff;
-  --popover-foreground: #111827;
+  /* India Post + UX4G theme tokens */
+  --background: var(--ux4g-background, #ffffff);
+  --foreground: var(--ux4g-foreground, #111827);
+  --card: var(--ux4g-background, #ffffff);
+  --card-foreground: var(--ux4g-foreground, #111827);
+  --popover: var(--ux4g-background, #ffffff);
+  --popover-foreground: var(--ux4g-foreground, #111827);
 
-  --primary: #c60000; /* India Post Red */
-  --primary-foreground: #ffffff;
+  --primary: var(--ux4g-primary, #E74C3C); /* UX4G Primary Red */
+  --primary-foreground: var(--ux4g-primary-foreground, #ffffff);
 
-  --secondary: #f3f4f6; /* Ash */
-  --secondary-foreground: #111827;
+  --secondary: var(--ux4g-secondary, #2C3E50); /* UX4G Secondary */
+  --secondary-foreground: var(--ux4g-secondary-foreground, #ffffff);
 
-  --muted: #f8fafc; /* Light grey */
-  --muted-foreground: #4b5563;
+  --muted: var(--ux4g-neutral-100, #f3f4f6);
+  --muted-foreground: var(--ux4g-neutral-600, #4b5563);
 
-  --accent: #fff3e6; /* Saffron tint (subtle) */
-  --accent-foreground: #111827;
+  --accent: var(--ux4g-neutral-100, #f3f4f6);
+  --accent-foreground: var(--ux4g-foreground, #111827);
 
-  --destructive: #b91c1c;
-  --border: rgba(17, 24, 39, 0.12);
-  --input: rgba(17, 24, 39, 0.12);
-  --ring: rgba(198, 0, 0, 0.35);
+  --destructive: var(--ux4g-danger, #DC2626);
+  --border: var(--ux4g-border, rgba(17, 24, 39, 0.12));
+  --input: var(--ux4g-input-border, rgba(17, 24, 39, 0.14));
+  --ring: rgba(231, 76, 60, 0.35);
 
   --chart-1: #c60000;
   --chart-2: #ff9933; /* Saffron */
@@ -141,11 +142,20 @@
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
-    /* Subtle background texture */
-    background-image: 
-      radial-gradient(circle at 1px 1px, rgba(17, 24, 39, 0.015) 1px, transparent 0);
-    background-size: 24px 24px;
   }
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 /* ============================================

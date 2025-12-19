@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "../src/styles/ux4g-tokens.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -49,9 +50,10 @@
 :root {
   /* UX4G: citizen-service UI (calm, trustworthy, non-decorative) */
   --radius: 0.5rem;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Inter, "Noto Sans", "Helvetica Neue", Arial,
-    "Apple Color Emoji", "Segoe UI Emoji";
+  /* UX4G: Noto Sans as primary font with system fallbacks */
+  --font-sans: var(--font-noto-sans, "Noto Sans"), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
 
@@ -63,9 +65,9 @@
   --popover: #ffffff;
   --popover-foreground: #111827;
 
-  /* India Post red for trust + key actions (not decorative) */
-  --primary: #c60000;
-  --primary-foreground: #fff7f2;
+  /* UX4G: India Post red (E74C3C) for trust + key actions */
+  --primary: #E74C3C;
+  --primary-foreground: #ffffff;
 
   --secondary: #f3f4f6;
   --secondary-foreground: #111827;
@@ -281,8 +283,110 @@
 
   /* Trust badge styling */
   .vyapar-trust-badge {
-    background: linear-gradient(135deg, rgba(198, 0, 0, 0.08) 0%, rgba(198, 0, 0, 0.04) 100%);
-    border: 1px solid rgba(198, 0, 0, 0.15);
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(231, 76, 60, 0.04) 100%);
+    border: 1px solid rgba(231, 76, 60, 0.15);
     border-radius: 0.75rem;
+  }
+
+  /* ============================================
+     UX4G TYPESCALE CLASSES
+     ============================================ */
+  
+  .ux4g-display {
+    font-size: var(--ux4g-typescale-display-font-size);
+    line-height: var(--ux4g-typescale-display-line-height);
+    font-weight: var(--ux4g-typescale-display-font-weight);
+    letter-spacing: var(--ux4g-typescale-display-letter-spacing);
+  }
+
+  .ux4g-headline {
+    font-size: var(--ux4g-typescale-headline-font-size);
+    line-height: var(--ux4g-typescale-headline-line-height);
+    font-weight: var(--ux4g-typescale-headline-font-weight);
+    letter-spacing: var(--ux4g-typescale-headline-letter-spacing);
+  }
+
+  .ux4g-title {
+    font-size: var(--ux4g-typescale-title-font-size);
+    line-height: var(--ux4g-typescale-title-line-height);
+    font-weight: var(--ux4g-typescale-title-font-weight);
+    letter-spacing: var(--ux4g-typescale-title-letter-spacing);
+  }
+
+  .ux4g-label {
+    font-size: var(--ux4g-typescale-label-font-size);
+    line-height: var(--ux4g-typescale-label-line-height);
+    font-weight: var(--ux4g-typescale-label-font-weight);
+    letter-spacing: var(--ux4g-typescale-label-letter-spacing);
+  }
+
+  .ux4g-body {
+    font-size: var(--ux4g-typescale-body-font-size);
+    line-height: var(--ux4g-typescale-body-line-height);
+    font-weight: var(--ux4g-typescale-body-font-weight);
+    letter-spacing: var(--ux4g-typescale-body-letter-spacing);
+  }
+
+  .ux4g-body-small {
+    font-size: var(--ux4g-typescale-body-small-font-size);
+    line-height: var(--ux4g-typescale-body-small-line-height);
+    font-weight: var(--ux4g-typescale-body-small-font-weight);
+    letter-spacing: var(--ux4g-typescale-body-small-letter-spacing);
+  }
+
+  /* ============================================
+     UX4G ACCESSIBILITY FEATURES
+     ============================================ */
+
+  /* Text size adjustments */
+  .ux4g-text-large {
+    --ux4g-typescale-display-font-size: 4rem;
+    --ux4g-typescale-headline-font-size: 2.875rem;
+    --ux4g-typescale-title-font-size: 1.75rem;
+    --ux4g-typescale-body-font-size: 1.125rem;
+    --ux4g-typescale-body-small-font-size: 1rem;
+  }
+
+  .ux4g-text-xlarge {
+    --ux4g-typescale-display-font-size: 4.5rem;
+    --ux4g-typescale-headline-font-size: 3.25rem;
+    --ux4g-typescale-title-font-size: 2rem;
+    --ux4g-typescale-body-font-size: 1.25rem;
+    --ux4g-typescale-body-small-font-size: 1.125rem;
+  }
+
+  /* High contrast mode */
+  .ux4g-high-contrast {
+    --background: #ffffff;
+    --foreground: #000000;
+    --primary: #E74C3C;
+    --primary-foreground: #ffffff;
+    --border: #000000;
+    --muted-foreground: #000000;
+    --secondary-foreground: #000000;
+  }
+
+  /* Keyboard focus indicators */
+  .ux4g-keyboard-hints *:focus-visible {
+    outline: var(--ux4g-focus-ring-width) solid var(--ux4g-focus-ring-color);
+    outline-offset: var(--ux4g-focus-ring-offset);
+    border-radius: var(--ux4g-radius-sm);
+  }
+
+  /* Ensure minimum touch targets */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  [role="button"] {
+    min-height: var(--ux4g-touch-target-min);
+    min-width: var(--ux4g-touch-target-min);
+  }
+
+  /* Sentence case for labels (UX4G rule) */
+  .ux4g-label,
+  label,
+  button {
+    text-transform: none;
   }
 }

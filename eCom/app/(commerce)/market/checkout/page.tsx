@@ -187,9 +187,9 @@ export default function CheckoutPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
       <div className="flex flex-col gap-3 vyapar-fade-in">
-        <div className="vyapar-kicker">Service application form</div>
-        <h1 className="text-2xl font-semibold tracking-tight">Checkout</h1>
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        <div className="vyapar-kicker ux4g-label">Service application form</div>
+        <h1 className="ux4g-headline">Checkout</h1>
+        <p className="ux4g-body text-muted-foreground">
           Provide delivery details. After submission, a service receipt and India Post tracking ID will be generated.
         </p>
       </div>
@@ -316,61 +316,62 @@ export default function CheckoutPage() {
               }}
             >
               <div className="grid gap-2">
-                <label className="text-sm font-medium" htmlFor="email">
+                <label className="ux4g-label font-medium" htmlFor="email">
                   Email
                 </label>
-                <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="vyapar-gentle-transition" />
-                <div className="text-xs text-muted-foreground leading-relaxed">
+                <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="vyapar-gentle-transition min-h-[44px] ux4g-body" aria-required="true" />
+                <div className="ux4g-body-small text-muted-foreground">
                   Used for receipt lookup and tracking access.
                 </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
-                  <label className="text-sm font-medium" htmlFor="name">Full name</label>
-                  <Input id="name" value={fullName} onChange={(e) => setFullName(e.target.value)} className="vyapar-gentle-transition" />
+                  <label className="ux4g-label font-medium" htmlFor="name">Full name</label>
+                  <Input id="name" value={fullName} onChange={(e) => setFullName(e.target.value)} className="vyapar-gentle-transition min-h-[44px] ux4g-body" aria-required="true" />
                 </div>
                 <div className="grid gap-2">
-                  <label className="text-sm font-medium" htmlFor="phone">Mobile number</label>
-                  <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="vyapar-gentle-transition" />
+                  <label className="ux4g-label font-medium" htmlFor="phone">Mobile number</label>
+                  <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="vyapar-gentle-transition min-h-[44px] ux4g-body" aria-required="true" />
                 </div>
               </div>
 
               <div className="grid gap-2">
-                <label className="text-sm font-medium" htmlFor="a1">Address line 1</label>
-                <Textarea id="a1" rows={2} value={addressLine1} onChange={(e) => setAddressLine1(e.target.value)} className="vyapar-gentle-transition" />
+                <label className="ux4g-label font-medium" htmlFor="a1">Address line 1</label>
+                <Textarea id="a1" rows={2} value={addressLine1} onChange={(e) => setAddressLine1(e.target.value)} className="vyapar-gentle-transition ux4g-body" aria-required="true" />
               </div>
 
               <div className="grid gap-2">
-                <label className="text-sm font-medium" htmlFor="a2">Address line 2 (optional)</label>
-                <Input id="a2" value={addressLine2} onChange={(e) => setAddressLine2(e.target.value)} className="vyapar-gentle-transition" />
+                <label className="ux4g-label font-medium" htmlFor="a2">Address line 2 (optional)</label>
+                <Input id="a2" value={addressLine2} onChange={(e) => setAddressLine2(e.target.value)} className="vyapar-gentle-transition min-h-[44px] ux4g-body" />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="grid gap-2">
-                  <label className="text-sm font-medium" htmlFor="city">City</label>
-                  <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} className="vyapar-gentle-transition" />
+                  <label className="ux4g-label font-medium" htmlFor="city">City</label>
+                  <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} className="vyapar-gentle-transition min-h-[44px] ux4g-body" aria-required="true" />
                 </div>
                 <div className="grid gap-2">
-                  <label className="text-sm font-medium" htmlFor="state">State</label>
-                  <Input id="state" value={state} onChange={(e) => setState(e.target.value)} className="vyapar-gentle-transition" />
+                  <label className="ux4g-label font-medium" htmlFor="state">State</label>
+                  <Input id="state" value={state} onChange={(e) => setState(e.target.value)} className="vyapar-gentle-transition min-h-[44px] ux4g-body" aria-required="true" />
                 </div>
                 <div className="grid gap-2">
-                  <label className="text-sm font-medium" htmlFor="pin">PIN code</label>
-                  <Input id="pin" value={pincode} onChange={(e) => setPincode(e.target.value)} className="vyapar-gentle-transition" />
+                  <label className="ux4g-label font-medium" htmlFor="pin">PIN code</label>
+                  <Input id="pin" value={pincode} onChange={(e) => setPincode(e.target.value)} className="vyapar-gentle-transition min-h-[44px] ux4g-body" aria-required="true" />
                 </div>
               </div>
 
               <div className="grid gap-2">
-                <label className="text-sm font-medium" htmlFor="digipin">India Address Code (DIGIPIN)</label>
+                <label className="ux4g-label font-medium" htmlFor="digipin">India address code (DIGIPIN)</label>
                 <div className="flex gap-2">
                   <Input 
                     id="digipin" 
                     value={digipin} 
                     onChange={(e) => setDigipin(e.target.value)} 
                     placeholder="e.g., DL-110001-3F2A" 
-                    className="vyapar-gentle-transition flex-1"
+                    className="vyapar-gentle-transition flex-1 min-h-[44px] ux4g-body"
                     disabled={fetchingDigipin}
+                    aria-required="true"
                   />
                   <Button
                     type="button"
@@ -379,11 +380,13 @@ export default function CheckoutPage() {
                     onClick={handleFetchByAddress}
                     disabled={fetchingDigipin || !addressLine1 || !city || !state || !pincode}
                     title="Fetch DIGIPIN from address"
+                    className="min-h-[44px] min-w-[44px]"
+                    aria-label="Fetch DIGIPIN from address"
                   >
                     {fetchingDigipin ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                     ) : (
-                      <MapPin className="h-4 w-4" />
+                      <MapPin className="h-4 w-4" aria-hidden="true" />
                     )}
                   </Button>
                   <Button
@@ -393,19 +396,21 @@ export default function CheckoutPage() {
                     onClick={handleFetchByLocation}
                     disabled={fetchingDigipin}
                     title="Fetch DIGIPIN from device location"
+                    className="min-h-[44px] min-w-[44px]"
+                    aria-label="Fetch DIGIPIN from device location"
                   >
                     {fetchingDigipin ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                     ) : (
-                      <Navigation className="h-4 w-4" />
+                      <Navigation className="h-4 w-4" aria-hidden="true" />
                     )}
                   </Button>
                 </div>
                 {digipinError && (
-                  <div className="text-xs text-destructive">{digipinError}</div>
+                  <div className="ux4g-body-small text-destructive" role="alert">{digipinError}</div>
                 )}
-                <div className="text-xs text-muted-foreground leading-relaxed">
-                  Official Address Code used for accurate routing and hub assignment.
+                <div className="ux4g-body-small text-muted-foreground">
+                  Official address code used for accurate routing and hub assignment.
                   {fetchingDigipin && " Fetching DIGIPIN..."}
                   {!fetchingDigipin && digipin && " ✓ DIGIPIN fetched automatically"}
                 </div>
@@ -425,14 +430,14 @@ export default function CheckoutPage() {
 
               <Button
                 type="submit"
-                className="bg-primary hover:bg-primary/90 vyapar-gentle-transition"
+                className="bg-primary hover:bg-primary/90 vyapar-gentle-transition min-h-[44px] ux4g-label"
                 disabled={submitting}
               >
-                {submitting ? "Placing order..." : "Place Order & Generate Tracking"}
+                {submitting ? "Placing order..." : "Place order & generate tracking"}
               </Button>
 
               {error ? (
-                <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive">
+                <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-3 ux4g-body-small text-destructive" role="alert">
                   {error}
                 </div>
               ) : null}
@@ -446,41 +451,41 @@ export default function CheckoutPage() {
 
         <Card className="h-fit vyapar-card vyapar-soft-shadow">
           <CardHeader>
-            <CardTitle className="text-base">Order summary</CardTitle>
+            <CardTitle className="ux4g-title">Order summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
               {lines.map((l, idx) => (
-                <div key={l.p.id} className="flex items-start justify-between gap-3 text-sm vyapar-fade-in" style={{ animationDelay: `${idx * 30}ms` }}>
+                <div key={l.p.id} className="flex items-start justify-between gap-3 ux4g-body-small vyapar-fade-in" style={{ animationDelay: `${idx * 30}ms` }}>
                   <div>
-                    <div className="font-medium">{l.p.name}</div>
-                    <div className="text-xs text-muted-foreground">Qty: {l.q}</div>
+                    <div className="ux4g-label font-medium">{l.p.name}</div>
+                    <div className="ux4g-body-small text-muted-foreground">Qty: {l.q}</div>
                   </div>
-                  <div className="font-medium">₹{l.total.toLocaleString("en-IN")}</div>
+                  <div className="ux4g-label font-medium">₹{l.total.toLocaleString("en-IN")}</div>
                 </div>
               ))}
             </div>
             <div className="h-px w-full bg-border" />
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between ux4g-body-small">
               <span className="text-muted-foreground">Subtotal</span>
               <span className="font-medium">₹{subtotal.toLocaleString("en-IN")}</span>
             </div>
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between ux4g-body-small">
               <span className="text-muted-foreground">Shipping (India Post)</span>
               <span className="font-medium">₹{shipping.toLocaleString("en-IN")}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold">Total</span>
-              <span className="text-xl font-semibold">₹{total.toLocaleString("en-IN")}</span>
+              <span className="ux4g-label font-semibold">Total</span>
+              <span className="ux4g-headline text-primary">₹{total.toLocaleString("en-IN")}</span>
             </div>
 
-            <Button asChild variant="secondary" className="w-full vyapar-gentle-transition">
+            <Button asChild variant="secondary" className="w-full vyapar-gentle-transition min-h-[44px] ux4g-label">
               <Link href="/market/cart">Edit cart</Link>
             </Button>
 
-            <div className="rounded-xl border vyapar-trust-badge bg-background/80 p-3 text-xs text-muted-foreground vyapar-soft-shadow">
+            <div className="rounded-xl border vyapar-trust-badge bg-background/80 p-3 ux4g-body-small text-muted-foreground vyapar-soft-shadow">
               <div className="flex items-center gap-2">
-                <PackageSearch className="h-4 w-4 text-primary" />
+                <PackageSearch className="h-4 w-4 text-primary" aria-hidden="true" />
                 Tracking opens immediately after order placement.
               </div>
             </div>

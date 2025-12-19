@@ -7,6 +7,7 @@ import { signIn } from "@/supabase/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CommerceNavbar } from "@/components/commerce/CommerceNavbar";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -82,16 +83,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md px-4 py-10">
-      <Card>
+    <>
+      <CommerceNavbar />
+      <div className="min-h-screen bg-muted/40">
+        <div className="mx-auto w-full max-w-md px-4 py-10">
+          <Card>
         <CardHeader>
-          <CardTitle>Sign In</CardTitle>
-          <CardDescription>Sign in to your VYAPAR account</CardDescription>
+          <CardTitle className="ux4g-title">Sign in</CardTitle>
+          <CardDescription className="ux4g-body-small">Sign in to your VYAPAR account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="ux4g-label font-medium">
                 Email
               </label>
               <Input
@@ -101,10 +105,12 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                className="min-h-[44px] ux4g-body"
+                aria-required="true"
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label htmlFor="password" className="ux4g-label font-medium">
                 Password
               </label>
               <Input
@@ -114,18 +120,20 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
+                className="min-h-[44px] ux4g-body"
+                aria-required="true"
               />
             </div>
             {error && (
-              <div className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+              <div className="rounded-md border border-destructive/50 bg-destructive/10 p-3 ux4g-body-small text-destructive" role="alert">
                 {error}
               </div>
             )}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+            <Button type="submit" className="w-full min-h-[44px] ux4g-label" disabled={loading}>
+              {loading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
-          <div className="mt-4 space-y-2 text-center text-sm">
+          <div className="mt-4 space-y-2 text-center ux4g-body-small">
             <div>
               <span className="text-muted-foreground">Don't have an account? </span>
               <Link href="/auth/signup" className="text-primary hover:underline">
@@ -134,12 +142,14 @@ export default function LoginPage() {
             </div>
             <div>
               <Link href="/auth/admin-login" className="text-primary hover:underline">
-                Admin Login
+                Admin login
               </Link>
             </div>
           </div>
         </CardContent>
       </Card>
-    </div>
+        </div>
+      </div>
+    </>
   );
 }

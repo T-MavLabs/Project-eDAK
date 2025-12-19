@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import "../../src/styles/design-tokens.css";
+import "../../src/styles/ux4g-dashboard.css";
 
 import { CoreNavbar } from "@/components/core/CoreNavbar";
 import { Badge } from "@/components/ui/badge";

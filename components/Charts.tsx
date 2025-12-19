@@ -176,6 +176,7 @@ export type ModeComparisonData = {
 
 /**
  * Delivery Mode Comparison Doughnut Chart
+ * UX4G-compliant with accessibility and legend
  */
 export function ModeComparisonChart({
   data,
@@ -196,15 +197,35 @@ export function ModeComparisonChart({
     current.delayRate > prev.delayRate ? current : prev
   );
 
+  // Generate accessible description for screen readers
+  const chartDescription = `Efficiency overview comparing delivery modes. ` +
+    chartData.map((d) => 
+      `${d.name} mode has ${d.value.toFixed(0)}% efficiency score, ${d.avgTransitDays.toFixed(1)} days average transit, and ${d.delayRate.toFixed(1)}% delay rate.`
+    ).join(" ");
+
   return (
     <div className="p-5">
+      {/* Screen reader description */}
+      <div className="sr-only" role="region" aria-label="Efficiency Overview Chart">
+        {chartDescription}
+      </div>
+
       <div className="mb-4">
-        <div className="daksh-text-label mb-1">Delivery Mode Comparison</div>
-        <div className="daksh-text-secondary text-xs">
-          Efficiency score comparison across delivery modes
+        <div 
+          className="text-sm font-medium text-neutral-600 uppercase tracking-wide mb-1"
+          style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+        >
+          Delivery Mode Comparison
+        </div>
+        <div 
+          className="text-xs text-neutral-600"
+          style={{ fontSize: "var(--ux4g-text-xs, 0.75rem)" }}
+        >
+          Efficiency score comparison across delivery modes to identify optimization opportunities.
         </div>
       </div>
-      <div className="h-72">
+      
+      <div className="h-72" role="img" aria-label="Delivery Mode Efficiency Comparison Chart">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -217,9 +238,14 @@ export function ModeComparisonChart({
               innerRadius={50}
               fill="#8884d8"
               dataKey="value"
+              aria-label="Delivery mode efficiency scores"
             >
               {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={COLORS[index]}
+                  aria-label={`${entry.name}: ${entry.value.toFixed(0)}% efficiency`}
+                />
               ))}
             </Pie>
             <Tooltip
@@ -227,15 +253,19 @@ export function ModeComparisonChart({
                 if (active && payload && payload[0]) {
                   const data = payload[0].payload;
                   return (
-                    <div className="rounded-lg border bg-background p-3 shadow-md">
-                      <div className="font-semibold">{data.name}</div>
-                      <div className="text-sm text-muted-foreground">
+                    <div 
+                      className="rounded-lg border border-neutral-200 bg-white p-3 shadow-lg"
+                      role="tooltip"
+                      aria-label={`Mode details: ${data.name}`}
+                    >
+                      <div className="font-semibold text-neutral-900 mb-1">{data.name}</div>
+                      <div className="text-sm text-neutral-600">
                         Efficiency: {data.value.toFixed(1)}%
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-neutral-600">
                         Avg Transit: {data.avgTransitDays.toFixed(1)} days
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-neutral-600">
                         Delay Rate: {data.delayRate.toFixed(1)}%
                       </div>
                     </div>
@@ -243,16 +273,32 @@ export function ModeComparisonChart({
                 }
                 return null;
               }}
+              contentStyle={{
+                borderRadius: "0.5rem",
+                borderColor: "#E5E7EB",
+                backgroundColor: "#FFFFFF",
+              }}
             />
-            <Legend />
+            <Legend 
+              wrapperStyle={{ fontSize: "12px", paddingTop: "16px" }}
+              iconType="circle"
+            />
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <div className="mt-4 rounded-lg border bg-muted/30 p-3">
-        <div className="text-sm font-semibold daksh-text-secondary mb-1">
+
+      {/* Efficiency Gap Explanation Panel */}
+      <div className="mt-4 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+        <div 
+          className="text-sm font-semibold text-neutral-700 mb-1"
+          style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+        >
           Efficiency Gap Analysis
         </div>
-        <div className="text-xs daksh-text-meta leading-relaxed">
+        <div 
+          className="text-xs text-neutral-600 leading-relaxed"
+          style={{ fontSize: "var(--ux4g-text-xs, 0.75rem)" }}
+        >
           <strong>{highestDelayMode.mode}</strong> mode shows the highest delay rate (
           {highestDelayMode.delayRate.toFixed(1)}%), indicating potential bottlenecks in surface
           logistics or route optimization needs.
@@ -273,6 +319,7 @@ export type CongestedHubData = {
 
 /**
  * Top Congested Hubs Horizontal Bar Chart
+ * UX4G-compliant with accessibility features
  */
 export function CongestedHubsChart({
   data,
@@ -290,66 +337,97 @@ export function CongestedHubsChart({
       region: d.region,
     }));
 
-  // Gradient colors from red to orange
+  // UX4G gradient colors: red to orange (tokenized)
   const getBarColor = (score: number) => {
-    if (score >= 7) return "#C60000"; // India Post Red
-    if (score >= 5) return "#E74C3C"; // Lighter red
-    return "#FF9933"; // Saffron
+    if (score >= 7) return "#E74C3C"; // Primary red
+    if (score >= 5) return "#EC7063"; // Primary light
+    return "#FF9933"; // Warning/Saffron
   };
+
+  // Generate accessible description for screen readers
+  const chartDescription = `Bottleneck analysis showing top ${chartData.length} congested hubs. ` +
+    chartData.map((d, idx) => 
+      `${idx + 1}. ${d.hub} (${d.hubCode}) has congestion score ${d.congestionScore.toFixed(1)} out of 10.`
+    ).join(" ");
 
   return (
     <div className="p-5">
+      {/* Screen reader description */}
+      <div className="sr-only" role="region" aria-label="Bottleneck Analysis Chart">
+        {chartDescription}
+      </div>
+      
       <div className="mb-4">
-        <div className="daksh-text-label mb-1">Top Congested Hubs</div>
-        <div className="daksh-text-secondary text-xs">
-          Hub congestion analysis based on delay metrics and throughput
+        <div 
+          className="text-sm font-medium text-neutral-600 uppercase tracking-wide mb-1"
+          style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+        >
+          Top Congested Hubs
+        </div>
+        <div 
+          className="text-xs text-neutral-600"
+          style={{ fontSize: "var(--ux4g-text-xs, 0.75rem)" }}
+        >
+          Hub congestion analysis based on delay metrics and throughput. Higher scores indicate critical capacity constraints.
         </div>
       </div>
-      <div className="h-[400px]">
+      
+      <div className="h-[400px]" role="img" aria-label="Bottleneck Analysis Bar Chart">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
             layout="vertical"
             margin={{ left: 120, right: 20, top: 10, bottom: 10 }}
+            aria-label="Bottleneck Analysis Chart"
           >
-            <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#E5E7EB" />
             <XAxis
               type="number"
               domain={[0, 10]}
               tickLine={false}
               axisLine={false}
-              tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-              label={{ value: "Congestion Score", position: "insideBottom", offset: -5 }}
+              tick={{ fill: "#6B7280", fontSize: 12 }}
+              label={{ 
+                value: "Congestion Score", 
+                position: "insideBottom", 
+                offset: -5,
+                fill: "#374151",
+                style: { fontSize: "12px", fontWeight: 500 }
+              }}
             />
             <YAxis
               type="category"
               dataKey="hubCode"
               tickLine={false}
               axisLine={false}
-              tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+              tick={{ fill: "#6B7280", fontSize: 11 }}
               width={110}
             />
             <Tooltip
-              cursor={{ fill: "rgba(198,0,0,0.06)" }}
+              cursor={{ fill: "rgba(231, 76, 60, 0.1)" }}
               content={({ active, payload }) => {
                 if (active && payload && payload[0]) {
                   const data = payload[0].payload;
                   return (
-                    <div className="rounded-lg border bg-background p-3 shadow-md">
-                      <div className="font-semibold">{data.hub}</div>
-                      <div className="text-sm text-muted-foreground">
-                        Code: {data.hubCode}
+                    <div 
+                      className="rounded-lg border border-neutral-200 bg-white p-3 shadow-lg"
+                      role="tooltip"
+                      aria-label={`Hub details: ${data.hub}`}
+                    >
+                      <div className="font-semibold text-neutral-900 mb-1">{data.hub}</div>
+                      <div className="text-sm text-neutral-600">
+                        Code: <span className="font-mono">{data.hubCode}</span>
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-neutral-600">
                         Region: {data.region}
                       </div>
-                      <div className="mt-2 text-sm font-medium">
+                      <div className="mt-2 text-sm font-medium text-neutral-900">
                         Congestion: {data.congestionScore.toFixed(1)}/10
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-neutral-600">
                         Avg Delay: {data.avgDelayHours.toFixed(1)} hrs
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-neutral-600">
                         Delayed: {data.delayedCount.toLocaleString("en-IN")}
                       </div>
                     </div>
@@ -358,23 +436,55 @@ export function CongestedHubsChart({
                 return null;
               }}
               contentStyle={{
-                borderRadius: 10,
-                borderColor: "rgba(0,0,0,0.08)",
-                backgroundColor: "rgba(255,255,255,0.95)",
-                backdropFilter: "blur(8px)",
+                borderRadius: "0.5rem",
+                borderColor: "#E5E7EB",
+                backgroundColor: "#FFFFFF",
               }}
             />
             <Bar
               dataKey="congestionScore"
               name="Congestion Score"
               radius={[0, 6, 6, 0]}
+              aria-label="Congestion score per hub"
             >
               {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getBarColor(entry.congestionScore)} />
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={getBarColor(entry.congestionScore)}
+                  aria-label={`${entry.hubCode}: ${entry.congestionScore.toFixed(1)}`}
+                />
               ))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
+      </div>
+
+      {/* Accessible legend with patterns for color-blind users */}
+      <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-neutral-600">
+        <span className="inline-flex items-center gap-2">
+          <span 
+            className="h-3 w-12 rounded-sm" 
+            style={{ background: "#E74C3C" }}
+            aria-label="High congestion (score 7-10)"
+          />
+          High (7-10)
+        </span>
+        <span className="inline-flex items-center gap-2">
+          <span 
+            className="h-3 w-12 rounded-sm" 
+            style={{ background: "#EC7063" }}
+            aria-label="Moderate congestion (score 5-7)"
+          />
+          Moderate (5-7)
+        </span>
+        <span className="inline-flex items-center gap-2">
+          <span 
+            className="h-3 w-12 rounded-sm" 
+            style={{ background: "#FF9933" }}
+            aria-label="Low congestion (score below 5)"
+          />
+          Low (&lt;5)
+        </span>
       </div>
     </div>
   );

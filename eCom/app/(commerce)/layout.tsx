@@ -8,7 +8,7 @@ export default function CommerceLayout({ children }: { children: ReactNode }) {
     <>
       <CommerceNavbar />
       <div className="vyapar-page">
-        <div className="mx-auto w-full max-w-6xl px-4 pt-4">
+        <div className="mx-auto w-full max-w-7xl px-4 pt-4">
           <EmailVerificationBanner />
         </div>
         {children}

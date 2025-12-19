@@ -66,8 +66,8 @@ export default function CartPage() {
     <div className="mx-auto w-full max-w-7xl px-4 py-8">
       {/* Header */}
       <div className="mb-8 vyapar-fade-in">
-        <h1 className="text-3xl font-semibold tracking-tight mb-2">Shopping Cart</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="ux4g-headline mb-2">Shopping cart</h1>
+        <p className="ux4g-body-small text-muted-foreground">
           {lines.length === 0 ? "Your cart is empty" : `${lines.length} ${lines.length === 1 ? "item" : "items"} in your cart`}
         </p>
       </div>
@@ -75,13 +75,13 @@ export default function CartPage() {
       {lines.length === 0 ? (
         <Card className="vyapar-card vyapar-soft-shadow vyapar-fade-in">
           <CardContent className="p-12 text-center">
-            <div className="text-5xl mb-4">🛒</div>
-            <div className="text-xl font-semibold mb-2">Your cart is empty</div>
-            <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
+            <div className="text-5xl mb-4" role="img" aria-label="Empty shopping cart">🛒</div>
+            <div className="ux4g-title mb-2">Your cart is empty</div>
+            <p className="ux4g-body text-muted-foreground mb-6 max-w-md mx-auto">
               Browse the marketplace and support an Indian seller today. Every purchase helps MSMEs grow.
             </p>
-            <Button asChild className="bg-primary hover:bg-primary/90 vyapar-gentle-transition">
-              <Link href="/market">Continue Shopping</Link>
+            <Button asChild className="bg-primary hover:bg-primary/90 vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/market">Continue shopping</Link>
             </Button>
           </CardContent>
         </Card>
@@ -107,11 +107,11 @@ export default function CartPage() {
                     <div className="flex-1 min-w-0 space-y-3">
                       <div>
                         <Link href={`/market/product/${l.product.id}`}>
-                          <h3 className="text-base font-semibold mb-2 hover:text-primary vyapar-gentle-transition line-clamp-2">{l.product.name}</h3>
+                          <h3 className="ux4g-label font-semibold mb-2 hover:text-primary vyapar-gentle-transition line-clamp-2">{l.product.name}</h3>
                         </Link>
                         <div className="flex flex-wrap items-center gap-2 mb-3">
-                          <Badge variant="secondary" className="vyapar-chip text-xs">{l.product.category}</Badge>
-                          <Badge variant="secondary" className="vyapar-chip text-xs">Cash on Delivery</Badge>
+                          <Badge variant="secondary" className="vyapar-chip ux4g-body-small">{l.product.category}</Badge>
+                          <Badge variant="secondary" className="vyapar-chip ux4g-body-small">Cash on delivery</Badge>
                         </div>
                       </div>
 
@@ -121,49 +121,49 @@ export default function CartPage() {
                             variant="outline"
                             size="icon"
                             aria-label="Decrease quantity"
-                            className="h-8 w-8 vyapar-gentle-transition"
+                            className="h-11 w-11 vyapar-gentle-transition"
                             onClick={() => {
                               updateCartQty(l.productId, Math.max(1, l.quantity - 1));
                               setCart(getCart());
                             }}
                           >
-                            <Minus className="h-3.5 w-3.5" />
+                            <Minus className="h-3.5 w-3.5" aria-hidden="true" />
                           </Button>
-                          <div className="min-w-10 text-center text-sm font-medium tabular-nums">{l.quantity}</div>
+                          <div className="min-w-10 text-center ux4g-body font-medium tabular-nums">{l.quantity}</div>
                           <Button
                             variant="outline"
                             size="icon"
                             aria-label="Increase quantity"
-                            className="h-8 w-8 vyapar-gentle-transition"
+                            className="h-11 w-11 vyapar-gentle-transition"
                             onClick={() => {
                               updateCartQty(l.productId, Math.min(10, l.quantity + 1));
                               setCart(getCart());
                             }}
                           >
-                            <Plus className="h-3.5 w-3.5" />
+                            <Plus className="h-3.5 w-3.5" aria-hidden="true" />
                           </Button>
                         </div>
 
                         <div className="flex items-center gap-4">
                           <div className="text-right">
-                            <div className="text-xs text-muted-foreground">Unit price</div>
-                            <div className="text-sm font-medium">₹{Number(l.product.price).toLocaleString("en-IN")}</div>
+                            <div className="ux4g-body-small text-muted-foreground">Unit price</div>
+                            <div className="ux4g-body font-medium">₹{Number(l.product.price).toLocaleString("en-IN")}</div>
                           </div>
                           <div className="text-right">
-                            <div className="text-xs text-muted-foreground">Total</div>
-                            <div className="text-lg font-semibold">₹{l.lineTotal.toLocaleString("en-IN")}</div>
+                            <div className="ux4g-body-small text-muted-foreground">Total</div>
+                            <div className="ux4g-title text-primary">₹{l.lineTotal.toLocaleString("en-IN")}</div>
                           </div>
                           <Button
                             variant="ghost"
                             size="icon"
                             aria-label="Remove from cart"
-                            className="h-8 w-8 vyapar-gentle-transition text-muted-foreground hover:text-destructive"
+                            className="h-11 w-11 vyapar-gentle-transition text-muted-foreground hover:text-destructive"
                             onClick={() => {
                               removeFromCart(l.productId);
                               setCart(getCart());
                             }}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4" aria-hidden="true" />
                           </Button>
                         </div>
                       </div>
@@ -178,15 +178,15 @@ export default function CartPage() {
           <div className="lg:sticky lg:top-24 h-fit">
             <Card className="vyapar-card vyapar-soft-shadow">
               <CardHeader>
-                <CardTitle className="text-lg">Order Summary</CardTitle>
+                <CardTitle className="ux4g-title">Order summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between ux4g-body-small">
                     <span className="text-muted-foreground">Subtotal ({lines.length} {lines.length === 1 ? "item" : "items"})</span>
                     <span className="font-medium">₹{subtotal.toLocaleString("en-IN")}</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between ux4g-body-small">
                     <span className="text-muted-foreground">Shipping</span>
                     <span className="font-medium">
                       {shipping === 0 ? (
@@ -197,33 +197,33 @@ export default function CartPage() {
                     </span>
                   </div>
                   {subtotal < 999 && (
-                    <div className="text-xs text-muted-foreground">
+                    <div className="ux4g-body-small text-muted-foreground">
                       Add ₹{(999 - subtotal).toLocaleString("en-IN")} more for free shipping
                     </div>
                   )}
                 </div>
                 <div className="h-px w-full bg-border" />
                 <div className="flex items-center justify-between">
-                  <span className="text-base font-semibold">Total</span>
-                  <span className="text-2xl font-bold text-primary">₹{total.toLocaleString("en-IN")}</span>
+                  <span className="ux4g-label font-semibold">Total</span>
+                  <span className="ux4g-headline text-primary">₹{total.toLocaleString("en-IN")}</span>
                 </div>
 
-                <Button asChild className="w-full bg-primary hover:bg-primary/90 h-12 text-base vyapar-gentle-transition">
-                  <Link href="/market/checkout">Proceed to Checkout</Link>
+                <Button asChild className="w-full bg-primary hover:bg-primary/90 h-12 ux4g-label vyapar-gentle-transition min-h-[44px]">
+                  <Link href="/market/checkout">Proceed to checkout</Link>
                 </Button>
 
-                <div className="pt-3 border-t space-y-2 text-xs text-muted-foreground">
+                <div className="pt-3 border-t space-y-2 ux4g-body-small text-muted-foreground">
                   <div className="flex items-center gap-2">
-                    <span>✓</span>
+                    <span aria-hidden="true">✓</span>
                     <span>Free shipping on orders ₹999+</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span>✓</span>
+                    <span aria-hidden="true">✓</span>
                     <span>Delivered via India Post</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span>✓</span>
-                    <span>Cash on Delivery available</span>
+                    <span aria-hidden="true">✓</span>
+                    <span>Cash on delivery available</span>
                   </div>
                 </div>
               </CardContent>

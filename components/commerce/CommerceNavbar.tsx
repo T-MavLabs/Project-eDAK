@@ -16,6 +16,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { GovernmentBanner } from "@/components/GovernmentBanner";
 
 const navItems = [
   { href: "/market", label: "Marketplace", icon: ShoppingBag },
@@ -27,6 +28,8 @@ export function CommerceNavbar() {
   const pathname = usePathname();
 
   return (
+    <>
+      <GovernmentBanner />
     <header className="sticky top-0 z-50 border-b bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/75">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/market" className="flex items-center gap-3">
@@ -131,5 +134,6 @@ export function CommerceNavbar() {
 
       <div className="h-1 w-full bg-[linear-gradient(90deg,rgba(255,153,51,0.35)_0%,rgba(198,0,0,0.65)_55%,rgba(19,136,8,0.35)_100%)]" />
     </header>
+    </>
   );
 }

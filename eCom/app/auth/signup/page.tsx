@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CommerceNavbar } from "@/components/commerce/CommerceNavbar";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -93,17 +94,20 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md px-4 py-10">
-      <Card>
+    <>
+      <CommerceNavbar />
+      <div className="min-h-screen bg-muted/40">
+        <div className="mx-auto w-full max-w-md px-4 py-10">
+          <Card>
         <CardHeader>
-          <CardTitle>Create Account</CardTitle>
-          <CardDescription>Join VYAPAR marketplace</CardDescription>
+          <CardTitle className="ux4g-title">Create account</CardTitle>
+          <CardDescription className="ux4g-body-small">Join VYAPAR marketplace</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="fullName" className="text-sm font-medium">
-                Full Name
+              <label htmlFor="fullName" className="ux4g-label font-medium">
+                Full name
               </label>
               <Input
                 id="fullName"
@@ -111,10 +115,12 @@ export default function SignUpPage() {
                 onChange={(e) => setFullName(e.target.value)}
                 required
                 disabled={loading}
+                className="min-h-[44px] ux4g-body"
+                aria-required="true"
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="ux4g-label font-medium">
                 Email
               </label>
               <Input
@@ -124,10 +130,12 @@ export default function SignUpPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                className="min-h-[44px] ux4g-body"
+                aria-required="true"
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label htmlFor="password" className="ux4g-label font-medium">
                 Password
               </label>
               <Input
@@ -138,14 +146,16 @@ export default function SignUpPage() {
                 required
                 minLength={6}
                 disabled={loading}
+                className="min-h-[44px] ux4g-body"
+                aria-required="true"
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="role" className="text-sm font-medium">
+              <label htmlFor="role" className="ux4g-label font-medium">
                 I want to
               </label>
               <Select value={role} onValueChange={(v) => setRole(v as "buyer" | "seller")}>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] ux4g-body">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -155,15 +165,15 @@ export default function SignUpPage() {
               </Select>
             </div>
             {error && (
-              <div className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+              <div className="rounded-md border border-destructive/50 bg-destructive/10 p-3 ux4g-body-small text-destructive" role="alert">
                 {error}
               </div>
             )}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : "Sign Up"}
+            <Button type="submit" className="w-full min-h-[44px] ux4g-label" disabled={loading}>
+              {loading ? "Creating account..." : "Sign up"}
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-center ux4g-body-small">
             <span className="text-muted-foreground">Already have an account? </span>
             <Link href="/auth/login" className="text-primary hover:underline">
               Sign in
@@ -171,6 +181,8 @@ export default function SignUpPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+        </div>
+      </div>
+    </>
   );
 }

@@ -1,0 +1,230 @@
+/**
+ * UX4G Design Tokens for DAKSH
+ * Government of India UX Guidelines 4.0
+ * 
+ * This file provides design tokens for institutional, accessible,
+ * and trustworthy government-facing applications.
+ */
+
+/* ============================================
+   TYPOGRAPHY & FONTS
+   ============================================ */
+
+:root {
+  /* Base font stack: Noto Sans with fallbacks */
+  --ux4g-font-family-base: var(--font-noto-sans, "Noto Sans"), -apple-system, BlinkMacSystemFont, 
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  --ux4g-font-family-display: var(--font-noto-sans-display, "Noto Sans Display"), var(--font-noto-sans, "Noto Sans"), 
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  --ux4g-font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, 
+    Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Typescale mapping to rems */
+  --ux4g-text-xs: 0.75rem;      /* 12px */
+  --ux4g-text-sm: 0.875rem;     /* 14px */
+  --ux4g-text-base: 1rem;       /* 16px */
+  --ux4g-text-lg: 1.125rem;     /* 18px */
+  --ux4g-text-xl: 1.25rem;      /* 20px */
+  --ux4g-text-2xl: 1.5rem;      /* 24px */
+  --ux4g-text-3xl: 1.875rem;    /* 30px */
+  --ux4g-text-4xl: 2.25rem;     /* 36px */
+
+  /* Line heights */
+  --ux4g-leading-tight: 1.25;
+  --ux4g-leading-normal: 1.5;
+  --ux4g-leading-relaxed: 1.75;
+
+  /* Font weights */
+  --ux4g-font-normal: 400;
+  --ux4g-font-medium: 500;
+  --ux4g-font-semibold: 600;
+  --ux4g-font-bold: 700;
+}
+
+/* ============================================
+   COLOR TOKENS
+   ============================================ */
+
+:root {
+  /* Primary Colors */
+  --ux4g-primary: #E74C3C;           /* India Post Red */
+  --ux4g-primary-dark: #C0392B;
+  --ux4g-primary-light: #EC7063;
+  --ux4g-primary-foreground: #FFFFFF;
+
+  /* Secondary Colors */
+  --ux4g-secondary: #2C3E50;         /* Dark blue-grey */
+  --ux4g-secondary-dark: #1A252F;
+  --ux4g-secondary-light: #34495E;
+  --ux4g-secondary-foreground: #FFFFFF;
+
+  /* Neutral Colors */
+  --ux4g-neutral-50: #F9FAFB;
+  --ux4g-neutral-100: #F3F4F6;
+  --ux4g-neutral-200: #E5E7EB;
+  --ux4g-neutral-300: #D1D5DB;
+  --ux4g-neutral-400: #9CA3AF;
+  --ux4g-neutral-500: #6B7280;
+  --ux4g-neutral-600: #4B5563;
+  --ux4g-neutral-700: #374151;
+  --ux4g-neutral-800: #1F2937;
+  --ux4g-neutral-900: #111827;
+
+  /* Semantic Colors */
+  --ux4g-success: #138808;           /* India Green */
+  --ux4g-success-light: #2ECC71;
+  --ux4g-success-dark: #0F6B0A;
+  --ux4g-success-foreground: #FFFFFF;
+
+  --ux4g-warning: #FF9933;           /* Saffron */
+  --ux4g-warning-light: #FFB366;
+  --ux4g-warning-dark: #E67E22;
+  --ux4g-warning-foreground: #FFFFFF;
+
+  --ux4g-danger: #DC2626;            /* Error red */
+  --ux4g-danger-light: #EF4444;
+  --ux4g-danger-dark: #B91C1C;
+  --ux4g-danger-foreground: #FFFFFF;
+
+  --ux4g-info: #2563EB;              /* Informational blue */
+  --ux4g-info-light: #3B82F6;
+  --ux4g-info-dark: #1D4ED8;
+  --ux4g-info-foreground: #FFFFFF;
+
+  /* Background Colors */
+  --ux4g-background: #FFFFFF;
+  --ux4g-background-alt: #F9FAFB;
+  --ux4g-foreground: #111827;
+  --ux4g-foreground-muted: #6B7280;
+
+  /* Border & Divider Colors */
+  --ux4g-border: rgba(17, 24, 39, 0.12);
+  --ux4g-border-light: rgba(17, 24, 39, 0.08);
+  --ux4g-border-dark: rgba(17, 24, 39, 0.2);
+
+  /* Input Colors */
+  --ux4g-input-background: #FFFFFF;
+  --ux4g-input-border: rgba(17, 24, 39, 0.14);
+  --ux4g-input-border-focus: var(--ux4g-primary);
+  --ux4g-input-foreground: #111827;
+  --ux4g-input-placeholder: #9CA3AF;
+}
+
+/* ============================================
+   SPACING TOKENS
+   ============================================ */
+
+:root {
+  /* Base spacing unit: 0.25rem (4px) */
+  --ux4g-spacing-0: 0;
+  --ux4g-spacing-1: 0.25rem;    /* 4px */
+  --ux4g-spacing-2: 0.5rem;     /* 8px */
+  --ux4g-spacing-3: 0.75rem;    /* 12px */
+  --ux4g-spacing-4: 1rem;       /* 16px */
+  --ux4g-spacing-5: 1.25rem;    /* 20px */
+  --ux4g-spacing-6: 1.5rem;     /* 24px */
+  --ux4g-spacing-8: 2rem;       /* 32px */
+  --ux4g-spacing-10: 2.5rem;    /* 40px */
+  --ux4g-spacing-12: 3rem;      /* 48px */
+  --ux4g-spacing-16: 4rem;      /* 64px */
+  --ux4g-spacing-20: 5rem;      /* 80px */
+  --ux4g-spacing-24: 6rem;      /* 96px */
+}
+
+/* ============================================
+   SHADOW & ELEVATION TOKENS
+   ============================================ */
+
+:root {
+  /* Elevation levels for cards and panels */
+  --ux4g-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --ux4g-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --ux4g-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+                    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --ux4g-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Card-specific shadows */
+  --ux4g-shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 
+                      0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --ux4g-shadow-card-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                               0 2px 4px -1px rgba(0, 0, 0, 0.06),
+                               inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+
+  /* Panel shadows */
+  --ux4g-shadow-panel: 0 1px 2px 0 rgba(0, 0, 0, 0.05),
+                       0 1px 3px 0 rgba(0, 0, 0, 0.1),
+                       inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+  --ux4g-shadow-panel-elevated: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                                0 4px 6px -2px rgba(0, 0, 0, 0.05),
+                                inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================
+   BORDER RADIUS TOKENS
+   ============================================ */
+
+:root {
+  --ux4g-radius-none: 0;
+  --ux4g-radius-sm: 0.25rem;     /* 4px */
+  --ux4g-radius-md: 0.375rem;    /* 6px */
+  --ux4g-radius-lg: 0.5rem;      /* 8px */
+  --ux4g-radius-xl: 0.75rem;     /* 12px */
+  --ux4g-radius-2xl: 1rem;       /* 16px */
+  --ux4g-radius-full: 9999px;
+}
+
+/* ============================================
+   CONTAINER & GRID TOKENS
+   ============================================ */
+
+:root {
+  /* Container max widths (responsive) */
+  --ux4g-container-sm: 640px;
+  --ux4g-container-md: 768px;
+  --ux4g-container-lg: 1024px;
+  --ux4g-container-xl: 1280px;
+  --ux4g-container-2xl: 1536px;
+
+  /* Grid gutters */
+  --ux4g-grid-gutter: 1.5rem;    /* 24px */
+  --ux4g-grid-gutter-sm: 1rem;   /* 16px */
+  --ux4g-grid-gutter-lg: 2rem;   /* 32px */
+}
+
+/* ============================================
+   ACCESSIBILITY TOKENS
+   ============================================ */
+
+:root {
+  /* Focus indicators */
+  --ux4g-focus-ring: 0 0 0 3px rgba(231, 76, 60, 0.25);
+  --ux4g-focus-ring-offset: 2px;
+
+  /* High contrast mode support */
+  --ux4g-contrast-enhanced-border: 2px solid currentColor;
+}
+
+/* High contrast mode */
+[data-ux4g-high-contrast="true"] {
+  --ux4g-border: currentColor;
+  --ux4g-border-dark: currentColor;
+  --ux4g-primary: currentColor;
+  --ux4g-secondary: currentColor;
+}
+
+/* Font size scaling */
+[data-ux4g-font-size="small"] {
+  font-size: 87.5%; /* 14px base */
+}
+
+[data-ux4g-font-size="large"] {
+  font-size: 112.5%; /* 18px base */
+}
+
+[data-ux4g-font-size="xlarge"] {
+  font-size: 125%; /* 20px base */
+}

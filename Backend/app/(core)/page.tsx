@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-8 md:py-12">
+    <div className="mx-auto w-full max-w-7xl px-4 pt-6 pb-8 md:pt-8 md:pb-12">
       {/* System Header */}
       <div className="mb-12 daksh-fade-in">
         <div className="daksh-kicker mb-3">National Logistics Intelligence Platform</div>

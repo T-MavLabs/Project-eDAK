@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
+import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 
 import { Footer } from "@/components/Footer";
+
+const notoSans = Noto_Sans({
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-noto-sans",
+});
 
 export const metadata: Metadata = {
   title: "VYAPAR – Virtual Yet Accessible Postal Aggregated Retail",
@@ -15,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={notoSans.variable}>
       <body className="min-h-screen antialiased">
         <main className="min-h-[calc(100vh-64px)] bg-muted/40">{children}</main>
         <Footer />

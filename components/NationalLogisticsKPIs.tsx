@@ -2,49 +2,12 @@
 
 import { AlertTriangle, MapPin, Route, TrendingDown } from "lucide-react";
 import type { SummaryMetrics } from "@/lib/analyticsApi";
+import { KpiCard } from "@/components/ux4g/KpiCard";
 
-interface KPICardProps {
-  label: string;
-  value: string;
-  icon: typeof AlertTriangle;
-  isRisk?: boolean;
-}
-
-function KPICard({ label, value, icon: Icon, isRisk = false }: KPICardProps) {
-  return (
-    <div
-      className={`daksh-layered-deep daksh-gradient-card rounded-xl p-6 daksh-interactive daksh-hover-lift daksh-fade-in border border-border/60 relative overflow-hidden ${
-        isRisk ? "border-l-3" : ""
-      }`}
-      style={{
-        borderLeft: isRisk ? "3px solid #E74C3C" : undefined,
-      }}
-    >
-      {isRisk && (
-        <div
-          className="absolute inset-0 bg-gradient-to-br opacity-30 pointer-events-none rounded-xl"
-          style={{
-            background: "linear-gradient(135deg, #E74C3C08 0%, transparent 100%)",
-          }}
-        />
-      )}
-      <div className="daksh-text-label mb-4 flex items-center justify-between relative z-10">
-        <span>{label}</span>
-        <div className="p-1.5 rounded-md daksh-layered bg-muted/40">
-          <Icon className="h-3.5 w-3.5 text-muted-foreground/70" />
-        </div>
-      </div>
-      <div
-        className={`daksh-text-data relative z-10 ${
-          isRisk ? "text-[#E74C3C]" : "text-foreground"
-        }`}
-      >
-        {value}
-      </div>
-    </div>
-  );
-}
-
+/**
+ * National Logistics KPIs Component
+ * Displays 4 KPI cards using UX4G-compliant KpiCard component
+ */
 export function NationalLogisticsKPIs({ metrics }: { metrics: SummaryMetrics }) {
   const kpis = [
     {
@@ -66,7 +29,7 @@ export function NationalLogisticsKPIs({ metrics }: { metrics: SummaryMetrics }) 
       isRisk: metrics.criticalHub.congestionScore > 7.0,
     },
     {
-      label: "Lowest Reliability Mode",
+      label: "Low Reliability Mode",
       value: `${metrics.lowestReliabilityMode.mode} (${(metrics.lowestReliabilityMode.reliabilityScore * 100).toFixed(0)}%)`,
       icon: TrendingDown,
       isRisk: metrics.lowestReliabilityMode.reliabilityScore < 0.75,
@@ -76,20 +39,29 @@ export function NationalLogisticsKPIs({ metrics }: { metrics: SummaryMetrics }) 
   return (
     <div>
       <div className="mb-6">
-        <div className="daksh-kicker mb-2">National Logistics Snapshot</div>
-        <div className="daksh-text-secondary text-sm max-w-3xl">
+        <div 
+          className="text-sm font-medium text-neutral-600 uppercase tracking-wide mb-2"
+          style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+        >
+          National Logistics Snapshot
+        </div>
+        <p 
+          className="text-sm text-neutral-600 max-w-3xl leading-relaxed"
+          style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+        >
           High-level operational metrics for national logistics intelligence. Values highlighted in
           red indicate risk thresholds crossed.
-        </div>
+        </p>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {kpis.map((kpi, idx) => (
-          <KPICard
+        {kpis.map((kpi) => (
+          <KpiCard
             key={kpi.label}
             label={kpi.label}
             value={kpi.value}
             icon={kpi.icon}
             isRisk={kpi.isRisk}
+            aria-label={`${kpi.label}: ${kpi.value}${kpi.isRisk ? " (High Risk)" : ""}`}
           />
         ))}
       </div>

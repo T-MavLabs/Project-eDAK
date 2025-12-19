@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AlertCircle, MapPin, Package, Search } from "lucide-react";
+import { AlertCircle, MapPin, Package, Search, Receipt } from "lucide-react";
 
 import { getParcelByTrackingId, mockParcels } from "@/lib/mockData";
 import { fetchParcelFromPublicApi } from "@/lib/publicApi";
+import { useDemoRole } from "@/lib/useDemoRole";
 
 import { ParcelTimeline } from "@/components/ParcelTimeline";
 import { DelayPredictionCard } from "@/components/DelayPredictionCard";
@@ -21,6 +22,8 @@ export function TrackClient({ initialTrackingId }: { initialTrackingId?: string 
 
   const [trackingId, setTrackingId] = useState(seeded);
   const [submitted, setSubmitted] = useState(seeded);
+  const role = useDemoRole();
+  const isAuthenticated = role === "admin"; // In production, check actual auth state
 
   const parcel = useMemo(() => {
     const base = getParcelByTrackingId(submitted);
@@ -156,6 +159,50 @@ export function TrackClient({ initialTrackingId }: { initialTrackingId?: string 
 
           <div className="space-y-6">
             <DelayPredictionCard prediction={parcel.prediction} />
+
+            {/* Order Receipt - Only shown when logged in */}
+            {isAuthenticated && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Receipt className="h-4 w-4 text-primary" />
+                    Order receipt
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm">
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    <div>
+                      <div className="text-xs text-muted-foreground">Order ID</div>
+                      <div className="mt-1 font-mono font-medium">{parcel.trackingId.replace("IP", "ORD")}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground">Tracking ID</div>
+                      <div className="mt-1 font-mono font-medium">{parcel.trackingId}</div>
+                    </div>
+                  </div>
+                  <div className="pt-2 border-t">
+                    <div className="text-xs text-muted-foreground mb-2">Order details</div>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Article type:</span>
+                        <span className="font-medium">{parcel.articleType}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Booked on:</span>
+                        <span className="font-medium">{parcel.bookedAt}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Status:</span>
+                        <Badge variant="secondary" className="text-xs">{parcel.currentStatusLabel}</Badge>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-2 border-t text-xs text-muted-foreground">
+                    Order receipt information is only visible to authenticated users.
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             <Card>
               <CardHeader>

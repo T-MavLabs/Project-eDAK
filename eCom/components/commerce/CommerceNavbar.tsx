@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { ShoppingBag, ShoppingCart, ClipboardList, PackageSearch, BadgeCheck, Store, Shield, LogIn, LogOut, User } from "lucide-react";
+import { ShoppingBag, ShoppingCart, ClipboardList, PackageSearch, BadgeCheck, Store, Shield, LogIn, LogOut, User, Home } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { getCurrentUserRole, signOut, getCurrentUser, getUserProfile, type UserProfile } from "@/supabase/auth";
@@ -27,11 +27,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GovernmentBanner } from "@/components/GovernmentBanner";
 
 const navItems = [
+  { href: "/", label: "Home", icon: Home },
   { href: "/market", label: "Marketplace", icon: ShoppingBag },
-  { href: "/market/cart", label: "Cart", icon: ShoppingCart },
   { href: "/market/orders", label: "Orders", icon: ClipboardList },
+  { href: "/track", label: "Track", icon: PackageSearch },
 ] as const;
 
 export function CommerceNavbar() {
@@ -116,10 +118,13 @@ export function CommerceNavbar() {
   const adminAuth = mounted && isAdminAuthenticated();
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/85 vyapar-gentle-transition">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
-        <Link href="/market" className="flex items-center gap-3 vyapar-gentle-transition">
-          <div className="relative h-9 w-9 rounded-lg overflow-hidden vyapar-soft-shadow vyapar-gentle-transition">
+    <>
+      <GovernmentBanner />
+      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 vyapar-gentle-transition">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4">
+        {/* Logo - Left */}
+        <Link href="/market" className="flex items-center gap-3 vyapar-gentle-transition" aria-label="VYAPAR Home">
+          <div className="relative h-10 w-10 rounded-lg overflow-hidden vyapar-soft-shadow vyapar-gentle-transition">
             <Image
               src="/VYAPAR.png"
               alt="VYAPAR Logo"
@@ -128,61 +133,80 @@ export function CommerceNavbar() {
               priority
             />
           </div>
-          <div className="leading-tight">
-            <div className="text-sm font-semibold tracking-tight">VYAPAR</div>
-            <div className="text-xs text-muted-foreground">
+          <div className="leading-tight hidden sm:block">
+            <div className="ux4g-label font-semibold tracking-tight">VYAPAR</div>
+            <div className="ux4g-body-small text-muted-foreground">
               Powered by India Post (DAKSH)
             </div>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        {/* Primary Navigation - Center-left */}
+        <nav className="hidden items-center gap-1 lg:flex flex-1 justify-center lg:justify-start lg:ml-8" aria-label="Main navigation">
           {navItems.map((item) => {
-            const active = pathname === item.href;
+            let active = false;
+            if (item.href === "/") {
+              active = pathname === "/";
+            } else if (item.href === "/market") {
+              // Only active for /market, not for /market/orders, /market/cart, etc.
+              active = pathname === "/market" || (pathname?.startsWith("/market/") && !pathname?.startsWith("/market/orders") && !pathname?.startsWith("/market/cart") && !pathname?.startsWith("/market/checkout") && !pathname?.startsWith("/market/product"));
+            } else if (item.href === "/market/orders") {
+              active = pathname === "/market/orders" || pathname?.startsWith("/market/orders/");
+            } else if (item.href === "/track") {
+              active = pathname === "/track" || pathname?.startsWith("/track/");
+            } else {
+              active = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+            }
             const Icon = item.icon;
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium vyapar-gentle-transition",
+                  "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 ux4g-label font-medium vyapar-gentle-transition min-h-[44px]",
                   active
-                    ? "bg-secondary text-foreground vyapar-soft-shadow"
+                    ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                 )}
+                aria-current={active ? "page" : undefined}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4" aria-hidden="true" />
                 {item.label}
               </Link>
             );
           })}
-
-          <Button asChild variant="outline" className="ml-2 vyapar-gentle-transition">
-            <Link href="/track" className="inline-flex items-center gap-2">
-              <PackageSearch className="h-4 w-4" /> Track via India Post
-            </Link>
-          </Button>
         </nav>
 
+        {/* Actions - Right */}
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="hidden gap-2 md:inline-flex vyapar-chip vyapar-gentle-transition">
-            <BadgeCheck className="h-3.5 w-3.5" /> Powered by India Post (DAKSH)
-          </Badge>
+          {/* Cart Button */}
+          <Button 
+            asChild 
+            variant="outline" 
+            size="sm" 
+            className="hidden md:inline-flex min-h-[44px] vyapar-gentle-transition"
+            aria-label="Shopping cart"
+          >
+            <Link href="/market/cart" className="inline-flex items-center gap-2">
+              <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+              <span className="ux4g-label">Cart</span>
+            </Link>
+          </Button>
 
           {/* Role-based navigation */}
           {mounted && (
             <>
               {userRole === "seller" && (
-                <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
+                <Button asChild variant="outline" size="sm" className="hidden md:inline-flex min-h-[44px] ux4g-label">
                   <Link href="/seller/dashboard">
-                    <Store className="h-4 w-4 mr-2" /> Seller Dashboard
+                    <Store className="h-4 w-4 mr-2" aria-hidden="true" /> Seller dashboard
                   </Link>
                 </Button>
               )}
               {adminAuth && (
-                <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
+                <Button asChild variant="outline" size="sm" className="hidden md:inline-flex min-h-[44px] ux4g-label">
                   <Link href="/admin">
-                    <Shield className="h-4 w-4 mr-2" /> Admin
+                    <Shield className="h-4 w-4 mr-2" aria-hidden="true" /> Admin
                   </Link>
                 </Button>
               )}
@@ -195,8 +219,8 @@ export function CommerceNavbar() {
               {isAuthenticated ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <User className="h-4 w-4 mr-2" />
+                    <Button variant="outline" size="sm" className="min-h-[44px] ux4g-label">
+                      <User className="h-4 w-4 mr-2" aria-hidden="true" />
                       {userProfile?.full_name 
                         ? userProfile.full_name.split(" ")[0]
                         : userEmail?.split("@")[0] || "Account"}
@@ -221,9 +245,9 @@ export function CommerceNavbar() {
                     
                     {/* Profile Edit */}
                     <DropdownMenuItem asChild>
-                      <Link href="/account/profile">
-                        <User className="h-4 w-4 mr-2" />
-                        Edit Profile
+                      <Link href="/account/profile" className="ux4g-label">
+                        <User className="h-4 w-4 mr-2" aria-hidden="true" />
+                        Edit profile
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -231,7 +255,7 @@ export function CommerceNavbar() {
                     {userRole === "buyer" && (
                       <>
                         <DropdownMenuItem asChild>
-                          <Link href="/market/orders">My Orders</Link>
+                          <Link href="/market/orders" className="ux4g-label">My orders</Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                       </>
@@ -239,26 +263,26 @@ export function CommerceNavbar() {
                     {userRole === "seller" && (
                       <>
                         <DropdownMenuItem asChild>
-                          <Link href="/seller/dashboard">Seller Dashboard</Link>
+                          <Link href="/seller/dashboard" className="ux4g-label">Seller dashboard</Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                       </>
                     )}
-                    <DropdownMenuItem onClick={handleLogout}>
-                      <LogOut className="h-4 w-4 mr-2" />
+                    <DropdownMenuItem onClick={handleLogout} className="ux4g-label">
+                      <LogOut className="h-4 w-4 mr-2" aria-hidden="true" />
                       Logout
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
                 <>
-                  <Button asChild variant="outline" size="sm">
+                  <Button asChild variant="outline" size="sm" className="min-h-[44px] ux4g-label">
                     <Link href="/auth/login">
-                      <LogIn className="h-4 w-4 mr-2" /> Login
+                      <LogIn className="h-4 w-4 mr-2" aria-hidden="true" /> Login
                     </Link>
                   </Button>
-                  <Button asChild size="sm">
-                    <Link href="/auth/signup">Sign Up</Link>
+                  <Button asChild size="sm" className="min-h-[44px] ux4g-label">
+                    <Link href="/auth/signup">Sign up</Link>
                   </Button>
                 </>
               )}
@@ -268,18 +292,30 @@ export function CommerceNavbar() {
           {mounted ? (
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" className="md:hidden vyapar-gentle-transition">
-                Menu
+              <Button variant="outline" className="md:hidden vyapar-gentle-transition min-h-[44px] min-w-[44px]" aria-label="Open menu">
+                <span className="ux4g-label">Menu</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="p-0">
               <div className="p-5">
                 <SheetHeader>
-                  <SheetTitle className="text-base">Menu</SheetTitle>
+                  <SheetTitle className="ux4g-title">Menu</SheetTitle>
                 </SheetHeader>
-                <div className="mt-4 grid gap-2">
+                <nav className="mt-4 grid gap-2" aria-label="Mobile navigation">
                   {navItems.map((item) => {
-                    const active = pathname === item.href;
+                    let active = false;
+                    if (item.href === "/") {
+                      active = pathname === "/";
+                    } else if (item.href === "/market") {
+                      // Only active for /market, not for /market/orders, /market/cart, etc.
+                      active = pathname === "/market" || (pathname?.startsWith("/market/") && !pathname?.startsWith("/market/orders") && !pathname?.startsWith("/market/cart") && !pathname?.startsWith("/market/checkout") && !pathname?.startsWith("/market/product"));
+                    } else if (item.href === "/market/orders") {
+                      active = pathname === "/market/orders" || pathname?.startsWith("/market/orders/");
+                    } else if (item.href === "/track") {
+                      active = pathname === "/track" || pathname?.startsWith("/track/");
+                    } else {
+                      active = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+                    }
                     const Icon = item.icon;
                     return (
                       <Link
@@ -287,77 +323,78 @@ export function CommerceNavbar() {
                         href={item.href}
                         onClick={() => setOpen(false)}
                         className={cn(
-                          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium vyapar-gentle-transition",
+                          "flex items-center gap-3 rounded-lg px-3 py-2.5 ux4g-label font-medium vyapar-gentle-transition min-h-[44px]",
                           active
-                            ? "bg-secondary text-foreground"
+                            ? "bg-primary/10 text-primary"
                             : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                         )}
+                        aria-current={active ? "page" : undefined}
                       >
-                        <Icon className="h-4 w-4" />
+                        <Icon className="h-4 w-4" aria-hidden="true" />
                         {item.label}
                       </Link>
                     );
                   })}
-                </div>
+                </nav>
 
                 <div className="mt-6 grid gap-2">
+                  <Button asChild variant="outline" className="w-full min-h-[44px] ux4g-label" onClick={() => setOpen(false)}>
+                    <Link href="/market/cart">
+                      <ShoppingCart className="h-4 w-4 mr-2" aria-hidden="true" /> Cart
+                    </Link>
+                  </Button>
                   {mounted && userRole === "seller" && (
-                    <Button asChild variant="outline" className="w-full">
+                    <Button asChild variant="outline" className="w-full min-h-[44px] ux4g-label">
                       <Link href="/seller/dashboard" onClick={() => setOpen(false)}>
-                        <Store className="h-4 w-4 mr-2" /> Seller Dashboard
+                        <Store className="h-4 w-4 mr-2" aria-hidden="true" /> Seller dashboard
                       </Link>
                     </Button>
                   )}
                   {mounted && adminAuth && (
-                    <Button asChild variant="outline" className="w-full">
+                    <Button asChild variant="outline" className="w-full min-h-[44px] ux4g-label">
                       <Link href="/admin" onClick={() => setOpen(false)}>
-                        <Shield className="h-4 w-4 mr-2" /> Admin Dashboard
+                        <Shield className="h-4 w-4 mr-2" aria-hidden="true" /> Admin dashboard
                       </Link>
                     </Button>
                   )}
-                  <Button asChild className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition">
-                    <Link href="/track" className="inline-flex items-center gap-2" onClick={() => setOpen(false)}>
-                      <PackageSearch className="h-4 w-4" /> Track via India Post
-                    </Link>
-                  </Button>
                   {mounted && (
                     <div className="mt-4 space-y-2">
                       {isAuthenticated ? (
                         <>
-                          <Button asChild variant="outline" className="w-full" onClick={() => setOpen(false)}>
+                          <Button asChild variant="outline" className="w-full min-h-[44px] ux4g-label" onClick={() => setOpen(false)}>
                             <Link href="/account/profile">
-                              <User className="h-4 w-4 mr-2" /> Edit Profile
+                              <User className="h-4 w-4 mr-2" aria-hidden="true" /> Edit profile
                             </Link>
                           </Button>
                           {userRole === "buyer" && (
-                            <Button asChild variant="outline" className="w-full" onClick={() => setOpen(false)}>
-                              <Link href="/market/orders">My Orders</Link>
+                            <Button asChild variant="outline" className="w-full min-h-[44px] ux4g-label" onClick={() => setOpen(false)}>
+                              <Link href="/market/orders">My orders</Link>
                             </Button>
                           )}
                           {userRole === "seller" && (
-                            <Button asChild variant="outline" className="w-full" onClick={() => setOpen(false)}>
-                              <Link href="/seller/dashboard">Seller Dashboard</Link>
+                            <Button asChild variant="outline" className="w-full min-h-[44px] ux4g-label" onClick={() => setOpen(false)}>
+                              <Link href="/seller/dashboard">Seller dashboard</Link>
                             </Button>
                           )}
-                          <Button variant="outline" className="w-full" onClick={() => { handleLogout(); setOpen(false); }}>
-                            <LogOut className="h-4 w-4 mr-2" /> Logout
+                          <Button variant="outline" className="w-full min-h-[44px] ux4g-label" onClick={() => { handleLogout(); setOpen(false); }}>
+                            <LogOut className="h-4 w-4 mr-2" aria-hidden="true" /> Logout
                           </Button>
                         </>
                       ) : (
                         <>
-                          <Button asChild variant="outline" className="w-full" onClick={() => setOpen(false)}>
+                          <Button asChild variant="outline" className="w-full min-h-[44px] ux4g-label" onClick={() => setOpen(false)}>
                             <Link href="/auth/login">
-                              <LogIn className="h-4 w-4 mr-2" /> Login
+                              <LogIn className="h-4 w-4 mr-2" aria-hidden="true" /> Login
                             </Link>
                           </Button>
-                          <Button asChild className="w-full" onClick={() => setOpen(false)}>
-                            <Link href="/auth/signup">Sign Up</Link>
+                          <Button asChild className="w-full min-h-[44px] ux4g-label" onClick={() => setOpen(false)}>
+                            <Link href="/auth/signup">Sign up</Link>
                           </Button>
                         </>
                       )}
                     </div>
                   )}
-                  <p className="text-xs text-muted-foreground leading-relaxed mt-4">
+                  <p className="ux4g-body-small text-muted-foreground leading-relaxed mt-4">
                     Integrated with India Post tracking via tracking ID.
                   </p>
                 </div>
@@ -372,7 +409,8 @@ export function CommerceNavbar() {
         </div>
       </div>
 
-      <div className="h-1 w-full bg-[linear-gradient(90deg,rgba(255,153,51,0.35)_0%,rgba(198,0,0,0.65)_55%,rgba(19,136,8,0.35)_100%)] vyapar-gentle-transition" />
-    </header>
+      <div className="h-1 w-full bg-[linear-gradient(90deg,rgba(255,153,51,0.35)_0%,rgba(231,76,60,0.65)_55%,rgba(19,136,8,0.35)_100%)] vyapar-gentle-transition" />
+      </header>
+    </>
   );
 }

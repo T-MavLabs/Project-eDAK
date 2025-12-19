@@ -199,3 +199,119 @@ NEXT_PUBLIC_DAKSH_URL=http://localhost:3001  # DAKSH platform URL
 - **Database Schema**: See `database_structure/README.md`
 - **API Integration**: See `lib/logistics.ts` for DAKSH integration
 - **Permissions**: See `lib/permissions.ts` for access control
+
+---
+
+## UX4G Integration Notes
+
+VYAPAR has been redesigned using the **UX4G Design System** to ensure accessibility, consistency, and compliance with government design standards.
+
+### Design System Implementation
+
+#### Files Added/Modified
+
+**New Files:**
+- `src/styles/ux4g-tokens.css` - UX4G design tokens (colors, spacing, typescale, elevation)
+- `components/AccessibilityBar.tsx` - Accessibility controls (text size, contrast, keyboard hints)
+
+**Modified Files:**
+- `app/globals.css` - Updated with Noto Sans font, UX4G typescale classes, accessibility features
+- `app/layout.tsx` - Added AccessibilityBar component
+- `components/commerce/CommerceNavbar.tsx` - Redesigned with UX4G layout (logo left, nav center, actions right)
+- `app/page.tsx` - Landing page updated with UX4G typescale and sentence case
+- `app/(commerce)/market/page.tsx` - Product cards updated with UX4G styling
+- `app/(commerce)/market/cart/page.tsx` - Cart page with UX4G form styling
+- `app/(commerce)/market/checkout/page.tsx` - Checkout forms with UX4G labels and accessibility
+- `components/Footer.tsx` - Multi-column enterprise footer with UX4G styling
+
+### Key UX4G Features Implemented
+
+1. **Typography (Noto Sans)**
+   - Primary font: Noto Sans (via Google Fonts CDN)
+   - Typescale classes: `.ux4g-display`, `.ux4g-headline`, `.ux4g-title`, `.ux4g-label`, `.ux4g-body`, `.ux4g-body-small`
+   - Sentence case for all labels (UX4G rule)
+
+2. **Color System**
+   - Brand Primary: `#E74C3C` (India Post Red)
+   - Brand Secondary: `#2C3E50` (Deep Navy)
+   - Semantic colors: Success, Warning, Danger, Info
+   - Neutral grays for backgrounds and borders
+
+3. **Spacing & Layout**
+   - 8px base unit spacing scale
+   - Responsive 12-column grid
+   - Container max-width: 1280px
+   - Mobile-first breakpoints
+
+4. **Accessibility**
+   - **Accessibility Bar**: Fixed bottom-right widget with:
+     - Text size controls (normal, large, xlarge)
+     - High contrast toggle
+     - Keyboard focus indicators
+   - Minimum touch targets: 44x44px
+   - ARIA labels on all interactive elements
+   - Keyboard navigation support
+   - Focus outlines with 2px ring
+
+5. **Components**
+   - Cards with elevation tokens (shadows)
+   - Forms with sentence case labels
+   - Buttons with minimum 44px height
+   - Skeleton loaders (replacing spinners)
+
+6. **Navigation**
+   - Logo positioned left
+   - Primary navigation center-left (Marketplace, Categories, Orders, Track)
+   - Auth/cart actions right
+   - Mobile menu with full navigation
+
+### Design Tokens
+
+All design tokens are defined in `src/styles/ux4g-tokens.css`:
+- Brand colors (primary, secondary, accent, semantic)
+- Neutral colors (50-900 scale)
+- Spacing scale (1-24 units)
+- Border radius tokens
+- Elevation/shadow tokens (0-5 levels)
+- Typescale (Display, Headline, Title, Label, Body)
+- Breakpoints (sm, md, lg, xl, 2xl)
+- Touch target minimums
+
+### Accessibility Compliance
+
+- **WCAG 2.1 AA**: Contrast ratios ≥ 4.5:1 for body text
+- **WCAG 2.1 AAA**: Critical CTAs meet 7:1 contrast
+- **Keyboard Navigation**: All interactive elements accessible via keyboard
+- **Screen Readers**: ARIA labels and semantic HTML
+- **Focus Indicators**: Clear 2px focus rings on all focusable elements
+
+### Rollout Instructions
+
+1. **Verify Font Loading**: Check that Noto Sans loads correctly (check Network tab)
+2. **Test Accessibility Bar**: 
+   - Click text size button to cycle through sizes
+   - Toggle high contrast mode
+   - Enable keyboard hints
+3. **Test Responsive Behavior**: 
+   - Mobile (< 640px): Stacked layout, mobile menu
+   - Tablet (640px - 1024px): 2-column grids
+   - Desktop (> 1024px): Full 3-4 column layouts
+4. **Verify Touch Targets**: All buttons and links should be at least 44x44px
+5. **Test Keyboard Navigation**: Tab through all interactive elements
+6. **Check Contrast**: Use browser DevTools or contrast checker tools
+
+### Browser Support
+
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+### Notes
+
+- All existing functionality preserved (no breaking changes)
+- Backend APIs and routes unchanged
+- Supabase integration intact
+- Product images use Supabase storage (already implemented)
+- Skeleton loaders replace spinners for better UX
+- All labels use sentence case per UX4G guidelines

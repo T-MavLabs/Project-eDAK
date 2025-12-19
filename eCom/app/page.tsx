@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SellerRedirect } from "@/components/SellerRedirect";
+import { CommerceNavbar } from "@/components/commerce/CommerceNavbar";
 import { fetchActiveProducts } from "@/supabase/queries";
 import { getProductImageUrl } from "@/supabase/storage";
 
@@ -16,6 +17,7 @@ export default async function Home() {
 
   return (
     <>
+      <CommerceNavbar />
       <SellerRedirect />
       <div className="min-h-screen bg-background">
         {/* Hero Section - Above the Fold */}
@@ -38,10 +40,10 @@ export default async function Home() {
                 </div>
               </div>
               
-              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4 text-balance">
+              <h2 className="ux4g-headline mb-4 text-balance">
                 Shop from Indian MSMEs. Delivered by India Post.
               </h2>
-              <p className="text-lg text-muted-foreground mb-8 text-pretty leading-relaxed">
+              <p className="ux4g-body text-muted-foreground mb-8 text-pretty">
                 Trusted e-commerce platform connecting buyers with verified Indian sellers. Every order is tracked end-to-end through India Post's nationwide delivery network.
               </p>
 
@@ -63,22 +65,22 @@ export default async function Home() {
 
               {/* Primary CTAs */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-                <Button asChild size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 vyapar-gentle-transition">
+                <Button asChild size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 vyapar-gentle-transition min-h-[44px] ux4g-label">
                   <Link href="/market">
-                    Explore Marketplace
-                    <ArrowRight className="h-4 w-4 ml-2" />
+                    Explore marketplace
+                    <ArrowRight className="h-4 w-4 ml-2" aria-hidden="true" />
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto vyapar-gentle-transition">
+                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto vyapar-gentle-transition min-h-[44px] ux4g-label">
                   <Link href="/track">
-                    <PackageSearch className="h-4 w-4 mr-2" />
-                    Track Your Order
+                    <PackageSearch className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Track your order
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto vyapar-gentle-transition">
+                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto vyapar-gentle-transition min-h-[44px] ux4g-label">
                   <Link href="/auth/signup">
-                    <Store className="h-4 w-4 mr-2" />
-                    Start Selling
+                    <Store className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Start selling
                   </Link>
                 </Button>
               </div>
@@ -115,9 +117,9 @@ export default async function Home() {
           <section className="border-b bg-background py-16">
             <div className="mx-auto w-full max-w-6xl px-4">
               <div className="mb-10 vyapar-slide-up">
-                <div className="vyapar-kicker">Browse by Category</div>
-                <h3 className="text-2xl font-semibold tracking-tight mt-2 mb-3">Shop by what you need</h3>
-                <p className="text-muted-foreground max-w-2xl">
+                <div className="vyapar-kicker ux4g-label">Browse by category</div>
+                <h3 className="ux4g-title mt-2 mb-3">Shop by what you need</h3>
+                <p className="ux4g-body text-muted-foreground max-w-2xl">
                   Discover products from verified Indian sellers across multiple categories. Every purchase supports local livelihoods.
                 </p>
               </div>
@@ -147,9 +149,9 @@ export default async function Home() {
           <section className="border-b bg-muted/20 py-16">
             <div className="mx-auto w-full max-w-6xl px-4">
               <div className="mb-10 vyapar-slide-up">
-                <div className="vyapar-kicker">Featured Products</div>
-                <h3 className="text-2xl font-semibold tracking-tight mt-2 mb-3">Handpicked from Indian sellers</h3>
-                <p className="text-muted-foreground max-w-2xl">
+                <div className="vyapar-kicker ux4g-label">Featured products</div>
+                <h3 className="ux4g-title mt-2 mb-3">Handpicked from Indian sellers</h3>
+                <p className="ux4g-body text-muted-foreground max-w-2xl">
                   Every product comes with a story. Support Indian MSMEs building sustainable livelihoods.
                 </p>
               </div>
@@ -157,11 +159,11 @@ export default async function Home() {
                 {featuredProducts.map((product, idx) => (
                   <Card
                     key={product.id}
-                    className="overflow-hidden vyapar-card vyapar-fade-in group"
+                    className="overflow-hidden vyapar-card vyapar-fade-in group flex flex-col h-full"
                     style={{ animationDelay: `${idx * 80}ms` }}
                   >
-                    <Link href={`/market/product/${product.id}`}>
-                      <div className="relative h-48 w-full bg-muted/30 overflow-hidden">
+                    <Link href={`/market/product/${product.id}`} className="flex flex-col h-full">
+                      <div className="relative h-48 w-full bg-muted/30 overflow-hidden flex-shrink-0">
                         <Image
                           src={getProductImageUrl(product.id, product.image_path)}
                           alt={product.name}
@@ -172,24 +174,35 @@ export default async function Home() {
                           unoptimized
                         />
                       </div>
-                      <CardHeader className="space-y-2">
-                        <CardTitle className="text-lg leading-snug line-clamp-2">{product.name}</CardTitle>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <Badge variant="secondary" className="vyapar-chip text-xs">{product.category}</Badge>
-                          <Badge variant="secondary" className="gap-1.5 vyapar-chip text-xs">
-                            <Truck className="h-3 w-3" />
-                            India Post
-                          </Badge>
+                      <CardHeader className="space-y-2 flex-shrink-0">
+                        <div className="min-h-[3.5rem]">
+                          <CardTitle className="ux4g-title line-clamp-2 mb-2">{product.name}</CardTitle>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Badge variant="secondary" className="vyapar-chip ux4g-body-small">{product.category}</Badge>
+                            <Badge variant="secondary" className="gap-1.5 vyapar-chip ux4g-body-small">
+                              <Truck className="h-3 w-3" aria-hidden="true" />
+                              India Post
+                            </Badge>
+                          </div>
                         </div>
                       </CardHeader>
-                      <CardContent className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="text-sm text-muted-foreground">From {product.seller_name}</div>
-                          <div className="text-xl font-semibold">₹{Number(product.price).toLocaleString("en-IN")}</div>
+                      <CardContent className="space-y-3 flex flex-col flex-1">
+                        <div className="min-h-[1.5rem]">
+                          <div className="ux4g-body-small text-muted-foreground">From {product.seller_name}</div>
                         </div>
-                        <Button className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition" size="sm">
-                          View Product
-                        </Button>
+                        <div className="flex-shrink-0">
+                          <div className="ux4g-title text-primary">₹{Number(product.price).toLocaleString("en-IN")}</div>
+                        </div>
+                        <div className="flex-shrink-0">
+                          <div className="ux4g-body-small text-muted-foreground">
+                            Delivery: 5-7 days via India Post
+                          </div>
+                        </div>
+                        <div className="mt-auto pt-2">
+                          <Button className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition min-h-[44px] ux4g-label" size="sm">
+                            View product
+                          </Button>
+                        </div>
                       </CardContent>
                     </Link>
                   </Card>
@@ -211,9 +224,9 @@ export default async function Home() {
         <section className="border-b bg-background py-16">
           <div className="mx-auto w-full max-w-6xl px-4">
             <div className="mb-10 vyapar-slide-up">
-              <div className="vyapar-kicker">Why India Post Logistics</div>
-              <h3 className="text-2xl font-semibold tracking-tight mt-2 mb-3">Reliable delivery across India</h3>
-              <p className="text-muted-foreground max-w-2xl">
+              <div className="vyapar-kicker ux4g-label">Why India Post logistics</div>
+              <h3 className="ux4g-title mt-2 mb-3">Reliable delivery across India</h3>
+              <p className="ux4g-body text-muted-foreground max-w-2xl">
                 India Post's extensive network ensures your orders reach every corner of the country, from metros to remote villages.
               </p>
             </div>
@@ -223,10 +236,10 @@ export default async function Home() {
                   <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/10 mb-4">
                     <MapPin className="h-6 w-6 text-primary" />
                   </div>
-                  <CardTitle className="text-xl">Nationwide Coverage</CardTitle>
+                  <CardTitle className="ux4g-title">Nationwide coverage</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="ux4g-body text-muted-foreground">
                     India Post reaches over 1.5 lakh post offices across India, ensuring delivery to even the most remote locations.
                   </p>
                 </CardContent>
@@ -234,12 +247,12 @@ export default async function Home() {
               <Card className="vyapar-card vyapar-fade-in" style={{ animationDelay: "100ms" }}>
                 <CardHeader>
                   <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/10 mb-4">
-                    <PackageSearch className="h-6 w-6 text-primary" />
+                    <PackageSearch className="h-6 w-6 text-primary" aria-hidden="true" />
                   </div>
-                  <CardTitle className="text-xl">Real-time Tracking</CardTitle>
+                  <CardTitle className="ux4g-title">Real-time tracking</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="ux4g-body text-muted-foreground">
                     Track your order from dispatch to delivery with detailed updates at every stage of the journey.
                   </p>
                 </CardContent>
@@ -247,12 +260,12 @@ export default async function Home() {
               <Card className="vyapar-card vyapar-fade-in" style={{ animationDelay: "200ms" }}>
                 <CardHeader>
                   <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/10 mb-4">
-                    <CheckCircle2 className="h-6 w-6 text-primary" />
+                    <CheckCircle2 className="h-6 w-6 text-primary" aria-hidden="true" />
                   </div>
-                  <CardTitle className="text-xl">Trusted & Secure</CardTitle>
+                  <CardTitle className="ux4g-title">Trusted & secure</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="ux4g-body text-muted-foreground">
                     Government-backed logistics with secure handling and reliable delivery timelines you can count on.
                   </p>
                 </CardContent>
@@ -265,9 +278,9 @@ export default async function Home() {
         <section className="border-b bg-muted/20 py-16">
           <div className="mx-auto w-full max-w-6xl px-4">
             <div className="mb-10 vyapar-slide-up">
-              <div className="vyapar-kicker">How It Works</div>
-              <h3 className="text-2xl font-semibold tracking-tight mt-2 mb-3">Simple delivery process</h3>
-              <p className="text-muted-foreground max-w-2xl">
+              <div className="vyapar-kicker ux4g-label">How it works</div>
+              <h3 className="ux4g-title mt-2 mb-3">Simple delivery process</h3>
+              <p className="ux4g-body text-muted-foreground max-w-2xl">
                 From order placement to doorstep delivery, here's how your purchase journey works.
               </p>
             </div>
@@ -282,8 +295,8 @@ export default async function Home() {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground text-lg font-semibold mb-4">
                     {item.step}
                   </div>
-                  <h4 className="font-semibold mb-2">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                  <h4 className="ux4g-label font-semibold mb-2">{item.title}</h4>
+                  <p className="ux4g-body-small text-muted-foreground">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -294,8 +307,8 @@ export default async function Home() {
         <section className="bg-background py-16">
           <div className="mx-auto w-full max-w-6xl px-4">
             <div className="mb-10 vyapar-slide-up text-center">
-              <h3 className="text-2xl font-semibold tracking-tight mb-3">Get Started</h3>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <h3 className="ux4g-title mb-3">Get started</h3>
+              <p className="ux4g-body text-muted-foreground max-w-2xl mx-auto">
                 Choose your role to begin your journey with VYAPAR
               </p>
             </div>
@@ -315,11 +328,11 @@ export default async function Home() {
                 <CardContent className="space-y-3">
                   <Button asChild className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition">
                     <Link href="/market">
-                      Browse Marketplace
-                      <ArrowRight className="h-4 w-4 ml-2" />
+                      Browse marketplace
+                      <ArrowRight className="h-4 w-4 ml-2" aria-hidden="true" />
                     </Link>
                   </Button>
-                  <div className="text-xs text-muted-foreground text-center">
+                  <div className="ux4g-body-small text-muted-foreground text-center">
                     <Link href="/auth/login" className="hover:text-foreground vyapar-gentle-transition">Already have an account?</Link>
                   </div>
                 </CardContent>
@@ -329,22 +342,22 @@ export default async function Home() {
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
                     <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/10">
-                      <Store className="h-6 w-6 text-primary" />
+                      <Store className="h-6 w-6 text-primary" aria-hidden="true" />
                     </div>
-                    <CardTitle>I'm a Seller (MSME)</CardTitle>
+                    <CardTitle className="ux4g-title">I'm a seller (MSME)</CardTitle>
                   </div>
-                  <CardDescription>
+                  <CardDescription className="ux4g-body-small">
                     List your products, manage inventory, and reach customers nationwide
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button asChild variant="default" className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition">
+                  <Button asChild variant="default" className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition min-h-[44px] ux4g-label">
                     <Link href="/auth/signup">
-                      Become a Seller
-                      <ArrowRight className="h-4 w-4 ml-2" />
+                      Become a seller
+                      <ArrowRight className="h-4 w-4 ml-2" aria-hidden="true" />
                     </Link>
                   </Button>
-                  <div className="text-xs text-muted-foreground text-center">
+                  <div className="ux4g-body-small text-muted-foreground text-center">
                     <Link href="/auth/login" className="hover:text-foreground vyapar-gentle-transition">Already registered?</Link>
                   </div>
                 </CardContent>
@@ -354,22 +367,22 @@ export default async function Home() {
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
                     <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/10">
-                      <Shield className="h-6 w-6 text-primary" />
+                      <Shield className="h-6 w-6 text-primary" aria-hidden="true" />
                     </div>
-                    <CardTitle>Admin Access</CardTitle>
+                    <CardTitle className="ux4g-title">Admin access</CardTitle>
                   </div>
-                  <CardDescription>
+                  <CardDescription className="ux4g-body-small">
                     Platform governance, seller verification, and product moderation
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
+                  <Button asChild variant="outline" className="w-full vyapar-gentle-transition min-h-[44px] ux4g-label">
                     <Link href="/auth/admin-login">
-                      Admin Login
-                      <ArrowRight className="h-4 w-4 ml-2" />
+                      Admin login
+                      <ArrowRight className="h-4 w-4 ml-2" aria-hidden="true" />
                     </Link>
                   </Button>
-                  <div className="text-xs text-muted-foreground text-center">
+                  <div className="ux4g-body-small text-muted-foreground text-center">
                     <span className="font-mono">admin / admin123</span>
                   </div>
                 </CardContent>

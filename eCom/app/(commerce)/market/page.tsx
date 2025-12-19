@@ -54,17 +54,17 @@ export default async function MarketPage({
         {/* Breadcrumbs */}
         <div className="border-b bg-muted/30">
           <div className="mx-auto w-full max-w-7xl px-4 py-3">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Link href="/" className="hover:text-foreground vyapar-gentle-transition">Home</Link>
-              <ChevronRight className="h-4 w-4" />
-              <span className="text-foreground font-medium">Marketplace</span>
+            <nav className="flex items-center gap-2 ux4g-body-small text-muted-foreground" aria-label="Breadcrumb">
+              <Link href="/" className="hover:text-foreground vyapar-gentle-transition min-h-[44px] inline-flex items-center">Home</Link>
+              <ChevronRight className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+              <span className="text-foreground font-medium ux4g-label">Marketplace</span>
               {categoryFilter && (
                 <>
-                  <ChevronRight className="h-4 w-4" />
-                  <span className="text-foreground font-medium">{categoryFilter}</span>
+                  <ChevronRight className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                  <span className="text-foreground font-medium ux4g-label">{categoryFilter}</span>
                 </>
               )}
-            </div>
+            </nav>
           </div>
         </div>
 
@@ -97,29 +97,29 @@ export default async function MarketPage({
               <div className="sticky top-[185px] space-y-6">
                 <Card className="vyapar-card p-4">
                   <div className="flex items-center gap-2 mb-4">
-                    <Filter className="h-4 w-4 text-primary" />
-                    <h3 className="font-semibold text-sm">Filters</h3>
+                    <Filter className="h-4 w-4 text-primary" aria-hidden="true" />
+                    <h3 className="ux4g-label font-semibold">Filters</h3>
                   </div>
                   
                   {/* Category Filter */}
                   <div className="space-y-3">
-                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Category</div>
+                    <div className="ux4g-label font-semibold text-muted-foreground">Category</div>
                     <div className="space-y-2">
                       <Link
                         href="/market"
-                        className={`block text-sm py-1.5 px-2 rounded-md vyapar-gentle-transition ${
+                        className={`block ux4g-body-small py-2 px-2 rounded-md vyapar-gentle-transition min-h-[44px] flex items-center ${
                           !params.category
                             ? "bg-primary/10 text-primary font-medium"
                             : "text-muted-foreground hover:text-foreground hover:bg-muted"
                         }`}
                       >
-                        All Categories
+                        All categories
                       </Link>
                       {categories.map((cat) => (
                         <Link
                           key={cat}
                           href={`/market?category=${encodeURIComponent(cat)}${params.search && typeof params.search === "string" ? `&search=${encodeURIComponent(params.search)}` : ""}`}
-                          className={`block text-sm py-1.5 px-2 rounded-md vyapar-gentle-transition ${
+                          className={`block ux4g-body-small py-2 px-2 rounded-md vyapar-gentle-transition min-h-[44px] flex items-center ${
                             categoryFilter === cat
                               ? "bg-primary/10 text-primary font-medium"
                               : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -134,9 +134,9 @@ export default async function MarketPage({
                   {/* Delivery Info */}
                   <div className="pt-4 border-t">
                     <div className="flex items-start gap-2 p-3 rounded-lg bg-primary/5 border border-primary/20">
-                      <Truck className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                      <div className="text-xs">
-                        <div className="font-semibold text-foreground mb-1">Delivered by India Post</div>
+                      <Truck className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
+                      <div className="ux4g-body-small">
+                        <div className="ux4g-label font-semibold text-foreground mb-1">Delivered by India Post</div>
                         <div className="text-muted-foreground">Nationwide delivery with real-time tracking</div>
                       </div>
                     </div>
@@ -150,10 +150,10 @@ export default async function MarketPage({
               {/* Results Header */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
-                  <h1 className="text-2xl font-semibold tracking-tight">
-                    {categoryFilter ? categoryFilter : "All Products"}
+                  <h1 className="ux4g-title">
+                    {categoryFilter ? categoryFilter : "All products"}
                   </h1>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="ux4g-body-small text-muted-foreground mt-1">
                     {products.length} {products.length === 1 ? "product" : "products"} found
                     {params.search && typeof params.search === "string" && ` for "${params.search}"`}
                   </p>
@@ -169,11 +169,11 @@ export default async function MarketPage({
                   {products.map((p, idx) => (
                     <Card
                       key={p.id}
-                      className="overflow-hidden vyapar-card vyapar-fade-in group hover:shadow-lg vyapar-gentle-transition"
+                      className="overflow-hidden vyapar-card vyapar-fade-in group hover:shadow-lg vyapar-gentle-transition flex flex-col h-full"
                       style={{ animationDelay: `${idx * 50}ms` }}
                     >
-                      <Link href={`/market/product/${p.id}`} className="block">
-                        <div className="relative h-48 w-full bg-muted/30 overflow-hidden">
+                      <Link href={`/market/product/${p.id}`} className="block flex flex-col h-full">
+                        <div className="relative h-48 w-full bg-muted/30 overflow-hidden flex-shrink-0">
                           <Image
                             src={getProductImageUrl(p.id, p.image_path)}
                             alt={p.name}
@@ -184,31 +184,44 @@ export default async function MarketPage({
                             unoptimized
                           />
                           <div className="absolute top-2 right-2">
-                            <Badge variant="secondary" className="gap-1 vyapar-chip bg-white/95 backdrop-blur-sm text-xs px-2 py-0.5">
-                              <Truck className="h-3 w-3 text-primary" />
+                            <Badge variant="secondary" className="gap-1 vyapar-chip bg-white/95 backdrop-blur-sm ux4g-body-small px-2 py-0.5">
+                              <Truck className="h-3 w-3 text-primary" aria-hidden="true" />
                               India Post
                             </Badge>
                           </div>
                         </div>
-                        <CardContent className="p-4 space-y-3">
-                          <div>
-                            <h3 className="text-sm font-semibold leading-snug line-clamp-2 mb-1.5 group-hover:text-primary vyapar-gentle-transition">
+                        <CardContent className="p-4 flex flex-col flex-1">
+                          {/* Title and Category - Fixed height area */}
+                          <div className="mb-3 min-h-[3.5rem]">
+                            <h3 className="ux4g-label font-semibold leading-snug line-clamp-2 mb-2 group-hover:text-primary vyapar-gentle-transition">
                               {p.name}
                             </h3>
-                            <div className="flex items-center gap-2 mb-2">
-                              <Badge variant="secondary" className="vyapar-chip text-xs px-2 py-0">{p.category}</Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="secondary" className="vyapar-chip ux4g-body-small px-2 py-0">{p.category}</Badge>
                             </div>
                           </div>
-                          <div className="space-y-2">
-                            <div className="flex items-baseline justify-between gap-2">
-                              <div className="text-xs text-muted-foreground">Seller</div>
-                              <div className="text-lg font-semibold text-primary">₹{Number(p.price).toLocaleString("en-IN")}</div>
-                            </div>
-                            <div className="text-xs text-muted-foreground truncate">{p.seller_name}</div>
+
+                          {/* Seller Info - Fixed height */}
+                          <div className="mb-3 min-h-[1.5rem]">
+                            <div className="ux4g-body-small text-muted-foreground truncate">{p.seller_name}</div>
                           </div>
-                          <div className="flex items-center gap-1.5 pt-2 border-t">
-                            <Badge variant="secondary" className="vyapar-chip text-xs px-2 py-0">COD</Badge>
-                            <Badge variant="secondary" className="vyapar-chip text-xs px-2 py-0">Free Delivery</Badge>
+
+                          {/* Price - Fixed position, always aligned */}
+                          <div className="mb-3 flex-shrink-0">
+                            <div className="ux4g-title text-primary">₹{Number(p.price).toLocaleString("en-IN")}</div>
+                          </div>
+
+                          {/* Delivery Info - Fixed height */}
+                          <div className="mb-3 min-h-[1.25rem] flex-shrink-0">
+                            <div className="ux4g-body-small text-muted-foreground">
+                              Delivery: 5-7 days via India Post
+                            </div>
+                          </div>
+
+                          {/* Payment badges - Push to bottom */}
+                          <div className="flex items-center gap-1.5 pt-2 border-t mt-auto">
+                            <Badge variant="secondary" className="vyapar-chip ux4g-body-small px-2 py-0">COD</Badge>
+                            <Badge variant="secondary" className="vyapar-chip ux4g-body-small px-2 py-0">Free delivery</Badge>
                           </div>
                         </CardContent>
                       </Link>
@@ -218,17 +231,17 @@ export default async function MarketPage({
               ) : (
                 <Card className="vyapar-card p-12 text-center">
                   <div className="space-y-4">
-                    <div className="text-4xl">📦</div>
+                    <div className="text-4xl" role="img" aria-label="Empty box">📦</div>
                     <div>
-                      <h3 className="text-lg font-semibold mb-2">No products found</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
+                      <h3 className="ux4g-title mb-2">No products found</h3>
+                      <p className="ux4g-body text-muted-foreground mb-4">
                         {params.search || categoryFilter
                           ? "Try adjusting your search or filters"
                           : "No products available at the moment"}
                       </p>
                       {(params.search || categoryFilter) && (
-                        <Button asChild variant="outline">
-                          <Link href="/market">Clear Filters</Link>
+                        <Button asChild variant="outline" className="min-h-[44px] ux4g-label">
+                          <Link href="/market">Clear filters</Link>
                         </Button>
                       )}
                     </div>
@@ -238,17 +251,17 @@ export default async function MarketPage({
 
               {/* Trust Footer */}
               <div className="mt-10 pt-6 border-t">
-                <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center justify-center gap-6 ux4g-body-small text-muted-foreground">
                   <div className="flex items-center gap-2">
-                    <Truck className="h-4 w-4 text-primary" />
+                    <Truck className="h-4 w-4 text-primary" aria-hidden="true" />
                     <span>Delivered by India Post</span>
                   </div>
-                  <div>•</div>
+                  <div aria-hidden="true">•</div>
                   <div>Nationwide delivery</div>
-                  <div>•</div>
+                  <div aria-hidden="true">•</div>
                   <div>Real-time tracking</div>
-                  <div>•</div>
-                  <div>Cash on Delivery available</div>
+                  <div aria-hidden="true">•</div>
+                  <div>Cash on delivery available</div>
                 </div>
               </div>
             </div>

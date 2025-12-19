@@ -17,12 +17,10 @@ import { NationalLogisticsKPIs } from "@/components/NationalLogisticsKPIs";
 import { CongestedHubsChart, ModeComparisonChart } from "@/components/Charts";
 import { RouteReliabilityExplorer } from "@/components/RouteReliabilityExplorer";
 import { DigipinIntelligence } from "@/components/DigipinIntelligence";
+import { AccessibilityBar } from "@/components/ux4g/AccessibilityBar";
+import { Panel } from "@/components/ux4g/Panel";
 
 import { Button } from "@/components/ui/button";
-import { AnimatedCard } from "@/components/aceternity/AnimatedCard";
-import { AnimatedText } from "@/components/aceternity/AnimatedText";
-import { Spotlight } from "@/components/aceternity/Spotlight";
-import { GridPattern } from "@/components/aceternity/GridPattern";
 
 export default function AdminPage() {
   const role = useDemoRole();
@@ -63,195 +61,190 @@ export default function AdminPage() {
   }, [isAdmin]);
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-10 relative overflow-hidden">
-      {/* Background effects */}
-      <Spotlight className="top-0 right-0 opacity-20" />
-      <GridPattern className="opacity-30" />
+    <>
+      {/* Accessibility widget */}
+      <AccessibilityBar />
 
-      {/* Operations control room header */}
-      <div className="daksh-sticky-header relative z-10">
-        <AnimatedText type="fade" delay={0}>
-          <div className="daksh-kicker mb-2">Operations Control Center</div>
-        </AnimatedText>
-        <AnimatedText type="slide" delay={100}>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-md daksh-gradient-primary daksh-layered aceternity-float">
-              <BarChart3 className="h-5 w-5 text-primary-foreground" />
+      {/* UX4G Container with max-width */}
+      <main 
+        className="mx-auto w-full max-w-[1536px] px-4 py-10"
+        role="main"
+        aria-label="Admin Analytics Dashboard"
+      >
+        {/* Page Header */}
+        <header className="mb-8">
+          <div 
+            className="text-sm font-medium text-neutral-600 uppercase tracking-wide mb-2"
+            style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+          >
+            Operations Control Center
+          </div>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 rounded-md bg-[#E74C3C]">
+              <BarChart3 className="h-5 w-5 text-white" aria-hidden="true" />
             </div>
-            <h1 className="daksh-text-primary text-3xl aceternity-gradient-text">
+            <h1 
+              className="text-3xl font-semibold text-neutral-900 leading-tight"
+              style={{ 
+                fontFamily: "var(--ux4g-font-family-display, 'Noto Sans Display', sans-serif)",
+                fontSize: "var(--ux4g-text-3xl, 1.875rem)"
+              }}
+            >
               Admin Analytics Dashboard
             </h1>
           </div>
-        </AnimatedText>
-        <AnimatedText type="fade" delay={200}>
-          <p className="daksh-text-secondary max-w-2xl">
+          <p 
+            className="text-sm text-neutral-600 max-w-2xl leading-relaxed"
+            style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+          >
             Operational overview for hubs, delays, and SLA compliance. Dense but readable
             intelligence for rapid triage.
           </p>
-        </AnimatedText>
-      </div>
+        </header>
 
-      {!isAdmin ? (
-        <div className="mt-6 daksh-layered-elevated daksh-advisory-warning rounded-lg p-6 daksh-slide-up">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="p-2 rounded-md daksh-gradient-primary daksh-layered flex-shrink-0">
-              <LockKeyhole className="h-4 w-4 text-primary-foreground" />
-            </div>
-            <div className="flex-1">
-              <div className="daksh-text-primary mb-1">Admin access (demo)</div>
-              <div className="daksh-text-secondary">
-                This page is visible in the hackathon demo only when the role is set to Admin. Use
-                the toggle in the top navigation, or enable Admin demo mode below.
-              </div>
-            </div>
-          </div>
-          <div className="daksh-layered rounded-lg p-4 daksh-gradient-muted mb-4">
-            <div className="flex items-start gap-3">
-              <ShieldAlert className="mt-0.5 h-4 w-4 text-[#FF9933] flex-shrink-0" />
-              <div>
-                <div className="daksh-text-secondary font-semibold mb-1">Restricted view</div>
-                <div className="daksh-text-meta">
-                  Enable admin mode to access operational intelligence.
-                </div>
-              </div>
-            </div>
-          </div>
-          <Button
-            className="bg-primary hover:bg-primary/90 daksh-elevated daksh-focus-ring daksh-press"
-            onClick={() => {
-              setDemoRole("admin");
-            }}
+        {!isAdmin ? (
+          <Panel
+            title="Admin Access Required"
+            description="This page is visible in the hackathon demo only when the role is set to Admin. Use the toggle in the top navigation, or enable Admin demo mode below."
+            elevated
+            className="border-l-4 border-l-[#FF9933]"
           >
-            Enable Admin demo mode
-          </Button>
-        </div>
-      ) : (
-        <>
-          {loading ? (
-            <div className="mt-6 space-y-6">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="h-32 rounded-xl bg-muted/50 animate-pulse"
-                  />
-                ))}
-              </div>
-              <div className="h-96 rounded-xl bg-muted/50 animate-pulse" />
-            </div>
-          ) : error ? (
-            <div className="mt-6 daksh-layered-elevated daksh-advisory-warning rounded-lg p-6">
-              <div className="daksh-text-primary mb-2">Error loading analytics</div>
-              <div className="daksh-text-secondary">{error}</div>
-              <Button
-                className="mt-4 bg-primary hover:bg-primary/90"
-                onClick={() => window.location.reload()}
-              >
-                Refresh Page
-              </Button>
-            </div>
-          ) : (
-            <>
-              {/* 1. Top KPI Header - National Logistics Snapshot */}
-              {summaryMetrics && (
-                <div className="mt-6 daksh-slide-up">
-                  <NationalLogisticsKPIs metrics={summaryMetrics} />
+            <div className="flex items-start gap-3 mb-4">
+              <ShieldAlert className="h-5 w-5 text-[#FF9933] flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <div>
+                <div className="text-sm font-semibold text-neutral-900 mb-1">
+                  Restricted view
                 </div>
-              )}
+                <p className="text-sm text-neutral-600">
+                  Enable admin mode to access operational intelligence.
+                </p>
+              </div>
+            </div>
+            <Button
+              className="bg-[#E74C3C] hover:bg-[#C0392B] text-white"
+              onClick={() => {
+                setDemoRole("admin");
+              }}
+              aria-label="Enable Admin demo mode"
+            >
+              Enable Admin demo mode
+            </Button>
+          </Panel>
+        ) : (
+          <>
+            {loading ? (
+              <div className="space-y-6">
+                {/* Skeleton loading states */}
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="h-32 rounded-lg bg-neutral-100 animate-pulse"
+                      aria-label="Loading KPI card"
+                    />
+                  ))}
+                </div>
+                <div className="h-96 rounded-lg bg-neutral-100 animate-pulse" aria-label="Loading chart" />
+              </div>
+            ) : error ? (
+              <Panel
+                title="Error Loading Analytics"
+                description={error}
+                elevated
+                className="border-l-4 border-l-[#DC2626]"
+              >
+                <Button
+                  className="mt-4 bg-[#E74C3C] hover:bg-[#C0392B] text-white"
+                  onClick={() => window.location.reload()}
+                  aria-label="Refresh page to retry loading analytics"
+                >
+                  Refresh Page
+                </Button>
+              </Panel>
+            ) : (
+              <>
+                {/* 1. Top KPI Header - National Logistics Snapshot */}
+                {summaryMetrics && (
+                  <section className="mb-10" aria-label="National Logistics KPIs">
+                    <NationalLogisticsKPIs metrics={summaryMetrics} />
+                  </section>
+                )}
 
-              {/* 2. Bottleneck Analysis - Top Congested Hubs */}
-              {congestedHubs.length > 0 && (
-                <div className="mt-10 daksh-slide-up">
-                  <div className="daksh-sticky-header mb-6">
-                    <div className="daksh-section-divider" />
-                    <div className="mt-6 mb-4">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="h-2 w-2 rounded-full bg-primary daksh-pulse" />
-                        <div className="daksh-kicker">Top Congested Hubs</div>
+                {/* 2. Bottleneck Analysis - Top Congested Hubs */}
+                {congestedHubs.length > 0 && (
+                  <section className="mb-10" aria-label="Bottleneck Analysis">
+                    <div className="mb-6">
+                      <div 
+                        className="text-sm font-medium text-neutral-600 uppercase tracking-wide mb-2"
+                        style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+                      >
+                        Top Congested Hubs
                       </div>
-                      <div className="daksh-text-secondary max-w-3xl">
+                      <p 
+                        className="text-sm text-neutral-600 max-w-3xl leading-relaxed"
+                        style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+                      >
                         Hub congestion analysis identifying bottlenecks in the logistics network.
                         Higher scores indicate critical capacity constraints.
-                      </div>
+                      </p>
                     </div>
-                  </div>
-                  <AnimatedCard
-                    className="daksh-layered-deep daksh-gradient-card rounded-xl overflow-hidden border border-border/60 aceternity-glow"
-                    delay={400}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/2 via-transparent to-transparent pointer-events-none rounded-xl z-0" />
-                    <div className="relative z-10">
+                    <Panel elevated>
                       <CongestedHubsChart data={congestedHubs} />
-                    </div>
-                  </AnimatedCard>
-                </div>
-              )}
+                    </Panel>
+                  </section>
+                )}
 
-              {/* 3. Efficiency Overview - Delivery Mode Comparison */}
-              {modeComparison.length > 0 && (
-                <div className="mt-10 daksh-slide-up">
-                  <div className="daksh-sticky-header mb-6">
-                    <div className="daksh-section-divider" />
-                    <div className="mt-6 mb-4">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="h-2 w-2 rounded-full bg-primary daksh-pulse" />
-                        <div className="daksh-kicker">Delivery Mode Comparison</div>
+                {/* 3. Efficiency Overview - Delivery Mode Comparison */}
+                {modeComparison.length > 0 && (
+                  <section className="mb-10" aria-label="Efficiency Overview">
+                    <div className="mb-6">
+                      <div 
+                        className="text-sm font-medium text-neutral-600 uppercase tracking-wide mb-2"
+                        style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+                      >
+                        Delivery Mode Comparison
                       </div>
-                      <div className="daksh-text-secondary max-w-3xl">
+                      <p 
+                        className="text-sm text-neutral-600 max-w-3xl leading-relaxed"
+                        style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+                      >
                         Comparative efficiency analysis across Surface, Air, and Express delivery
                         modes to identify optimization opportunities.
-                      </div>
+                      </p>
                     </div>
-                  </div>
-                  <div className="grid gap-6 lg:grid-cols-2">
-                    <AnimatedCard
-                      className="daksh-layered-deep daksh-gradient-card rounded-xl overflow-hidden border border-border/60 aceternity-glow"
-                      delay={500}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/2 via-transparent to-transparent pointer-events-none rounded-xl z-0" />
-                      <div className="relative z-10">
+                    <div className="grid gap-6 lg:grid-cols-2">
+                      <Panel elevated>
                         <ModeComparisonChart data={modeComparison} />
-                      </div>
-                    </AnimatedCard>
-                    <AnimatedCard
-                      className="daksh-layered-deep daksh-gradient-card rounded-xl overflow-hidden border border-border/60 aceternity-glow"
-                      delay={600}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/2 via-transparent to-transparent pointer-events-none rounded-xl z-0" />
-                      <div className="relative z-10 p-6">
-                        <DigipinIntelligence />
-                      </div>
-                    </AnimatedCard>
-                  </div>
-                </div>
-              )}
-
-              {/* 4. Smart Lane Search - Route Reliability Explorer */}
-              <div className="mt-10 daksh-slide-up">
-                <div className="daksh-sticky-header mb-6">
-                  <div className="daksh-section-divider" />
-                  <div className="mt-6 mb-4">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="h-2 w-2 rounded-full bg-primary daksh-pulse" />
-                      <div className="daksh-kicker">Route Reliability Explorer</div>
+                      </Panel>
+                      <DigipinIntelligence />
                     </div>
-                    <div className="daksh-text-secondary max-w-3xl">
+                  </section>
+                )}
+
+                {/* 4. Smart Lane Search - Route Reliability Explorer */}
+                <section aria-label="Route Reliability Explorer">
+                  <div className="mb-6">
+                    <div 
+                      className="text-sm font-medium text-neutral-600 uppercase tracking-wide mb-2"
+                      style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+                    >
+                      Route Reliability Explorer
+                    </div>
+                    <p 
+                      className="text-sm text-neutral-600 max-w-3xl leading-relaxed"
+                      style={{ fontSize: "var(--ux4g-text-sm, 0.875rem)" }}
+                    >
                       Search and analyze route performance metrics. High variance routes indicate
                       reliability risks requiring operational attention.
-                    </div>
+                    </p>
                   </div>
-                </div>
-                <AnimatedCard
-                  className="daksh-layered-deep daksh-gradient-card rounded-xl overflow-hidden border border-border/60 aceternity-border-gradient"
-                  delay={700}
-                >
                   <RouteReliabilityExplorer />
-                </AnimatedCard>
-              </div>
-            </>
-          )}
-        </>
-      )}
-    </div>
+                </section>
+              </>
+            )}
+          </>
+        )}
+      </main>
+    </>
   );
 }

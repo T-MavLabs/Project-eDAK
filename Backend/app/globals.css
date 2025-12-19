@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "../src/styles/design-tokens.css";
+@import "../src/styles/ux4g-dashboard.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -49,8 +51,9 @@
 :root {
   /* UX4G: neutral, high-contrast, non-decorative */
   --radius: 0.375rem;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Inter, "Noto Sans", "Helvetica Neue", Arial,
+  /* UX4G: Noto Sans as base font with fallbacks */
+  --font-sans: var(--font-noto-sans, var(--ux4g-font-family-base, "Noto Sans")), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial,
     "Apple Color Emoji", "Segoe UI Emoji";
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
@@ -63,9 +66,9 @@
   --popover: #ffffff;
   --popover-foreground: #111827;
 
-  /* India Post red ONLY for critical signals (use sparingly in UI) */
-  --primary: #c60000;
-  --primary-foreground: #fff7f2;
+  /* UX4G: India Post red (E74C3C) for primary actions */
+  --primary: var(--ux4g-primary, #E74C3C);
+  --primary-foreground: var(--ux4g-primary-foreground, #ffffff);
 
   --secondary: #f3f4f6;
   --secondary-foreground: #111827;
@@ -76,10 +79,10 @@
   --accent: #f3f4f6;
   --accent-foreground: #111827;
 
-  --destructive: #b42318;
-  --border: rgba(17, 24, 39, 0.14);
-  --input: rgba(17, 24, 39, 0.14);
-  --ring: rgba(198, 0, 0, 0.35);
+  --destructive: var(--ux4g-danger, #DC2626);
+  --border: var(--ux4g-border, rgba(17, 24, 39, 0.12));
+  --input: var(--ux4g-input-border, rgba(17, 24, 39, 0.14));
+  --ring: rgba(231, 76, 60, 0.35);
 
   --chart-1: #c60000;
   --chart-2: #ff9933;

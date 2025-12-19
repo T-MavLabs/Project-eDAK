@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { Bell, LayoutDashboard, MessageSquareWarning, PackageSearch } from "lucide-react";
+import { Bell, LayoutDashboard, MessageSquareWarning, PackageSearch, Home } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { setDemoRole, useDemoRole } from "@/lib/useDemoRole";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sheet";
 
 const navItems = [
+  { href: "/", label: "Home", icon: Home },
   { href: "/track", label: "Track Parcel", icon: PackageSearch },
   { href: "/notifications", label: "Notifications", icon: Bell },
   { href: "/complaints", label: "Complaints", icon: MessageSquareWarning },
@@ -69,7 +70,7 @@ export function CoreNavbar() {
 
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => {
-            const active = pathname === item.href;
+            const active = item.href === "/" ? pathname === "/" : pathname === item.href;
             const Icon = item.icon;
             return (
               <Link
@@ -114,7 +115,7 @@ export function CoreNavbar() {
                   </SheetHeader>
                   <div className="mt-4 grid gap-2">
                     {navItems.map((item) => {
-                      const active = pathname === item.href;
+                      const active = item.href === "/" ? pathname === "/" : pathname === item.href;
                       const Icon = item.icon;
                       return (
                         <Link

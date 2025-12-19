@@ -1,0 +1,425 @@
+/**
+ * UX4G Dashboard Styles for DAKSH
+ * Extends design tokens with dashboard-specific patterns
+ */
+
+@import "./design-tokens.css";
+
+/* ============================================
+   BASE TYPOGRAPHY USING UX4G TOKENS
+   ============================================ */
+
+.ux4g-body {
+  font-family: var(--ux4g-font-family-base);
+  font-size: var(--ux4g-text-base);
+  line-height: var(--ux4g-leading-normal);
+  color: var(--ux4g-foreground);
+}
+
+.ux4g-label {
+  font-family: var(--ux4g-font-family-base);
+  font-size: var(--ux4g-text-sm);
+  font-weight: var(--ux4g-font-medium);
+  line-height: var(--ux4g-leading-normal);
+  color: var(--ux4g-foreground-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ux4g-heading {
+  font-family: var(--ux4g-font-family-display);
+  font-weight: var(--ux4g-font-semibold);
+  line-height: var(--ux4g-leading-tight);
+  color: var(--ux4g-foreground);
+}
+
+.ux4g-heading-1 {
+  font-size: var(--ux4g-text-3xl);
+}
+
+.ux4g-heading-2 {
+  font-size: var(--ux4g-text-2xl);
+}
+
+.ux4g-heading-3 {
+  font-size: var(--ux4g-text-xl);
+}
+
+.ux4g-heading-4 {
+  font-size: var(--ux4g-text-lg);
+}
+
+/* ============================================
+   KPI CARD COMPONENT
+   ============================================ */
+
+.ux4g-kpi-card {
+  background: var(--ux4g-background);
+  border: 1px solid var(--ux4g-border);
+  border-radius: var(--ux4g-radius-lg);
+  padding: var(--ux4g-spacing-6);
+  box-shadow: var(--ux4g-shadow-card);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.ux4g-kpi-card:hover {
+  box-shadow: var(--ux4g-shadow-card-elevated);
+  transform: translateY(-1px);
+}
+
+.ux4g-kpi-card-risk {
+  border-left: 3px solid var(--ux4g-danger);
+}
+
+.ux4g-kpi-label {
+  composes: ux4g-label;
+  margin-bottom: var(--ux4g-spacing-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ux4g-kpi-value {
+  font-family: var(--ux4g-font-family-base);
+  font-size: var(--ux4g-text-2xl);
+  font-weight: var(--ux4g-font-semibold);
+  line-height: var(--ux4g-leading-tight);
+  color: var(--ux4g-foreground);
+  letter-spacing: -0.02em;
+}
+
+.ux4g-kpi-value-risk {
+  color: var(--ux4g-danger);
+}
+
+/* ============================================
+   PANEL COMPONENT
+   ============================================ */
+
+.ux4g-panel {
+  background: var(--ux4g-background);
+  border: 1px solid var(--ux4g-border);
+  border-radius: var(--ux4g-radius-xl);
+  padding: var(--ux4g-spacing-6);
+  box-shadow: var(--ux4g-shadow-panel);
+}
+
+.ux4g-panel-elevated {
+  box-shadow: var(--ux4g-shadow-panel-elevated);
+}
+
+.ux4g-panel-header {
+  margin-bottom: var(--ux4g-spacing-6);
+  padding-bottom: var(--ux4g-spacing-4);
+  border-bottom: 1px solid var(--ux4g-border);
+}
+
+.ux4g-panel-title {
+  composes: ux4g-heading ux4g-heading-3;
+  margin-bottom: var(--ux4g-spacing-2);
+}
+
+.ux4g-panel-description {
+  composes: ux4g-body;
+  font-size: var(--ux4g-text-sm);
+  color: var(--ux4g-foreground-muted);
+}
+
+/* ============================================
+   CHART CONTAINERS
+   ============================================ */
+
+.ux4g-chart-container {
+  position: relative;
+  background: var(--ux4g-background);
+  padding: var(--ux4g-spacing-5);
+  min-height: 300px;
+}
+
+.ux4g-chart-header {
+  margin-bottom: var(--ux4g-spacing-4);
+}
+
+.ux4g-chart-title {
+  composes: ux4g-label;
+  margin-bottom: var(--ux4g-spacing-1);
+}
+
+.ux4g-chart-subtitle {
+  font-size: var(--ux4g-text-xs);
+  color: var(--ux4g-foreground-muted);
+}
+
+/* Accessible chart descriptions for screen readers */
+.ux4g-chart-description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================
+   TABLE STYLES
+   ============================================ */
+
+.ux4g-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--ux4g-background);
+}
+
+.ux4g-table th {
+  composes: ux4g-label;
+  text-align: left;
+  padding: var(--ux4g-spacing-4);
+  border-bottom: 2px solid var(--ux4g-border);
+  background: var(--ux4g-background-alt);
+}
+
+.ux4g-table td {
+  composes: ux4g-body;
+  padding: var(--ux4g-spacing-4);
+  border-bottom: 1px solid var(--ux4g-border-light);
+}
+
+.ux4g-table tbody tr:hover,
+.ux4g-table tbody tr:focus-within {
+  background: var(--ux4g-neutral-50);
+  outline: 2px solid var(--ux4g-primary);
+  outline-offset: -2px;
+}
+
+.ux4g-table tbody tr:focus-within {
+  outline-style: solid;
+}
+
+/* Sortable table headers */
+.ux4g-table-sortable th {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-right: var(--ux4g-spacing-8);
+}
+
+.ux4g-table-sortable th:hover {
+  background: var(--ux4g-neutral-100);
+}
+
+.ux4g-table-sortable th:focus {
+  outline: 2px solid var(--ux4g-primary);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   FORM CONTROLS
+   ============================================ */
+
+.ux4g-input {
+  font-family: var(--ux4g-font-family-base);
+  font-size: var(--ux4g-text-base);
+  line-height: var(--ux4g-leading-normal);
+  color: var(--ux4g-input-foreground);
+  background: var(--ux4g-input-background);
+  border: 1px solid var(--ux4g-input-border);
+  border-radius: var(--ux4g-radius-md);
+  padding: var(--ux4g-spacing-3) var(--ux4g-spacing-4);
+  width: 100%;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ux4g-input::placeholder {
+  color: var(--ux4g-input-placeholder);
+}
+
+.ux4g-input:focus {
+  outline: none;
+  border-color: var(--ux4g-input-border-focus);
+  box-shadow: var(--ux4g-focus-ring);
+}
+
+.ux4g-input:focus-visible {
+  outline: 2px solid var(--ux4g-primary);
+  outline-offset: 2px;
+}
+
+.ux4g-select {
+  composes: ux4g-input;
+}
+
+.ux4g-button {
+  font-family: var(--ux4g-font-family-base);
+  font-size: var(--ux4g-text-base);
+  font-weight: var(--ux4g-font-medium);
+  line-height: var(--ux4g-leading-normal);
+  padding: var(--ux4g-spacing-3) var(--ux4g-spacing-6);
+  border-radius: var(--ux4g-radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ux4g-spacing-2);
+}
+
+.ux4g-button-primary {
+  background: var(--ux4g-primary);
+  color: var(--ux4g-primary-foreground);
+}
+
+.ux4g-button-primary:hover {
+  background: var(--ux4g-primary-dark);
+}
+
+.ux4g-button-primary:focus-visible {
+  outline: 2px solid var(--ux4g-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   LAYOUT UTILITIES
+   ============================================ */
+
+.ux4g-container {
+  width: 100%;
+  max-width: var(--ux4g-container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--ux4g-spacing-4);
+  padding-right: var(--ux4g-spacing-4);
+}
+
+.ux4g-grid {
+  display: grid;
+  gap: var(--ux4g-grid-gutter);
+}
+
+.ux4g-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.ux4g-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1024px) {
+  .ux4g-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .ux4g-grid-2,
+  .ux4g-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar + Content layout */
+.ux4g-layout-sidebar {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--ux4g-grid-gutter);
+}
+
+@media (max-width: 1024px) {
+  .ux4g-layout-sidebar {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   SKELETON LOADING STATES
+   ============================================ */
+
+.ux4g-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--ux4g-neutral-100) 25%,
+    var(--ux4g-neutral-200) 50%,
+    var(--ux4g-neutral-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: ux4g-skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: var(--ux4g-radius-md);
+}
+
+@keyframes ux4g-skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.ux4g-skeleton-chart {
+  height: 300px;
+  width: 100%;
+}
+
+.ux4g-skeleton-table {
+  height: 200px;
+  width: 100%;
+}
+
+/* ============================================
+   GRADIENT UTILITIES FOR CHARTS
+   ============================================ */
+
+.ux4g-gradient-danger-warning {
+  background: linear-gradient(90deg, var(--ux4g-danger) 0%, var(--ux4g-warning) 100%);
+}
+
+/* Color-blind safe patterns */
+.ux4g-pattern-stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(0, 0, 0, 0.1) 10px,
+    rgba(0, 0, 0, 0.1) 20px
+  );
+}
+
+/* ============================================
+   TOOLTIP PATTERN
+   ============================================ */
+
+.ux4g-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.ux4g-tooltip-trigger {
+  cursor: help;
+  border-bottom: 1px dotted var(--ux4g-foreground-muted);
+}
+
+.ux4g-tooltip-content {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--ux4g-spacing-2);
+  padding: var(--ux4g-spacing-2) var(--ux4g-spacing-3);
+  background: var(--ux4g-neutral-900);
+  color: var(--ux4g-background);
+  font-size: var(--ux4g-text-sm);
+  border-radius: var(--ux4g-radius-md);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 50;
+}
+
+.ux4g-tooltip:hover .ux4g-tooltip-content,
+.ux4g-tooltip:focus-within .ux4g-tooltip-content {
+  opacity: 1;
+}
