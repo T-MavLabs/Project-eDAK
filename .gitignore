@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+/Backend/node_modules
+/eCom/node_modules
+**/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -15,10 +18,19 @@
 
 # next.js
 /.next/
+/Backend/.next/
+/eCom/.next/
+**/.next/
 /out/
+/Backend/out/
+/eCom/out/
+**/out/
 
 # production
 /build
+/Backend/build
+/eCom/build
+**/build
 
 # misc
 .DS_Store
@@ -39,3 +51,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# package manager lock files (optional - uncomment if you don't want to commit them)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
