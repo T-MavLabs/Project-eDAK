@@ -116,7 +116,7 @@ export function CommerceNavbar() {
                     </Link>
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    This client integrates via public APIs (mock) using only tracking_id.
+                    This client integrates via public APIs   using only tracking_id.
                   </p>
                 </div>
               </div>

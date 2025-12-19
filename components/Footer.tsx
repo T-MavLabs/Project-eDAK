@@ -43,7 +43,7 @@ export function Footer() {
             <div className="text-sm font-semibold">Compliance & Accessibility</div>
             <ul className="mt-2 grid gap-2 text-sm text-muted-foreground">
               <li>WCAG-friendly contrast & keyboard navigation</li>
-              <li>Audit-friendly UI patterns (mock)</li>
+              <li>Audit-friendly UI patterns  </li>
               <li>No personal data stored</li>
             </ul>
           </div>

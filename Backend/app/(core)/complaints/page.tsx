@@ -98,20 +98,21 @@ export default function ComplaintsPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
       <div className="flex flex-col gap-2 daksh-fade-in">
-        <div className="daksh-kicker">Citizen Grievance Interface</div>
+        <div className="daksh-kicker">Complaint Management System</div>
         <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
           <MessageSquareWarning className="h-5 w-5 text-primary" />
           Complaint Register (AI-assisted)
         </h1>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Submit a complaint. The system classifies category and severity and generates an operator response preview (mock).
+          Submit operational complaints. The system automatically classifies category and severity, 
+          and generates response previews for operator review and resolution.
         </p>
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2 daksh-slide-up">
         <Card className="border-primary/10 daksh-glass daksh-elevated daksh-transition">
           <CardHeader>
-            <CardTitle className="text-base">Submit complaint</CardTitle>
+            <CardTitle className="text-base">Complaint Submission</CardTitle>
           </CardHeader>
           <CardContent>
             <form
@@ -205,7 +206,7 @@ export default function ComplaintsPage() {
             <CardTitle className="flex items-center justify-between gap-2 text-base">
               <span className="flex items-center gap-2">
                 <Bot className="h-4 w-4 text-primary" />
-                AI triage preview (mock)
+                AI triage preview  
               </span>
               <Button
                 variant="ghost"
@@ -251,9 +252,10 @@ export default function ComplaintsPage() {
       <div className="mt-10 daksh-slide-up">
         <div className="flex items-end justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold">Complaint history</h2>
+            <h2 className="text-lg font-semibold">Complaint Register</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Recent submissions and AI tags. Intended for audit-friendly review.
+              Recent submissions with AI classification and severity assessment. Structured 
+              for operational review and audit compliance.
             </p>
           </div>
         </div>

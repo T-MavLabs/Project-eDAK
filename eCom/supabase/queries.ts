@@ -132,3 +132,68 @@ export async function fetchOrdersByEmail(email: string): Promise<DbOrder[]> {
   if (error) throw error;
   return (data ?? []) as unknown as DbOrder[];
 }
+
+/**
+ * Create a parcel in the parcels table when an order is placed
+ * Uses API route that bypasses RLS with service role key
+ */
+export async function createParcel(input: {
+  tracking_id: string;
+  sender_user_id?: string | null;
+  receiver_user_id?: string | null;
+  origin_digipin: string;
+  destination_digipin: string;
+  origin_region_code?: string | null;
+  destination_region_code?: string | null;
+  status?: "created" | "picked_up" | "in_transit" | "at_hub" | "out_for_delivery" | "delivered" | "failed_delivery" | "returned" | "cancelled";
+}): Promise<void> {
+  const response = await fetch("/api/parcels", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      tracking_id: input.tracking_id,
+      sender_user_id: input.sender_user_id || null,
+      receiver_user_id: input.receiver_user_id || null,
+      origin_digipin: input.origin_digipin,
+      destination_digipin: input.destination_digipin,
+      origin_region_code: input.origin_region_code || null,
+      destination_region_code: input.destination_region_code || null,
+      status: input.status || "created",
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+    const errorMessage = errorData.error || `HTTP ${response.status}`;
+    console.error("Error creating parcel via API:", {
+      status: response.status,
+      error: errorMessage,
+      input: {
+        tracking_id: input.tracking_id,
+        sender_user_id: input.sender_user_id,
+        receiver_user_id: input.receiver_user_id,
+        origin_digipin: input.origin_digipin,
+        destination_digipin: input.destination_digipin,
+      },
+    });
+    throw new Error(`Failed to create parcel: ${errorMessage}`);
+  }
+}
+
+/**
+ * Get user ID from email (lookup in user_profiles)
+ * Note: parcels table may reference 'profiles' table, but eCom uses 'user_profiles'
+ * The foreign key constraint may need to be updated to reference user_profiles instead
+ */
+export async function getUserIdFromEmail(email: string): Promise<string | null> {
+  // Lookup in user_profiles (eCom schema)
+  const { data: userProfile } = await supabase
+    .from("user_profiles")
+    .select("id")
+    .eq("email", email.toLowerCase())
+    .maybeSingle();
+
+  return userProfile?.id || null;
+}

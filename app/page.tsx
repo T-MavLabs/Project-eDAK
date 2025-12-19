@@ -117,7 +117,7 @@ export default function Home() {
                     <FileCheck2 className="h-4 w-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-semibold">Secure audit trails (UI-ready)</div>
+                    <div className="text-sm font-semibold">Secure audit trails</div>
                     <div className="mt-1 text-sm text-muted-foreground">
                       Layout and information hierarchy prepared for future signing, event logs,
                       and role-based access — backend integration can be plugged in later.

@@ -12,7 +12,10 @@ import {
   createOrderItems,
   fetchProductsByIds,
   setOrderTrackingId,
+  createParcel,
+  getUserIdFromEmail,
 } from "@/supabase/queries";
+import { getCurrentUser } from "@/supabase/auth";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -270,6 +273,33 @@ export default function CheckoutPage() {
                   // Generate an India Post tracking id and store it on the order
                   const trackingId = generateTrackingId();
                   await setOrderTrackingId(order.id, trackingId);
+
+                  // Create parcel in parcels table
+                  try {
+                    // Get sender user ID (current user if authenticated)
+                    const currentUser = await getCurrentUser();
+                    const senderUserId = currentUser?.id || null;
+
+                    // Get receiver user ID from email (if user exists)
+                    const receiverUserId = await getUserIdFromEmail(user_email);
+
+                    // For origin_digipin, use a default since we don't have seller location readily available
+                    // In production, this should come from seller's location or warehouse
+                    // Using a default Delhi origin for demo purposes
+                    const originDigipin = "DL-110001-DEF"; // Default origin - can be updated later with seller location
+
+                    await createParcel({
+                      tracking_id: trackingId,
+                      sender_user_id: senderUserId,
+                      receiver_user_id: receiverUserId,
+                      origin_digipin: originDigipin,
+                      destination_digipin: dp,
+                      status: "created",
+                    });
+                  } catch (parcelError) {
+                    // Log error but don't fail the order - parcel creation is secondary
+                    console.error("Failed to create parcel (order still created):", parcelError);
+                  }
 
                   // Remember email for order history and clear cart
                   window.localStorage.setItem("edak_demo_email", user_email);

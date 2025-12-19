@@ -32,7 +32,7 @@ export type Order = {
   subtotalInr: number;
   shippingInr: number;
   totalInr: number;
-  paymentMode: "COD" | "Prepaid (Mock)";
+  paymentMode: "COD" | "Prepaid  ";
   deliveredBy: "India Post";
   trackingId: string;
   destinationCity: string;
@@ -186,7 +186,7 @@ function createParcelFromOrder(order: Order, address: ShippingAddress): Parcel {
     prediction: {
       estimatedDelayHours: 1,
       probabilityPercent: 24,
-      etaWindow: "Within 2–3 working days (mock)",
+      etaWindow: "Within 2–3 working days  ",
       riskFactors: [
         {
           label: "Hub Congestion",
@@ -241,7 +241,7 @@ export function placeOrder(address: ShippingAddress): {
 
   const paymentMode: Order["paymentMode"] = enriched.every((i) => i.codAvailable)
     ? "COD"
-    : "Prepaid (Mock)";
+    : "Prepaid  ";
 
   const order: Order = {
     id: `ORD-${randomAlphaNum(8)}`,

@@ -180,7 +180,7 @@ export const mockParcels: Parcel[] = [
         },
       ],
       modelNote:
-        "Prediction derived from hub scan cadence, historical RMS dwell time, and weather signals (mock).",
+        "Prediction derived from hub scan cadence, historical RMS dwell time, and weather signals  .",
     },
   },
   {
@@ -251,7 +251,7 @@ export const mockParcels: Parcel[] = [
         },
       ],
       modelNote:
-        "Model confidence moderate due to sparse scan points (mock).",
+        "Model confidence moderate due to sparse scan points  .",
     },
   },
 ];

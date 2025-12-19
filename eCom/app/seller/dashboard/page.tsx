@@ -141,100 +141,137 @@ export default function SellerDashboardPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto w-full max-w-6xl px-4 py-10">
-        <div>Loading...</div>
+      <div className="mx-auto w-full max-w-7xl px-4 py-10">
+        <div className="mb-6 space-y-2">
+          <div className="h-8 w-64 rounded-md vyapar-skeleton" />
+          <div className="h-4 w-96 rounded-md vyapar-skeleton" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-4 mb-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-24 rounded-xl vyapar-skeleton" />
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold">Seller Dashboard</h1>
-        <p className="text-sm text-muted-foreground">Manage your products and orders</p>
+    <div className="mx-auto w-full max-w-7xl px-4 py-8">
+      {/* Header */}
+      <div className="mb-8 vyapar-fade-in">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-semibold tracking-tight">Seller Dashboard</h1>
+            <p className="text-sm text-muted-foreground mt-1">Manage your products, orders, and business</p>
+          </div>
+          <Button asChild className="bg-primary hover:bg-primary/90 vyapar-gentle-transition">
+            <Link href="/seller/products/new">+ Add Product</Link>
+          </Button>
+        </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-4 mb-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Products</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
+      {/* Stats Grid - Information Dense */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+        <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Products</CardTitle>
+            <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10">
+              <Package className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalProducts}</div>
+            <div className="text-3xl font-bold mb-1">{stats.totalProducts}</div>
+            <p className="text-xs text-muted-foreground">Active listings</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-            <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+        <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition" style={{ animationDelay: "50ms" }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Orders</CardTitle>
+            <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10">
+              <ShoppingBag className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalOrders}</div>
+            <div className="text-3xl font-bold mb-1">{stats.totalOrders}</div>
+            <p className="text-xs text-muted-foreground">All time orders</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+        <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition" style={{ animationDelay: "100ms" }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
+            <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10">
+              <DollarSign className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₹{stats.totalRevenue.toLocaleString("en-IN")}</div>
+            <div className="text-3xl font-bold mb-1">₹{stats.totalRevenue.toLocaleString("en-IN")}</div>
+            <p className="text-xs text-muted-foreground">Lifetime earnings</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Orders</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+        <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition" style={{ animationDelay: "150ms" }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Pending Orders</CardTitle>
+            <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10">
+              <TrendingUp className="h-5 w-5 text-primary" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.pendingOrders}</div>
+            <div className="text-3xl font-bold mb-1">{stats.pendingOrders}</div>
+            <p className="text-xs text-muted-foreground">Requires action</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
+      {/* Quick Actions - Structured Layout */}
+      <div className="grid gap-6 md:grid-cols-3 mb-8">
+        <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition">
           <CardHeader>
-            <CardTitle>Products</CardTitle>
+            <CardTitle className="text-lg">Products</CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">Manage your product catalog</p>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button asChild className="w-full">
-              <Link href="/seller/products">Manage Products</Link>
+            <Button asChild className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition">
+              <Link href="/seller/products">View All Products</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full">
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
               <Link href="/seller/products/new">Add New Product</Link>
             </Button>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
+              <Link href="/seller/inventory">Manage Inventory</Link>
+            </Button>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition" style={{ animationDelay: "100ms" }}>
           <CardHeader>
-            <CardTitle>Orders</CardTitle>
+            <CardTitle className="text-lg">Orders</CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">Track and fulfill orders</p>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button asChild className="w-full">
+            <Button asChild className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition">
               <Link href="/seller/orders">View All Orders</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/seller/orders?status=placed">Pending Orders</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
+              <Link href="/seller/orders?status=placed">Pending Orders ({stats.pendingOrders})</Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
+              <Link href="/seller/returns">Returns & Refunds</Link>
             </Button>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition" style={{ animationDelay: "200ms" }}>
           <CardHeader>
-            <CardTitle>Quick Links</CardTitle>
+            <CardTitle className="text-lg">Business</CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">Analytics and payouts</p>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/seller/inventory">Inventory</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
+              <Link href="/seller/analytics">View Analytics</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/seller/analytics">Analytics</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
+              <Link href="/seller/payouts">Payouts & Earnings</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/seller/payouts">Payouts</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
+              <Link href="/seller/settings">Account Settings</Link>
             </Button>
           </CardContent>
         </Card>

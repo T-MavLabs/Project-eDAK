@@ -86,7 +86,7 @@ export default function MarketPage() {
                   {p.codAvailable ? (
                     <Badge variant="secondary">COD available</Badge>
                   ) : (
-                    <Badge variant="secondary">Prepaid (Mock)</Badge>
+                    <Badge variant="secondary">Prepaid  </Badge>
                   )}
                 </div>
                 <Button asChild className="w-full bg-primary hover:bg-primary/90 daksh-press">

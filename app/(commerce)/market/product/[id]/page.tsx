@@ -70,7 +70,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 </Badge>
               ) : null}
               <Badge variant="secondary">
-                {product.codAvailable ? "COD available" : "Prepaid (Mock)"}
+                {product.codAvailable ? "COD available" : "Prepaid  "}
               </Badge>
             </div>
           </CardHeader>

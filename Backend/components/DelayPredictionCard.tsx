@@ -16,121 +16,50 @@ export function DelayPredictionCard({ prediction }: { prediction: DelayPredictio
   const highRisk = prediction.probabilityPercent >= 70;
 
   return (
-    <Card className="border-border daksh-glass daksh-elevated daksh-transition daksh-fade-in">
-      {/* UX4G: System Advisory header (no gradients) */}
-      <div className="border-b daksh-glass bg-muted/30 px-5 py-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <div className="daksh-kicker">System Advisory Generated</div>
-            <div className="mt-1 text-sm font-semibold text-foreground">
-              Predicted Delivery Advisory
-            </div>
-            <div className="mt-1 text-xs text-muted-foreground leading-relaxed">
-              System generated insight. Review the risk assessment below.
-            </div>
-          </div>
-
-          <div className="flex flex-col items-end gap-2">
-            <span
-              className="daksh-stamp daksh-elevated daksh-transition"
-              style={{
-                borderColor: highRisk ? "var(--daksh-notice-red)" : "var(--daksh-rule)",
-                color: highRisk ? "var(--daksh-notice-red)" : "var(--foreground)",
-              }}
-            >
-              {highRisk ? "Severity: High" : "Severity: Moderate"}
-            </span>
-            <div className="text-[0.72rem] text-muted-foreground daksh-code">
-              Ref: DAKSH-PRED-{prediction.probabilityPercent}
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <Card className="border-primary/15">
       <CardHeader className="space-y-2">
-        <CardTitle className="flex items-center justify-between gap-3 text-base">
-          <span className="inline-flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 daksh-transition" aria-hidden="true" />
-            Logistics Risk Assessment
-          </span>
-          <span className="daksh-code text-xs text-muted-foreground">
-            Updated via model inference
-          </span>
+        <CardTitle className="flex items-center gap-2 text-base">
+          <TrendingUp className="h-4 w-4 text-primary" />
+          Predictive Delay (AI)
         </CardTitle>
-
-        <div className="grid gap-2 sm:grid-cols-3">
-          <div className="rounded-md border daksh-glass bg-background p-3 daksh-elevated daksh-transition">
-            <div className="daksh-kicker">Estimated delay</div>
-            <div className="mt-1 text-sm font-semibold daksh-code">
-              {prediction.estimatedDelayHours}h
-            </div>
-          </div>
-          <div className="rounded-md border daksh-glass bg-background p-3 daksh-elevated daksh-transition">
-            <div className="daksh-kicker">Risk Confidence</div>
-            <div
-              className="mt-1 text-sm font-semibold daksh-code"
-              style={{ color: highRisk ? "var(--daksh-notice-red)" : "inherit" }}
-            >
-              {prediction.probabilityPercent}%
-            </div>
-          </div>
-          <div className="rounded-md border daksh-glass bg-background p-3 daksh-elevated daksh-transition">
-            <div className="daksh-kicker">ETA window</div>
-            <div className="mt-1 text-sm font-semibold daksh-code">
-              {prediction.etaWindow}
-            </div>
-          </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant={highRisk ? "destructive" : "secondary"}>
+            {prediction.estimatedDelayHours}h estimated delay
+          </Badge>
+          <Badge variant={highRisk ? "destructive" : "default"}>
+            {prediction.probabilityPercent}% probability
+          </Badge>
+          <Badge variant="secondary">ETA: {prediction.etaWindow}</Badge>
         </div>
       </CardHeader>
-
       <CardContent className="space-y-4">
-        <div className="rounded-md border daksh-glass bg-muted/30 p-4 daksh-elevated daksh-transition">
-          <div className="flex items-start gap-3">
+        <div className="rounded-md border bg-muted/40 p-3 text-sm text-muted-foreground">
+          <div className="flex items-start gap-2">
             {highRisk ? (
-              <AlertTriangle
-                className="mt-0.5 h-4 w-4 daksh-transition"
-                style={{ color: "var(--daksh-notice-amber)" }}
-                aria-hidden="true"
-              />
+              <AlertTriangle className="mt-0.5 h-4 w-4 text-[#FF9933]" />
             ) : (
-              <ShieldCheck
-                className="mt-0.5 h-4 w-4 daksh-transition"
-                style={{ color: "var(--daksh-notice-green)" }}
-                aria-hidden="true"
-              />
+              <ShieldCheck className="mt-0.5 h-4 w-4 text-[#138808]" />
             )}
             <div>
-              <div className="text-sm font-semibold text-foreground">
-                Operational Risk Factors
-              </div>
-              <div className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                {prediction.modelNote}
-              </div>
+              <div className="font-medium text-foreground">Model note</div>
+              <div className="mt-1">{prediction.modelNote}</div>
             </div>
           </div>
         </div>
 
         <div>
-          <div className="daksh-kicker">Factor register</div>
+          <div className="text-sm font-semibold">Risk factors</div>
           <div className="mt-2 grid gap-2">
-            {prediction.riskFactors.map((rf, i) => (
+            {prediction.riskFactors.map((rf) => (
               <div
                 key={`${rf.label}-${rf.severity}`}
-                className="grid gap-2 rounded-md border daksh-glass bg-background p-3 sm:grid-cols-[1fr_auto] daksh-elevated daksh-transition daksh-fade-in"
-                style={{ animationDelay: `${i * 50}ms` }}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-md border p-3"
               >
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="daksh-code text-xs text-muted-foreground">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <div className="text-sm font-medium">{rf.label}</div>
-                  </div>
-                  <div className="mt-1 text-xs text-muted-foreground leading-relaxed">{rf.note}</div>
+                <div>
+                  <div className="text-sm font-medium">{rf.label}</div>
+                  <div className="text-xs text-muted-foreground">{rf.note}</div>
                 </div>
-                <div className="flex items-start justify-end">
-                  <Badge variant={severityToBadgeVariant(rf.severity)} className="daksh-transition">{rf.severity}</Badge>
-                </div>
+                <Badge variant={severityToBadgeVariant(rf.severity)}>{rf.severity}</Badge>
               </div>
             ))}
           </div>

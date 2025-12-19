@@ -1,11 +1,16 @@
 "use client";
 
+import React from "react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
+  Legend,
   Line,
   LineChart,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -151,5 +156,371 @@ export function RegionalHeatmap({ data }: { data: RegionalHeatCell[] }) {
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+// Mode comparison colors
+const MODE_COLORS = {
+  Surface: "#C60000", // India Post Red
+  Air: "#FF9933", // Saffron
+  Express: "#138808", // India Green
+};
+
+export type ModeComparisonData = {
+  mode: "Surface" | "Air" | "Express";
+  efficiencyScore: number;
+  avgTransitDays: number;
+  totalShipments: number;
+  delayRate: number;
+};
+
+/**
+ * Delivery Mode Comparison Doughnut Chart
+ */
+export function ModeComparisonChart({
+  data,
+}: {
+  data: ModeComparisonData[];
+}) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="p-5">
+        <div className="mb-4">
+          <div className="daksh-text-label mb-1">Delivery Mode Comparison</div>
+          <div className="daksh-text-secondary text-xs">
+            Average delivery days comparison across delivery modes
+          </div>
+        </div>
+        <div className="h-72 flex items-center justify-center">
+          <div className="text-center daksh-text-secondary">
+            No mode comparison data available
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Map data to chart format - value represents average transit days
+  const chartData = data.map((d) => ({
+    name: d.mode,
+    value: d.avgTransitDays || 0, // Average delivery days
+    avgTransitDays: d.avgTransitDays || 0,
+    totalShipments: d.totalShipments || 0,
+    delayRate: d.delayRate || 0,
+  }));
+
+  const COLORS = data.map((d) => MODE_COLORS[d.mode] || "#9CA3AF");
+
+  // Find mode with highest average delivery days (slowest)
+  const slowestMode = data.length > 0 
+    ? data.reduce((prev, current) => 
+        (current.avgTransitDays || 0) > (prev.avgTransitDays || 0) ? current : prev
+      )
+    : { mode: "N/A" as const, avgTransitDays: 0 };
+
+  return (
+    <div className="p-5">
+      <div className="mb-4">
+        <div className="daksh-text-label mb-1">Delivery Mode Comparison</div>
+        <div className="daksh-text-secondary text-xs">
+          Average delivery days comparison across delivery modes
+        </div>
+      </div>
+      <div className="h-72 min-h-[288px]">
+        <ResponsiveContainer width="100%" height="100%" minHeight={288}>
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={({ name, value }) => `${name}: ${value} days`}
+              outerRadius={80}
+              innerRadius={50}
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+              ))}
+            </Pie>
+            <Tooltip
+              content={({ active, payload }) => {
+                if (active && payload && payload[0]) {
+                  const data = payload[0].payload;
+                  return (
+                    <div className="rounded-lg border bg-background p-3 shadow-md">
+                      <div className="font-semibold">{data.name}</div>
+                      <div className="text-sm text-muted-foreground">
+                        Avg Delivery: {data.value} days
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              }}
+            />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="mt-4 rounded-lg border bg-muted/30 p-3">
+        <div className="text-sm font-semibold daksh-text-secondary mb-1">
+          Delivery Time Analysis
+        </div>
+        <div className="text-xs daksh-text-meta leading-relaxed">
+          Comparing average delivery days across different modes. Lower days indicate faster
+          delivery performance. <strong>{slowestMode.mode}</strong> mode has the highest average delivery time ({slowestMode.avgTransitDays} days).
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export type CongestedHubData = {
+  hub: string;
+  hubCode: string;
+  congestionScore: number;
+  avgDelayHours: number;
+  delayedCount: number;
+  region: string;
+};
+
+/**
+ * Top Congested Hubs Horizontal Bar Chart using Chart.js with enhanced animations
+ */
+export function CongestedHubsChart({
+  data,
+}: {
+  data: CongestedHubData[];
+}) {
+  // Dynamic import to avoid SSR issues with Chart.js
+  const [ChartComponent, setChartComponent] = React.useState<typeof import("react-chartjs-2").Bar | null>(null);
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+    Promise.all([
+      import("react-chartjs-2"),
+      import("chart.js"),
+    ]).then(([chartjs2, chartjs]) => {
+      // Register Chart.js components
+      const { Chart, registerables } = chartjs;
+      Chart.register(...registerables);
+      setChartComponent(() => chartjs2.Bar);
+    }).catch((error) => {
+      console.error("Failed to load Chart.js:", error);
+    });
+  }, []);
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="p-5">
+        <div className="mb-4">
+          <div className="daksh-text-label mb-1">Top Congested Hubs</div>
+          <div className="daksh-text-secondary text-xs">
+            Hub congestion analysis based on delay metrics and throughput
+          </div>
+        </div>
+        <div className="h-[400px] flex items-center justify-center">
+          <div className="text-center daksh-text-secondary">
+            <div className="mb-2">No hub data available</div>
+            <div className="text-xs daksh-text-meta">Please check the API connection</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Convert congestion score (0-10) to percentage (0-100)
+  const chartData = [...data]
+    .filter(d => d && d.congestionScore !== undefined && d.congestionScore !== null)
+    .sort((a, b) => b.congestionScore - a.congestionScore)
+    .map((d) => ({
+      hub: d.hub || "N/A",
+      hubCode: d.hubCode || "N/A",
+      congestionPercent: (d.congestionScore || 0) * 10, // Convert 0-10 scale to 0-100%
+    }));
+
+  if (chartData.length === 0) {
+    return (
+      <div className="p-5">
+        <div className="mb-4">
+          <div className="daksh-text-label mb-1">Top Congested Hubs</div>
+          <div className="daksh-text-secondary text-xs">
+            Hub congestion analysis based on delay metrics and throughput
+          </div>
+        </div>
+        <div className="h-[400px] flex items-center justify-center">
+          <div className="text-center daksh-text-secondary">
+            <div className="mb-2">No valid hub data found</div>
+            <div className="text-xs daksh-text-meta">Check data format</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Gradient colors from red to orange (based on percentage)
+  const getBarColor = (percent: number) => {
+    if (percent >= 70) return "#C60000"; // India Post Red
+    if (percent >= 50) return "#E74C3C"; // Lighter red
+    return "#FF9933"; // Saffron
+  };
+
+  // Prepare Chart.js data
+  const labels = chartData.map(d => d.hubCode);
+  const values = chartData.map(d => d.congestionPercent);
+  const colors = chartData.map(d => getBarColor(d.congestionPercent));
+
+  const chartJsData = {
+    labels,
+    datasets: [
+      {
+        label: "Congestion (%)",
+        data: values,
+        backgroundColor: colors,
+        borderColor: colors.map(c => c + "CC"), // Add transparency
+        borderWidth: 1,
+        borderRadius: 6,
+        borderSkipped: false,
+      },
+    ],
+  };
+
+  const chartJsOptions = {
+    indexAxis: "y" as const,
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: {
+      duration: 1200,
+      easing: "easeInOutQuad" as const,
+      delay: (context: any) => {
+        let delay = 0;
+        if (context.type === "data" && context.mode === "default") {
+          delay = context.dataIndex * 80; // Staggered animation for each bar
+        }
+        return delay;
+      },
+    },
+    transitions: {
+      show: {
+        animations: {
+          x: {
+            from: 0,
+            duration: 800,
+            easing: "easeOutQuad" as const,
+          },
+        },
+      },
+      hide: {
+        animations: {
+          x: {
+            duration: 400,
+            easing: "easeInQuad" as const,
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: "rgba(255, 255, 255, 0.95)",
+        titleColor: "#111827",
+        bodyColor: "#4b5563",
+        borderColor: "rgba(0, 0, 0, 0.08)",
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
+        displayColors: true,
+        callbacks: {
+          title: (context: any) => {
+            const index = context[0].dataIndex;
+            return chartData[index].hub;
+          },
+          label: (context: any) => {
+            const index = context.dataIndex;
+            return [
+              `Code: ${chartData[index].hubCode}`,
+              `Congestion: ${context.parsed.x.toFixed(1)}%`,
+            ];
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        max: Math.max(...values, 100),
+        ticks: {
+          color: "var(--muted-foreground)",
+          font: {
+            size: 12,
+          },
+          callback: function(value: any) {
+            return value + "%";
+          },
+        },
+        grid: {
+          color: "rgba(17, 24, 39, 0.08)",
+          drawBorder: false,
+        },
+        title: {
+          display: true,
+          text: "Congestion (%)",
+          color: "var(--muted-foreground)",
+          font: {
+            size: 12,
+          },
+        },
+      },
+      y: {
+        ticks: {
+          color: "var(--muted-foreground)",
+          font: {
+            size: 11,
+          },
+        },
+        grid: {
+          display: false,
+          drawBorder: false,
+        },
+      },
+    },
+  };
+
+  if (!isClient || !ChartComponent) {
+    return (
+      <div className="p-5">
+        <div className="mb-4">
+          <div className="daksh-text-label mb-1">Top Congested Hubs</div>
+          <div className="daksh-text-secondary text-xs">
+            Hub congestion analysis based on delay metrics and throughput
+          </div>
+        </div>
+        <div className="h-[400px] flex items-center justify-center">
+          <div className="text-center daksh-text-secondary">
+            <div className="mb-2">Loading chart...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-5">
+      <div className="mb-4">
+        <div className="daksh-text-label mb-1">Top Congested Hubs</div>
+        <div className="daksh-text-secondary text-xs">
+          Hub congestion analysis based on delay metrics and throughput
+        </div>
+      </div>
+      <div className="h-[400px] min-h-[400px]">
+        <ChartComponent data={chartJsData} options={chartJsOptions} />
+      </div>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ShoppingBag, ShoppingCart, ClipboardList, PackageSearch, BadgeCheck, Store, Shield, LogIn, LogOut, User } from "lucide-react";
@@ -118,8 +119,14 @@ export function CommerceNavbar() {
     <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/85 vyapar-gentle-transition">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/market" className="flex items-center gap-3 vyapar-gentle-transition">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-muted text-foreground vyapar-soft-shadow vyapar-gentle-transition">
-            <span className="text-sm font-semibold tracking-tight">IE</span>
+          <div className="relative h-9 w-9 rounded-lg overflow-hidden vyapar-soft-shadow vyapar-gentle-transition">
+            <Image
+              src="/VYAPAR.png"
+              alt="VYAPAR Logo"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
           <div className="leading-tight">
             <div className="text-sm font-semibold tracking-tight">VYAPAR</div>
@@ -258,6 +265,7 @@ export function CommerceNavbar() {
             </div>
           )}
 
+          {mounted ? (
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" className="md:hidden vyapar-gentle-transition">
@@ -356,6 +364,11 @@ export function CommerceNavbar() {
               </div>
             </SheetContent>
           </Sheet>
+          ) : (
+            <Button variant="outline" className="md:hidden vyapar-gentle-transition" disabled>
+              Menu
+            </Button>
+          )}
         </div>
       </div>
 

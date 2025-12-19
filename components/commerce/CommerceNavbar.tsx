@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ShoppingBag, ShoppingCart, ClipboardList, PackageSearch, BadgeCheck } from "lucide-react";
 
@@ -29,13 +30,19 @@ export function CommerceNavbar() {
     <header className="sticky top-0 z-50 border-b bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/75">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/market" className="flex items-center gap-3">
-          <div className="grid h-9 w-9 place-items-center rounded-md bg-muted text-foreground shadow-sm">
-            <span className="text-sm font-semibold tracking-tight">IE</span>
+          <div className="relative h-9 w-9 rounded-lg overflow-hidden shadow-sm">
+            <Image
+              src="/VYAPAR.png"
+              alt="VYAPAR Logo"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
           <div className="leading-tight">
-            <div className="text-sm font-semibold tracking-tight">Indian E-commerce Demo</div>
+            <div className="text-sm font-semibold tracking-tight">VYAPAR</div>
             <div className="text-xs text-muted-foreground">
-              Small-business UI • Powered by India Post
+              Powered by India Post (DAKSH)
             </div>
           </div>
         </Link>
@@ -113,7 +120,7 @@ export function CommerceNavbar() {
                     </Link>
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    This client integrates via public APIs (mock) using only tracking_id.
+                    This client integrates via public APIs   using only tracking_id.
                   </p>
                 </div>
               </div>

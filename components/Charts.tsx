@@ -4,8 +4,12 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
+  Legend,
   Line,
   LineChart,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -150,6 +154,227 @@ export function RegionalHeatmap({ data }: { data: RegionalHeatCell[] }) {
             High
           </span>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Mode comparison colors
+const MODE_COLORS = {
+  Surface: "#C60000", // India Post Red
+  Air: "#FF9933", // Saffron
+  Express: "#138808", // India Green
+};
+
+export type ModeComparisonData = {
+  mode: "Surface" | "Air" | "Express";
+  efficiencyScore: number;
+  avgTransitDays: number;
+  totalShipments: number;
+  delayRate: number;
+};
+
+/**
+ * Delivery Mode Comparison Doughnut Chart
+ */
+export function ModeComparisonChart({
+  data,
+}: {
+  data: ModeComparisonData[];
+}) {
+  const chartData = data.map((d) => ({
+    name: d.mode,
+    value: d.efficiencyScore * 100, // Convert to percentage
+    avgTransitDays: d.avgTransitDays,
+    totalShipments: d.totalShipments,
+    delayRate: d.delayRate,
+  }));
+
+  const COLORS = data.map((d) => MODE_COLORS[d.mode]);
+
+  const highestDelayMode = data.reduce((prev, current) => 
+    current.delayRate > prev.delayRate ? current : prev
+  );
+
+  return (
+    <div className="p-5">
+      <div className="mb-4">
+        <div className="daksh-text-label mb-1">Delivery Mode Comparison</div>
+        <div className="daksh-text-secondary text-xs">
+          Efficiency score comparison across delivery modes
+        </div>
+      </div>
+      <div className="h-72">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={({ name, value }) => `${name}: ${value.toFixed(0)}%`}
+              outerRadius={80}
+              innerRadius={50}
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+              ))}
+            </Pie>
+            <Tooltip
+              content={({ active, payload }) => {
+                if (active && payload && payload[0]) {
+                  const data = payload[0].payload;
+                  return (
+                    <div className="rounded-lg border bg-background p-3 shadow-md">
+                      <div className="font-semibold">{data.name}</div>
+                      <div className="text-sm text-muted-foreground">
+                        Efficiency: {data.value.toFixed(1)}%
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Avg Transit: {data.avgTransitDays.toFixed(1)} days
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Delay Rate: {data.delayRate.toFixed(1)}%
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              }}
+            />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="mt-4 rounded-lg border bg-muted/30 p-3">
+        <div className="text-sm font-semibold daksh-text-secondary mb-1">
+          Efficiency Gap Analysis
+        </div>
+        <div className="text-xs daksh-text-meta leading-relaxed">
+          <strong>{highestDelayMode.mode}</strong> mode shows the highest delay rate (
+          {highestDelayMode.delayRate.toFixed(1)}%), indicating potential bottlenecks in surface
+          logistics or route optimization needs.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export type CongestedHubData = {
+  hub: string;
+  hubCode: string;
+  congestionScore: number;
+  avgDelayHours: number;
+  delayedCount: number;
+  region: string;
+};
+
+/**
+ * Top Congested Hubs Horizontal Bar Chart
+ */
+export function CongestedHubsChart({
+  data,
+}: {
+  data: CongestedHubData[];
+}) {
+  const chartData = [...data]
+    .sort((a, b) => b.congestionScore - a.congestionScore)
+    .map((d) => ({
+      hub: d.hub,
+      hubCode: d.hubCode,
+      congestionScore: d.congestionScore,
+      avgDelayHours: d.avgDelayHours,
+      delayedCount: d.delayedCount,
+      region: d.region,
+    }));
+
+  // Gradient colors from red to orange
+  const getBarColor = (score: number) => {
+    if (score >= 7) return "#C60000"; // India Post Red
+    if (score >= 5) return "#E74C3C"; // Lighter red
+    return "#FF9933"; // Saffron
+  };
+
+  return (
+    <div className="p-5">
+      <div className="mb-4">
+        <div className="daksh-text-label mb-1">Top Congested Hubs</div>
+        <div className="daksh-text-secondary text-xs">
+          Hub congestion analysis based on delay metrics and throughput
+        </div>
+      </div>
+      <div className="h-[400px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={chartData}
+            layout="vertical"
+            margin={{ left: 120, right: 20, top: 10, bottom: 10 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
+            <XAxis
+              type="number"
+              domain={[0, 10]}
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+              label={{ value: "Congestion Score", position: "insideBottom", offset: -5 }}
+            />
+            <YAxis
+              type="category"
+              dataKey="hubCode"
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+              width={110}
+            />
+            <Tooltip
+              cursor={{ fill: "rgba(198,0,0,0.06)" }}
+              content={({ active, payload }) => {
+                if (active && payload && payload[0]) {
+                  const data = payload[0].payload;
+                  return (
+                    <div className="rounded-lg border bg-background p-3 shadow-md">
+                      <div className="font-semibold">{data.hub}</div>
+                      <div className="text-sm text-muted-foreground">
+                        Code: {data.hubCode}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Region: {data.region}
+                      </div>
+                      <div className="mt-2 text-sm font-medium">
+                        Congestion: {data.congestionScore.toFixed(1)}/10
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Avg Delay: {data.avgDelayHours.toFixed(1)} hrs
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Delayed: {data.delayedCount.toLocaleString("en-IN")}
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              }}
+              contentStyle={{
+                borderRadius: 10,
+                borderColor: "rgba(0,0,0,0.08)",
+                backgroundColor: "rgba(255,255,255,0.95)",
+                backdropFilter: "blur(8px)",
+              }}
+            />
+            <Bar
+              dataKey="congestionScore"
+              name="Congestion Score"
+              radius={[0, 6, 6, 0]}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={getBarColor(entry.congestionScore)} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

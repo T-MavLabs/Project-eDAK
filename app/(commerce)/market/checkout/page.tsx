@@ -156,7 +156,7 @@ export default function CheckoutPage() {
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">Payment</div>
                   <Badge variant="secondary" className="gap-2">
-                    <CreditCard className="h-3.5 w-3.5" /> {codEligible ? "Cash on Delivery" : "Prepaid (Mock)"}
+                    <CreditCard className="h-3.5 w-3.5" /> {codEligible ? "Cash on Delivery" : "Prepaid  "}
                   </Badge>
                 </div>
                 <div className="mt-2 text-sm text-muted-foreground">

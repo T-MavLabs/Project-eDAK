@@ -91,7 +91,7 @@ export default function CartPage() {
                       {l.product.codAvailable ? (
                         <Badge variant="secondary">COD</Badge>
                       ) : (
-                        <Badge variant="secondary">Prepaid (Mock)</Badge>
+                        <Badge variant="secondary">Prepaid  </Badge>
                       )}
                     </div>
 

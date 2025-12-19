@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Bell, LayoutDashboard, MessageSquareWarning, PackageSearch } from "lucide-react";
@@ -47,8 +48,14 @@ export function CoreNavbar() {
     <header className="sticky top-0 z-50 border-b daksh-sticky-header daksh-transition">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="flex items-center gap-3 daksh-focus-ring daksh-transition">
-          <div className="grid h-9 w-9 place-items-center rounded-md bg-primary text-primary-foreground daksh-elevated daksh-transition">
-            <span className="text-sm font-semibold tracking-tight">IP</span>
+          <div className="relative h-9 w-9 rounded-md overflow-hidden daksh-elevated daksh-transition">
+            <Image
+              src="/DAKSH.png"
+              alt="DAKSH Logo"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
           <div className="leading-tight">
             <div className="text-sm font-semibold tracking-tight">

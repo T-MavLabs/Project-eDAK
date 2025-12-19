@@ -36,12 +36,47 @@ export default function SignUpPage() {
       });
 
       if (user) {
-        // Update user profile with role
         const { supabase } = await import("@/supabase/client");
-        await supabase
+        
+        // Wait for the trigger to create the profile (it runs after auth.users insert)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Update non-role fields first
+        const { error: updateError } = await supabase
           .from("user_profiles")
-          .update({ role, full_name: fullName })
+          .update({ 
+            full_name: fullName,
+            email: user.email || email,
+          })
           .eq("id", user.id);
+        
+        if (updateError) {
+          console.error("Error updating profile:", updateError);
+        }
+        
+        // Try to set the role using the database function (if it exists)
+        // This function allows users to set their own role during initial signup
+        if (role !== "buyer") {
+          const { error: roleError } = await supabase.rpc('set_initial_user_role', {
+            target_user_id: user.id,
+            new_role: role
+          });
+          
+          if (roleError) {
+            console.warn("Could not set role via RPC, trying direct update:", roleError);
+            // Fallback: try direct update (might fail due to trigger, but worth trying)
+            const { error: directUpdateError } = await supabase
+              .from("user_profiles")
+              .update({ role })
+              .eq("id", user.id);
+            
+            if (directUpdateError) {
+              console.error("Could not set role:", directUpdateError);
+              // Don't block the user - they can contact admin to fix their role
+              // The account is created, just with wrong role
+            }
+          }
+        }
 
         if (role === "seller") {
           router.push("/seller/onboarding");

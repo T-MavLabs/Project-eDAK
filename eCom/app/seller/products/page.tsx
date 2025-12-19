@@ -81,31 +81,55 @@ export default function ProductsPage() {
   };
 
   if (loading) {
-    return <div>Loading products...</div>;
+    return (
+      <div className="mx-auto w-full max-w-7xl px-4 py-8">
+        <div className="mb-6 space-y-2">
+          <div className="h-8 w-64 rounded-md vyapar-skeleton" />
+          <div className="h-4 w-96 rounded-md vyapar-skeleton" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-80 rounded-xl vyapar-skeleton" />
+          ))}
+        </div>
+      </div>
+    );
   }
 
+  const activeProducts = products.filter(p => p.is_active).length;
+  const inactiveProducts = products.filter(p => !p.is_active).length;
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Products</h1>
-          <p className="text-muted-foreground">Manage your product catalog</p>
+    <div className="mx-auto w-full max-w-7xl px-4 py-8">
+      {/* Header */}
+      <div className="mb-8 vyapar-fade-in">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-semibold tracking-tight mb-2">Products</h1>
+            <p className="text-sm text-muted-foreground">
+              Manage your product catalog • {products.length} total products ({activeProducts} active, {inactiveProducts} inactive)
+            </p>
+          </div>
+          <Button asChild className="bg-primary hover:bg-primary/90 vyapar-gentle-transition">
+            <Link href="/seller/products/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Product
+            </Link>
+          </Button>
         </div>
-        <Button asChild>
-          <Link href="/seller/products/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Product
-          </Link>
-        </Button>
       </div>
 
       {products.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Package className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No products yet</h3>
-            <p className="text-muted-foreground mb-4">Get started by adding your first product</p>
-            <Button asChild>
+        <Card className="vyapar-card vyapar-soft-shadow vyapar-fade-in">
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <div className="grid h-16 w-16 place-items-center rounded-full bg-muted mb-4">
+              <Package className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">No products yet</h3>
+            <p className="text-sm text-muted-foreground mb-6 text-center max-w-md">
+              Get started by adding your first product. List your items and start selling to customers across India.
+            </p>
+            <Button asChild className="bg-primary hover:bg-primary/90 vyapar-gentle-transition">
               <Link href="/seller/products/new">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Your First Product
@@ -114,47 +138,63 @@ export default function ProductsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <Card key={product.id}>
-              <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {products.map((product, idx) => (
+            <Card key={product.id} className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition overflow-hidden" style={{ animationDelay: `${idx * 50}ms` }}>
+              <div className="relative h-48 w-full overflow-hidden bg-muted/30">
                 <Image
                   src={getProductImageUrl(product.id, product.image_path)}
                   alt={product.name}
                   fill
-                  className="object-cover"
+                  className="object-cover vyapar-gentle-transition"
                   unoptimized
                 />
+                <div className="absolute top-3 right-3">
+                  <Badge 
+                    variant={product.is_active ? "default" : "secondary"}
+                    className={product.is_active ? "bg-primary text-primary-foreground" : ""}
+                  >
+                    {product.is_active ? "Active" : "Inactive"}
+                  </Badge>
+                </div>
               </div>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <CardTitle className="text-lg">{product.name}</CardTitle>
-                  <Badge variant={product.status === "approved" ? "default" : "secondary"}>
+              <CardHeader className="space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <CardTitle className="text-lg leading-snug line-clamp-2 flex-1">{product.name}</CardTitle>
+                  <Badge variant="outline" className="text-xs flex-shrink-0">
                     {product.status || "draft"}
                   </Badge>
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold">₹{Number(product.price).toLocaleString("en-IN")}</span>
-                  <Badge>{product.category}</Badge>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <div>
+                    <div className="text-xs text-muted-foreground mb-1">Price</div>
+                    <div className="text-xl font-semibold text-primary">₹{Number(product.price).toLocaleString("en-IN")}</div>
+                  </div>
+                  <Badge variant="secondary" className="vyapar-chip">{product.category}</Badge>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" className="flex-1" asChild>
+                  <Button variant="outline" size="sm" className="flex-1 vyapar-gentle-transition" asChild>
                     <Link href={`/seller/products/${product.id}/edit`}>
-                      <Edit className="mr-2 h-4 w-4" />
+                      <Edit className="mr-2 h-3.5 w-3.5" />
                       Edit
                     </Link>
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex-1"
+                    className="flex-1 vyapar-gentle-transition text-muted-foreground hover:text-destructive"
                     onClick={() => handleDelete(product.id)}
                   >
-                    <Trash2 className="mr-2 h-4 w-4" />
+                    <Trash2 className="mr-2 h-3.5 w-3.5" />
                     Delete
+                  </Button>
+                  <Button variant="outline" size="sm" className="vyapar-gentle-transition" asChild>
+                    <Link href={`/market/product/${product.id}`}>
+                      <Eye className="h-3.5 w-3.5" />
+                    </Link>
                   </Button>
                 </div>
               </CardContent>
