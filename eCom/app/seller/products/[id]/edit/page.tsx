@@ -54,13 +54,21 @@ export default function EditProductPage() {
           .single();
 
         if (error) throw error;
-        if (data) {
+        const typedData = data as unknown as {
+          name: string;
+          description: string;
+          price: string | number;
+          category: string;
+          image_path?: string | null;
+          is_active?: boolean;
+        } | null;
+        if (typedData) {
           setFormData({
-            name: data.name || "",
-            description: data.description || "",
-            price: String(data.price || ""),
-            category: data.category || "",
-            is_active: data.is_active || false,
+            name: typedData.name || "",
+            description: typedData.description || "",
+            price: String(typedData.price || ""),
+            category: typedData.category || "",
+            is_active: typedData.is_active || false,
           });
         }
       } catch (err) {

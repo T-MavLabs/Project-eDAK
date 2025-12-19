@@ -41,17 +41,19 @@ export default function ProductsPage() {
           .eq("id", userId)
           .single();
 
-        if (!sellerProfile) return;
+        const typedSellerProfile = sellerProfile as unknown as { id: string } | null;
+        if (!typedSellerProfile || !typedSellerProfile.id) return;
 
         // Load products
         const { data, error } = await supabase
           .from("products")
           .select("*")
-          .eq("seller_id", sellerProfile.id)
+          .eq("seller_id", typedSellerProfile.id)
           .order("created_at", { ascending: false });
 
         if (error) throw error;
-        setProducts(data || []);
+        const typedProducts = (data as unknown as Array<Product> | null) || [];
+        setProducts(typedProducts);
       } catch (err) {
         console.error("Error loading products:", err);
       } finally {

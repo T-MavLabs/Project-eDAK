@@ -43,7 +43,7 @@ export async function fetchActiveProducts(): Promise<DbProduct[]> {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return (data ?? []) as DbProduct[];
+  return (data ?? []) as unknown as DbProduct[];
 }
 
 export async function fetchProductById(id: string): Promise<DbProduct | null> {
@@ -55,8 +55,9 @@ export async function fetchProductById(id: string): Promise<DbProduct | null> {
 
   if (error) throw error;
   if (!data) return null;
-  if (!data.is_active) return null;
-  return data as DbProduct;
+  const typedData = data as unknown as DbProduct;
+  if (!typedData.is_active) return null;
+  return typedData;
 }
 
 export async function fetchProductsByIds(ids: string[]): Promise<DbProduct[]> {
@@ -68,7 +69,7 @@ export async function fetchProductsByIds(ids: string[]): Promise<DbProduct[]> {
     .in("id", ids);
 
   if (error) throw error;
-  return (data ?? []) as DbProduct[];
+  return (data ?? []) as unknown as DbProduct[];
 }
 
 export async function createOrder(input: {
@@ -89,7 +90,7 @@ export async function createOrder(input: {
     .single();
 
   if (error) throw error;
-  return data as DbOrder;
+  return data as unknown as DbOrder;
 }
 
 export async function createOrderItems(
@@ -109,7 +110,7 @@ export async function createOrderItems(
     .select("id,order_id,product_id,quantity,price_at_purchase");
 
   if (error) throw error;
-  return (data ?? []) as DbOrderItem[];
+  return (data ?? []) as unknown as DbOrderItem[];
 }
 
 export async function setOrderTrackingId(orderId: string, trackingId: string): Promise<void> {
@@ -129,5 +130,5 @@ export async function fetchOrdersByEmail(email: string): Promise<DbOrder[]> {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return (data ?? []) as DbOrder[];
+  return (data ?? []) as unknown as DbOrder[];
 }

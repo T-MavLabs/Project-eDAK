@@ -50,13 +50,14 @@ export default function PayoutsPage() {
         .eq("id", userId)
         .single();
 
-      if (!sellerProfile) return;
+      const typedSellerProfile = sellerProfile as unknown as { id: string } | null;
+      if (!typedSellerProfile || !typedSellerProfile.id) return;
 
       // Try to load payouts (if table exists)
       const { data: payoutData, error } = await supabase
         .from("payouts")
         .select("*")
-        .eq("seller_id", sellerProfile.id)
+        .eq("seller_id", typedSellerProfile.id)
         .order("created_at", { ascending: false });
 
       if (error && error.code !== "42P01") {
@@ -65,11 +66,12 @@ export default function PayoutsPage() {
       }
 
       if (payoutData) {
-        setPayouts(payoutData);
-        const pending = payoutData
+        const typedPayoutData = payoutData as unknown as Array<Payout>;
+        setPayouts(typedPayoutData);
+        const pending = typedPayoutData
           .filter((p) => p.status === "pending")
           .reduce((sum, p) => sum + parseFloat(String(p.net_amount || 0)), 0);
-        const settled = payoutData
+        const settled = typedPayoutData
           .filter((p) => p.status === "settled")
           .reduce((sum, p) => sum + parseFloat(String(p.net_amount || 0)), 0);
         setSummary({

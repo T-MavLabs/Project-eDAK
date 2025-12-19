@@ -29,10 +29,11 @@ export async function canAccess(
           .select("seller_id")
           .eq("id", resourceId)
           .single();
-        if (!data) return false;
+        const typedData = data as unknown as { seller_id: string } | null;
+        if (!typedData) return false;
         // Get seller profile for current user
         const profile = await getUserProfile();
-        return data.seller_id === profile?.id;
+        return typedData.seller_id === profile?.id;
       }
       return false;
 
@@ -45,21 +46,24 @@ export async function canAccess(
           .select("buyer_id")
           .eq("id", resourceId)
           .single();
-        if (!order) return false;
+        const typedOrder = order as unknown as { buyer_id: string } | null;
+        if (!typedOrder) return false;
         const userProfile = await getUserProfile();
-        if (order.buyer_id === userProfile?.id) return true;
+        if (typedOrder.buyer_id === userProfile?.id) return true;
         // Check if seller owns products in order
         const { data: orderItems } = await supabase
           .from("order_items")
           .select("product_id")
           .eq("order_id", resourceId);
-        if (!orderItems || orderItems.length === 0) return false;
-        const productIds = orderItems.map((item) => item.product_id);
+        const typedOrderItems = (orderItems as Array<{ product_id: string }> | null) || [];
+        if (typedOrderItems.length === 0) return false;
+        const productIds = typedOrderItems.map((item) => item.product_id);
         const { data: products } = await supabase
           .from("products")
           .select("seller_id")
           .in("id", productIds);
-        return products?.some((p) => p.seller_id === userProfile?.id) || false;
+        const typedProducts = (products as Array<{ seller_id: string }> | null) || [];
+        return typedProducts.some((p) => p.seller_id === userProfile?.id);
       }
       return false;
 
@@ -118,7 +122,8 @@ export async function ownsResource(
     .eq("id", resourceId)
     .single();
 
-  return data?.[userIdColumn] === userId;
+  const typedData = data as unknown as Record<string, any> | null;
+  return typedData?.[userIdColumn] === userId;
 }
 
 /**

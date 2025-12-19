@@ -46,15 +46,17 @@ export default function OrdersPage() {
           .eq("id", userId)
           .single();
 
-        if (!sellerProfile) return;
+        const typedSellerProfile = sellerProfile as unknown as { id: string } | null;
+        if (!typedSellerProfile || !typedSellerProfile.id) return;
 
         // Get seller's products
         const { data: products } = await supabase
           .from("products")
           .select("id")
-          .eq("seller_id", sellerProfile.id);
+          .eq("seller_id", typedSellerProfile.id);
 
-        const productIds = products?.map((p) => p.id) || [];
+        const typedProducts = (products as Array<{ id: string }> | null) || [];
+        const productIds = typedProducts.map((p) => p.id);
         if (productIds.length === 0) {
           setOrders([]);
           setLoading(false);
@@ -67,7 +69,8 @@ export default function OrdersPage() {
           .select("order_id")
           .in("product_id", productIds);
 
-        const orderIds = [...new Set(orderItems?.map((oi) => oi.order_id) || [])];
+        const typedOrderItems = (orderItems as Array<{ order_id: string }> | null) || [];
+        const orderIds = [...new Set(typedOrderItems.map((oi) => oi.order_id))];
         if (orderIds.length === 0) {
           setOrders([]);
           setLoading(false);
@@ -87,7 +90,8 @@ export default function OrdersPage() {
 
         const { data, error } = await query;
         if (error) throw error;
-        setOrders(data || []);
+        const typedOrders = (data as unknown as Array<Order> | null) || [];
+        setOrders(typedOrders);
       } catch (err) {
         console.error("Error loading orders:", err);
       } finally {

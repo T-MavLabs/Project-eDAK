@@ -31,7 +31,8 @@ export default function SellerDashboardPage() {
           .eq("id", userId)
           .single();
         
-        if (profile && profile.role !== "seller") {
+        const typedProfile = profile as unknown as { role: string } | null;
+        if (typedProfile && typedProfile.role !== "seller") {
           // If user has a seller profile but role is not set, update it
           const { data: sellerProfile } = await supabase
             .from("seller_profiles")
@@ -39,7 +40,8 @@ export default function SellerDashboardPage() {
             .eq("id", userId)
             .single();
           
-          if (sellerProfile) {
+          const typedSellerProfileCheck = sellerProfile as unknown as { id: string } | null;
+          if (typedSellerProfileCheck) {
             // User has seller profile but wrong role - fix it
             await supabase
               .from("user_profiles")
@@ -67,20 +69,30 @@ export default function SellerDashboardPage() {
           return;
         }
 
+        // Type assertion for sellerProfile
+        const typedSellerProfile = sellerProfile as unknown as { id: string } | null;
+        if (!typedSellerProfile || !typedSellerProfile.id) {
+          router.push("/seller/onboarding");
+          return;
+        }
+
         // Get seller's product IDs
+        const sellerId = typedSellerProfile.id;
+
         const { data: sellerProducts } = await supabase
           .from("products")
           .select("id")
-          .eq("seller_id", sellerProfile.id);
+          .eq("seller_id", sellerId);
 
-        const productIds = sellerProducts?.map((p) => p.id) || [];
+        const typedSellerProducts = (sellerProducts as Array<{ id: string }> | null) || [];
+        const productIds = typedSellerProducts.map((p) => p.id);
 
         // Load stats
         const [productsResult, orderItemsResult] = await Promise.all([
           supabase
             .from("products")
             .select("id", { count: "exact" })
-            .eq("seller_id", sellerProfile.id),
+            .eq("seller_id", sellerId),
           productIds.length > 0
             ? supabase
                 .from("order_items")
@@ -89,8 +101,8 @@ export default function SellerDashboardPage() {
             : { data: [], error: null },
         ]);
 
-        const orderIds =
-          orderItemsResult.data?.map((oi) => oi.order_id) || [];
+        const typedOrderItems = (orderItemsResult.data as Array<{ order_id: string }> | null) || [];
+        const orderIds = typedOrderItems.map((oi) => oi.order_id);
         const uniqueOrderIds = [...new Set(orderIds)];
 
         const ordersResult =
@@ -102,7 +114,7 @@ export default function SellerDashboardPage() {
             : { data: [], error: null };
 
         const totalProducts = productsResult.count || 0;
-        const orders = ordersResult.data || [];
+        const orders = (ordersResult.data as Array<{ id: string; total_amount: string | number; status: string }> | null) || [];
         const totalOrders = orders.length;
         const totalRevenue = orders.reduce(
           (sum, o) => sum + parseFloat(String(o.total_amount || 0)),

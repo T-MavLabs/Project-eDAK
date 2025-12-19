@@ -103,15 +103,17 @@ export default function InventoryPage() {
         .eq("id", userId)
         .single();
 
-      if (!sellerProfile) return;
+      const typedSellerProfile = sellerProfile as unknown as { id: string } | null;
+      if (!typedSellerProfile || !typedSellerProfile.id) return;
 
       // Get seller's products
       const { data: products } = await supabase
         .from("products")
         .select("id, name")
-        .eq("seller_id", sellerProfile.id);
+        .eq("seller_id", typedSellerProfile.id);
 
-      if (!products || products.length === 0) {
+      const typedProducts = (products as Array<{ id: string; name: string }> | null) || [];
+      if (typedProducts.length === 0) {
         setInventory([]);
         setLoading(false);
         return;
@@ -126,12 +128,19 @@ export default function InventoryPage() {
           quantity,
           reserved
         `)
-        .in("product_id", products.map((p) => p.id));
+        .in("product_id", typedProducts.map((p) => p.id));
+
+      const typedInventoryData = (inventoryData as Array<{
+        product_id: string;
+        variant_id: string | null;
+        quantity: number;
+        reserved: number;
+      }> | null) || [];
 
       // If no inventory table or no data, show products with default stock
-      if (!inventoryData || inventoryData.length === 0) {
+      if (!inventoryData || typedInventoryData.length === 0) {
         setInventory(
-          products.map((p) => ({
+          typedProducts.map((p) => ({
             product_id: p.id,
             product_name: p.name,
             variant_id: null,
@@ -144,10 +153,10 @@ export default function InventoryPage() {
       } else {
         // Map inventory data with product names
         const inventoryMap = new Map(
-          products.map((p) => [p.id, p.name])
+          typedProducts.map((p) => [p.id, p.name])
         );
         setInventory(
-          inventoryData.map((inv) => ({
+          typedInventoryData.map((inv) => ({
             product_id: inv.product_id,
             product_name: inventoryMap.get(inv.product_id) || "Unknown",
             variant_id: inv.variant_id,
@@ -176,12 +185,13 @@ export default function InventoryPage() {
         .is("variant_id", null)
         .single();
 
-      if (existing) {
+      const typedExisting = existing as unknown as { id: string } | null;
+      if (typedExisting) {
         // Update existing
         const { error } = await supabase
           .from("inventory")
           .update({ quantity: newQuantity })
-          .eq("id", existing.id);
+          .eq("id", typedExisting.id);
         if (error) throw error;
       } else {
         // Create new

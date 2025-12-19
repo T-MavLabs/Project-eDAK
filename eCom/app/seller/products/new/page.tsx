@@ -52,7 +52,8 @@ export default function NewProductPage() {
         .eq("id", userId)
         .single();
 
-      if (sellerError || !sellerProfile) {
+      const typedSellerProfile = sellerProfile as unknown as { id: string } | null;
+      if (sellerError || !typedSellerProfile || !typedSellerProfile.id) {
         throw new Error("Seller profile not found. Please complete onboarding.");
       }
 
@@ -64,7 +65,7 @@ export default function NewProductPage() {
           description: formData.description,
           price: parseFloat(formData.price),
           category: formData.category,
-          seller_id: sellerProfile.id,
+          seller_id: typedSellerProfile.id,
           seller_name: "", // Will be populated from seller profile
           status: "draft", // Requires admin approval
           is_active: false,
@@ -74,7 +75,12 @@ export default function NewProductPage() {
 
       if (error) throw error;
 
-      router.push(`/seller/products/${data.id}/edit`);
+      const typedData = data as unknown as { id: string } | null;
+      if (typedData) {
+        router.push(`/seller/products/${typedData.id}/edit`);
+      } else {
+        router.push("/seller/products");
+      }
     } catch (err) {
       console.error("Error creating product:", err);
       alert(err instanceof Error ? err.message : "Failed to create product");

@@ -61,8 +61,11 @@ export default function OrderDetailPage() {
           .single();
 
         if (orderError) throw orderError;
-        setOrder(orderData);
-        setStatus(orderData.status);
+        const typedOrderData = orderData as unknown as Order | null;
+        setOrder(typedOrderData);
+        if (typedOrderData) {
+          setStatus(typedOrderData.status);
+        }
 
         // Load order items
         const { data: items, error: itemsError } = await supabase
@@ -74,8 +77,9 @@ export default function OrderDetailPage() {
           .eq("order_id", orderId);
 
         if (itemsError) throw itemsError;
+        const typedItems = (items as Array<any> | null) || [];
         setOrderItems(
-          items?.map((item: any) => ({
+          typedItems.map((item: any) => ({
             ...item,
             product: item.product,
           })) || []

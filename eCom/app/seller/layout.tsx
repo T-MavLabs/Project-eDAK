@@ -39,7 +39,8 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
           .eq("id", userId)
           .single();
         
-        setSellerName(profile?.full_name || "Seller");
+        const typedProfile = profile as unknown as { full_name: string | null } | null;
+        setSellerName(typedProfile?.full_name || "Seller");
       } catch {
         router.push("/auth/login");
       } finally {

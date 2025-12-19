@@ -46,15 +46,17 @@ export default function ReturnsPage() {
         .eq("id", userId)
         .single();
 
-      if (!sellerProfile) return;
+      const typedSellerProfile = sellerProfile as unknown as { id: string } | null;
+      if (!typedSellerProfile || !typedSellerProfile.id) return;
 
       // Get seller's products
       const { data: products } = await supabase
         .from("products")
         .select("id, name")
-        .eq("seller_id", sellerProfile.id);
+        .eq("seller_id", typedSellerProfile.id);
 
-      const productIds = products?.map((p) => p.id) || [];
+      const typedProducts = (products as Array<{ id: string; name: string }> | null) || [];
+      const productIds = typedProducts.map((p) => p.id);
       if (productIds.length === 0) {
         setReturns([]);
         setLoading(false);

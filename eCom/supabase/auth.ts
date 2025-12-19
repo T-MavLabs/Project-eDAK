@@ -61,7 +61,7 @@ export async function getUserProfile(userId?: string): Promise<UserProfile | nul
   }
   
   if (!data) return null;
-  return data as UserProfile;
+  return data as unknown as UserProfile;
 }
 
 /**
@@ -201,7 +201,7 @@ export async function updateUserProfile(
     throw new Error("Profile update returned no data");
   }
   
-  return data as UserProfile;
+  return data as unknown as UserProfile;
 }
 
 /**

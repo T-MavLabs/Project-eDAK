@@ -159,10 +159,11 @@ export default function SellerOnboardingPage() {
         .eq("id", userId)
         .single();
 
-      if (!profile) throw new Error("User profile not found");
+      const typedProfile = profile as unknown as { id: string; role: string } | null;
+      if (!typedProfile) throw new Error("User profile not found");
 
       // Ensure user role is set to 'seller'
-      if (profile.role !== "seller") {
+      if (typedProfile.role !== "seller") {
         const { error: roleError } = await supabase
           .from("user_profiles")
           .update({ role: "seller" })
@@ -178,7 +179,7 @@ export default function SellerOnboardingPage() {
       const { error: sellerError } = await supabase
         .from("seller_profiles")
         .insert({
-          id: profile.id,
+          id: typedProfile.id,
           business_name: formData.businessName,
           business_type: formData.businessType,
           gstin: formData.gstin || null,

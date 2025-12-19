@@ -44,14 +44,19 @@ export default function AnalyticsPage() {
 
       if (!sellerProfile) return;
 
+      // Type assertion for sellerProfile - handle potential error type
+      const seller = (sellerProfile as unknown as { id: string }) || null;
+      if (!seller || !seller.id) return;
+
       // Get seller's products
       const { data: products } = await supabase
         .from("products")
         .select("id")
-        .eq("seller_id", sellerProfile.id);
+        .eq("seller_id", seller.id);
 
-      const productIds = products?.map((p) => p.id) || [];
-      const totalProducts = products?.length || 0;
+      const typedProducts = (products as Array<{ id: string }> | null) || [];
+      const productIds = typedProducts.map((p) => p.id);
+      const totalProducts = typedProducts.length;
 
       if (productIds.length === 0) {
         setAnalytics({
@@ -72,7 +77,8 @@ export default function AnalyticsPage() {
         .select("order_id, price_at_purchase, quantity")
         .in("product_id", productIds);
 
-      const orderIds = [...new Set(orderItems?.map((oi) => oi.order_id) || [])];
+      const typedOrderItems = (orderItems as Array<{ order_id: string; price_at_purchase: string | number; quantity: number }> | null) || [];
+      const orderIds = [...new Set(typedOrderItems.map((oi) => oi.order_id))];
       const totalOrders = orderIds.length;
 
       // Get orders
@@ -81,18 +87,19 @@ export default function AnalyticsPage() {
         .select("id, total_amount, created_at")
         .in("id", orderIds);
 
-      const totalRevenue = orders?.reduce((sum, o) => sum + parseFloat(String(o.total_amount || 0)), 0) || 0;
+      const typedOrders = (orders as Array<{ id: string; total_amount: string | number; created_at: string }> | null) || [];
+      const totalRevenue = typedOrders.reduce((sum, o) => sum + parseFloat(String(o.total_amount || 0)), 0);
       const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
       // This month's data
       const now = new Date();
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      const ordersThisMonth = orders?.filter(
+      const ordersThisMonth = typedOrders.filter(
         (o) => new Date(o.created_at) >= startOfMonth
-      ).length || 0;
-      const revenueThisMonth = orders?.filter(
+      ).length;
+      const revenueThisMonth = typedOrders.filter(
         (o) => new Date(o.created_at) >= startOfMonth
-      ).reduce((sum, o) => sum + parseFloat(String(o.total_amount || 0)), 0) || 0;
+      ).reduce((sum, o) => sum + parseFloat(String(o.total_amount || 0)), 0);
 
       setAnalytics({
         totalRevenue,

@@ -46,7 +46,8 @@ export default function SettingsPage() {
         .eq("id", userId)
         .single();
 
-      if (user) setUserProfile(user);
+      const typedUser = user as unknown as { phone?: string | null; [key: string]: any } | null;
+      if (typedUser) setUserProfile(typedUser);
 
       // Load seller profile
       const { data: seller } = await supabase
@@ -55,21 +56,37 @@ export default function SettingsPage() {
         .eq("id", userId)
         .single();
 
-      if (seller) {
-        setSellerProfile(seller);
+      const typedSeller = seller as unknown as {
+        shop_name?: string | null;
+        business_type?: string | null;
+        gstin?: string | null;
+        pan?: string | null;
+        bank_account_number?: string | null;
+        ifsc_code?: string | null;
+        address_line1?: string | null;
+        address_line2?: string | null;
+        city?: string | null;
+        state?: string | null;
+        pincode?: string | null;
+        verification_status?: string | null;
+        [key: string]: any;
+      } | null;
+
+      if (typedSeller) {
+        setSellerProfile(typedSeller);
         setFormData({
-          shop_name: seller.shop_name || "",
-          business_type: seller.business_type || "",
-          gstin: seller.gstin || "",
-          pan: seller.pan || "",
-          bank_account_number: seller.bank_account_number || "",
-          ifsc_code: seller.ifsc_code || "",
-          address_line1: seller.address_line1 || "",
-          address_line2: seller.address_line2 || "",
-          city: seller.city || "",
-          state: seller.state || "",
-          pincode: seller.pincode || "",
-          phone: user?.phone || "",
+          shop_name: typedSeller.shop_name || "",
+          business_type: typedSeller.business_type || "",
+          gstin: typedSeller.gstin || "",
+          pan: typedSeller.pan || "",
+          bank_account_number: typedSeller.bank_account_number || "",
+          ifsc_code: typedSeller.ifsc_code || "",
+          address_line1: typedSeller.address_line1 || "",
+          address_line2: typedSeller.address_line2 || "",
+          city: typedSeller.city || "",
+          state: typedSeller.state || "",
+          pincode: typedSeller.pincode || "",
+          phone: typedUser?.phone || "",
         });
       }
     } catch (err) {
