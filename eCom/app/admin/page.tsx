@@ -115,7 +115,7 @@ export default function AdminDashboardPage() {
           ordersResult.status === "fulfilled" &&
           !ordersResult.value.error &&
           ordersResult.value.data
-            ? (ordersResult.value.data as Array<{ total_amount: string | number }>).reduce(
+            ? ((ordersResult.value.data as unknown) as Array<{ total_amount: string | number }>).reduce(
                 (sum, o) => sum + parseFloat(String(o.total_amount || 0)),
                 0
               )

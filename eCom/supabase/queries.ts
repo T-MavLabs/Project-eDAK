@@ -195,5 +195,6 @@ export async function getUserIdFromEmail(email: string): Promise<string | null> 
     .eq("email", email.toLowerCase())
     .maybeSingle();
 
-  return userProfile?.id || null;
+  const typedUserProfile = userProfile as unknown as { id: string } | null;
+  return typedUserProfile?.id || null;
 }

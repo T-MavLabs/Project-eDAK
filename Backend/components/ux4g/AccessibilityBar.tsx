@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { TextSize, Contrast, Eye } from "lucide-react";
+import { Type, Contrast, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type FontSize = "normal" | "small" | "large" | "xlarge";
@@ -81,7 +81,7 @@ export function AccessibilityBar() {
                 htmlFor="font-size-toggle"
                 className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-1"
               >
-                <TextSize className="h-4 w-4" />
+                <Type className="h-4 w-4" />
                 Font Size
               </label>
               <button

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Package, Eye, Truck } from "lucide-react";
@@ -28,7 +28,7 @@ interface Order {
   buyer_id: string | null;
 }
 
-export default function OrdersPage() {
+function OrdersPageContent() {
   const searchParams = useSearchParams();
   const statusFilter = searchParams.get("status");
   const [orders, setOrders] = useState<Order[]>([]);
@@ -190,5 +190,17 @@ export default function OrdersPage() {
         </Card>
       )}
     </div>
+  );
+}
+
+export default function OrdersPage() {
+  return (
+    <Suspense fallback={
+      <div className="mx-auto w-full max-w-7xl px-4 py-10">
+        <div>Loading...</div>
+      </div>
+    }>
+      <OrdersPageContent />
+    </Suspense>
   );
 }

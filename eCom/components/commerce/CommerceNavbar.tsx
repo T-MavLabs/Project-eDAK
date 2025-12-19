@@ -29,12 +29,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { GovernmentBanner } from "@/components/GovernmentBanner";
 
-const navItems = [
+type NavItem = {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+};
+
+const navItems: NavItem[] = [
   { href: "/", label: "Home", icon: Home },
   { href: "/market", label: "Marketplace", icon: ShoppingBag },
   { href: "/market/orders", label: "Orders", icon: ClipboardList },
   { href: "/track", label: "Track", icon: PackageSearch },
-] as const;
+];
 
 export function CommerceNavbar() {
   const pathname = usePathname();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Package, CheckCircle2, XCircle, Archive, Search, Eye } from "lucide-react";
 import { supabase } from "@/supabase/client";
@@ -43,7 +43,7 @@ type Product = {
   rejection_reason: string | null;
 };
 
-export default function AdminProductsPage() {
+function AdminProductsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const statusFilter = searchParams.get("status") || "all";
@@ -78,7 +78,7 @@ export default function AdminProductsPage() {
 
         if (error) throw error;
 
-        setProducts((data || []) as Product[]);
+        setProducts((data || []) as unknown as Product[]);
       } catch (err) {
         console.error("Error loading products:", err);
       } finally {
@@ -347,5 +347,17 @@ export default function AdminProductsPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function AdminProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="mx-auto w-full max-w-7xl px-4 py-10">
+        <div>Loading...</div>
+      </div>
+    }>
+      <AdminProductsPageContent />
+    </Suspense>
   );
 }

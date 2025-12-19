@@ -72,7 +72,7 @@ export default function AdminOrdersPage() {
 
         if (error) throw error;
 
-        setOrders((data || []) as Order[]);
+        setOrders((data || []) as unknown as Order[]);
       } catch (err) {
         console.error("Error loading orders:", err);
       } finally {
