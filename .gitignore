@@ -44,6 +44,16 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.env.local
+/.env.local
+/Backend/.env.local
+/eCom/.env.local
+**/.env.local
+.env.local
+/.env.local
+/Backend/.env.local
+/eCom/.env.local
+**/.env.local
 
 # vercel
 .vercel
