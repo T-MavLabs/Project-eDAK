@@ -397,40 +397,40 @@ function AdminSellersPageContent() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-10">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:py-10 overflow-x-hidden">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Seller Management</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="ux4g-headline">Seller management</h1>
+          <p className="ux4g-body text-muted-foreground mt-1">
             Review and manage seller verifications
           </p>
         </div>
-        <Button variant="outline" onClick={() => router.push("/admin")}>
-          Back to Dashboard
+        <Button variant="outline" onClick={() => router.push("/admin")} className="min-h-[44px] ux4g-label w-full sm:w-auto">
+          Back to dashboard
         </Button>
       </div>
 
       {/* Filters */}
       <Card className="mb-6">
-        <CardContent className="pt-6">
+        <CardContent className="pt-4 sm:pt-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-1 items-center gap-2">
-              <Search className="h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-1 items-center gap-2 min-w-0">
+              <Search className="h-4 w-4 text-muted-foreground flex-shrink-0" aria-hidden="true" />
               <Input
                 placeholder="Search by business name, city, GSTIN, or email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-md"
+                className="max-w-md min-w-0"
               />
             </div>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full md:w-[180px] min-h-[44px]">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Sellers</SelectItem>
+                <SelectItem value="all">All sellers</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="under_review">Under Review</SelectItem>
+                <SelectItem value="under_review">Under review</SelectItem>
                 <SelectItem value="verified">Verified</SelectItem>
                 <SelectItem value="rejected">Rejected</SelectItem>
                 <SelectItem value="suspended">Suspended</SelectItem>
@@ -443,180 +443,328 @@ function AdminSellersPageContent() {
       {/* Sellers Table */}
       <Card>
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="ux4g-title">
             Sellers ({filteredSellers.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
           {filteredSellers.length === 0 ? (
-            <div className="py-8 text-center text-muted-foreground">
+            <div className="py-8 text-center ux4g-body text-muted-foreground">
               No sellers found
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Business Name</TableHead>
-                    <TableHead>Contact</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>GSTIN/PAN</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredSellers.map((seller) => {
-                    const isPendingOnboarding = seller.is_pending_onboarding || 
-                      (seller.business_city === "Not provided" && seller.business_state === "Not provided");
-                    
-                    return (
-                      <TableRow key={seller.id} className={isPendingOnboarding ? "bg-muted/30" : ""}>
-                        <TableCell className="font-medium">
-                          <div className="flex items-center gap-2">
-                            {isPendingOnboarding ? (
-                              <>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden lg:block overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="ux4g-label">Business name</TableHead>
+                      <TableHead className="ux4g-label">Contact</TableHead>
+                      <TableHead className="ux4g-label">Location</TableHead>
+                      <TableHead className="ux4g-label">GSTIN/PAN</TableHead>
+                      <TableHead className="ux4g-label">Status</TableHead>
+                      <TableHead className="ux4g-label">Created</TableHead>
+                      <TableHead className="text-right ux4g-label">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredSellers.map((seller) => {
+                      const isPendingOnboarding = seller.is_pending_onboarding || 
+                        (seller.business_city === "Not provided" && seller.business_state === "Not provided");
+                      
+                      return (
+                        <TableRow key={seller.id} className={isPendingOnboarding ? "bg-muted/30" : ""}>
+                          <TableCell className="font-medium">
+                            <div className="flex items-center gap-2">
+                              {isPendingOnboarding ? (
                                 <div>
-                                  <div className="font-medium">
+                                  <div className="ux4g-label font-medium break-words">
                                     {seller.user_profile?.full_name || seller.user_profile?.email?.split("@")[0] || "New Seller"}
                                   </div>
-                                  <Badge variant="outline" className="mt-1 text-xs">
-                                    Awaiting Onboarding
+                                  <Badge variant="outline" className="mt-1 ux4g-body-small">
+                                    Awaiting onboarding
                                   </Badge>
                                 </div>
-                              </>
-                            ) : (
-                              <>
+                              ) : (
                                 <div>
-                                  <div className="font-medium">{seller.business_name}</div>
+                                  <div className="ux4g-label font-medium break-words">{seller.business_name}</div>
                                   {seller.business_type && (
-                                    <div className="text-xs text-muted-foreground">
+                                    <div className="ux4g-body-small text-muted-foreground">
                                       {seller.business_type}
                                     </div>
                                   )}
                                 </div>
-                              </>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm font-medium">
-                            {seller.user_profile?.email || "N/A"}
-                          </div>
-                          {seller.user_profile?.full_name && (
-                            <div className="text-xs text-muted-foreground">
-                              {seller.user_profile.full_name}
-                            </div>
-                          )}
-                          {seller.user_profile?.phone && (
-                            <div className="text-xs text-muted-foreground">
-                              📞 {seller.user_profile.phone}
-                            </div>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {isPendingOnboarding ? (
-                            <div className="text-sm text-muted-foreground italic">
-                              Not provided yet
-                            </div>
-                          ) : (
-                            <div className="text-sm">
-                              {seller.business_city}, {seller.business_state}
-                            </div>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {isPendingOnboarding ? (
-                            <div className="text-xs text-muted-foreground italic">
-                              Not provided yet
-                            </div>
-                          ) : (
-                            <div className="text-xs space-y-1">
-                              {seller.gstin ? (
-                                <div>GST: {seller.gstin}</div>
-                              ) : (
-                                <div className="text-muted-foreground">No GSTIN</div>
-                              )}
-                              {seller.pan ? (
-                                <div>PAN: {seller.pan}</div>
-                              ) : (
-                                <div className="text-muted-foreground">No PAN</div>
                               )}
                             </div>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-col gap-1">
-                            {getStatusBadge(seller.verification_status)}
-                            {isPendingOnboarding && (
-                              <Badge variant="outline" className="text-xs">
-                                Needs Onboarding
-                              </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="ux4g-body font-medium break-words">
+                              {seller.user_profile?.email || "N/A"}
+                            </div>
+                            {seller.user_profile?.full_name && (
+                              <div className="ux4g-body-small text-muted-foreground">
+                                {seller.user_profile.full_name}
+                              </div>
                             )}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {new Date(seller.created_at).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
-                            {seller.verification_status === "pending" ||
-                            seller.verification_status === "under_review" ? (
-                              <>
+                            {seller.user_profile?.phone && (
+                              <div className="ux4g-body-small text-muted-foreground">
+                                📞 {seller.user_profile.phone}
+                              </div>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            {isPendingOnboarding ? (
+                              <div className="ux4g-body text-muted-foreground italic">
+                                Not provided yet
+                              </div>
+                            ) : (
+                              <div className="ux4g-body">
+                                {seller.business_city}, {seller.business_state}
+                              </div>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            {isPendingOnboarding ? (
+                              <div className="ux4g-body-small text-muted-foreground italic">
+                                Not provided yet
+                              </div>
+                            ) : (
+                              <div className="ux4g-body-small space-y-1">
+                                {seller.gstin ? (
+                                  <div>GST: {seller.gstin}</div>
+                                ) : (
+                                  <div className="text-muted-foreground">No GSTIN</div>
+                                )}
+                                {seller.pan ? (
+                                  <div>PAN: {seller.pan}</div>
+                                ) : (
+                                  <div className="text-muted-foreground">No PAN</div>
+                                )}
+                              </div>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex flex-col gap-1">
+                              {getStatusBadge(seller.verification_status)}
+                              {isPendingOnboarding && (
+                                <Badge variant="outline" className="ux4g-body-small">
+                                  Needs onboarding
+                                </Badge>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell className="ux4g-body-small text-muted-foreground">
+                            {new Date(seller.created_at).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex justify-end gap-2 flex-wrap">
+                              {seller.verification_status === "pending" ||
+                              seller.verification_status === "under_review" ? (
+                                <>
+                                  <Button
+                                    size="sm"
+                                    variant="default"
+                                    onClick={() =>
+                                      handleStatusChange(seller.id, "verified")
+                                    }
+                                    title={isPendingOnboarding ? "Note: Seller hasn't completed onboarding yet" : ""}
+                                    className="min-h-[44px] ux4g-label"
+                                  >
+                                    <CheckCircle2 className="h-4 w-4 mr-1" aria-hidden="true" />
+                                    Verify
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={() =>
+                                      handleStatusChange(seller.id, "rejected")
+                                    }
+                                    className="min-h-[44px] ux4g-label"
+                                  >
+                                    <XCircle className="h-4 w-4 mr-1" aria-hidden="true" />
+                                    Reject
+                                  </Button>
+                                </>
+                              ) : seller.verification_status === "verified" ? (
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() =>
+                                    handleStatusChange(seller.id, "suspended")
+                                  }
+                                  className="min-h-[44px] ux4g-label"
+                                >
+                                  <Ban className="h-4 w-4 mr-1" aria-hidden="true" />
+                                  Suspend
+                                </Button>
+                              ) : seller.verification_status === "suspended" ? (
                                 <Button
                                   size="sm"
                                   variant="default"
                                   onClick={() =>
                                     handleStatusChange(seller.id, "verified")
                                   }
-                                  title={isPendingOnboarding ? "Note: Seller hasn't completed onboarding yet" : ""}
+                                  className="min-h-[44px] ux4g-label"
                                 >
-                                  <CheckCircle2 className="h-4 w-4 mr-1" />
+                                  <CheckCircle2 className="h-4 w-4 mr-1" aria-hidden="true" />
+                                  Unsuspend
+                                </Button>
+                              ) : null}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="lg:hidden space-y-4">
+                {filteredSellers.map((seller) => {
+                  const isPendingOnboarding = seller.is_pending_onboarding || 
+                    (seller.business_city === "Not provided" && seller.business_state === "Not provided");
+                  
+                  return (
+                    <Card key={seller.id} className={isPendingOnboarding ? "bg-muted/30" : ""}>
+                      <CardContent className="p-4 sm:p-6">
+                        <div className="space-y-4">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0 flex-1">
+                              {isPendingOnboarding ? (
+                                <>
+                                  <div className="ux4g-title mb-2 break-words">
+                                    {seller.user_profile?.full_name || seller.user_profile?.email?.split("@")[0] || "New Seller"}
+                                  </div>
+                                  <Badge variant="outline" className="ux4g-body-small">
+                                    Awaiting onboarding
+                                  </Badge>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="ux4g-title mb-1 break-words">{seller.business_name}</div>
+                                  {seller.business_type && (
+                                    <div className="ux4g-body-small text-muted-foreground">
+                                      {seller.business_type}
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              {getStatusBadge(seller.verification_status)}
+                              {isPendingOnboarding && (
+                                <Badge variant="outline" className="ux4g-body-small">
+                                  Needs onboarding
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="grid gap-3 sm:grid-cols-2">
+                            <div>
+                              <div className="ux4g-label text-muted-foreground mb-1">Contact</div>
+                              <div className="ux4g-body break-words">{seller.user_profile?.email || "N/A"}</div>
+                              {seller.user_profile?.full_name && (
+                                <div className="ux4g-body-small text-muted-foreground mt-1">
+                                  {seller.user_profile.full_name}
+                                </div>
+                              )}
+                              {seller.user_profile?.phone && (
+                                <div className="ux4g-body-small text-muted-foreground mt-1">
+                                  📞 {seller.user_profile.phone}
+                                </div>
+                              )}
+                            </div>
+                            <div>
+                              <div className="ux4g-label text-muted-foreground mb-1">Location</div>
+                              {isPendingOnboarding ? (
+                                <div className="ux4g-body text-muted-foreground italic">
+                                  Not provided yet
+                                </div>
+                              ) : (
+                                <div className="ux4g-body">
+                                  {seller.business_city}, {seller.business_state}
+                                </div>
+                              )}
+                            </div>
+                            <div>
+                              <div className="ux4g-label text-muted-foreground mb-1">GSTIN/PAN</div>
+                              {isPendingOnboarding ? (
+                                <div className="ux4g-body-small text-muted-foreground italic">
+                                  Not provided yet
+                                </div>
+                              ) : (
+                                <div className="ux4g-body-small space-y-1">
+                                  {seller.gstin ? (
+                                    <div>GST: {seller.gstin}</div>
+                                  ) : (
+                                    <div className="text-muted-foreground">No GSTIN</div>
+                                  )}
+                                  {seller.pan ? (
+                                    <div>PAN: {seller.pan}</div>
+                                  ) : (
+                                    <div className="text-muted-foreground">No PAN</div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                            <div>
+                              <div className="ux4g-label text-muted-foreground mb-1">Created</div>
+                              <div className="ux4g-body-small">{new Date(seller.created_at).toLocaleDateString()}</div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-col gap-2 pt-2 border-t">
+                            {seller.verification_status === "pending" ||
+                            seller.verification_status === "under_review" ? (
+                              <div className="grid grid-cols-2 gap-2">
+                                <Button
+                                  variant="default"
+                                  onClick={() => handleStatusChange(seller.id, "verified")}
+                                  title={isPendingOnboarding ? "Note: Seller hasn't completed onboarding yet" : ""}
+                                  className="min-h-[44px] ux4g-label"
+                                >
+                                  <CheckCircle2 className="h-4 w-4 mr-2" aria-hidden="true" />
                                   Verify
                                 </Button>
                                 <Button
-                                  size="sm"
                                   variant="destructive"
-                                  onClick={() =>
-                                    handleStatusChange(seller.id, "rejected")
-                                  }
+                                  onClick={() => handleStatusChange(seller.id, "rejected")}
+                                  className="min-h-[44px] ux4g-label"
                                 >
-                                  <XCircle className="h-4 w-4 mr-1" />
+                                  <XCircle className="h-4 w-4 mr-2" aria-hidden="true" />
                                   Reject
                                 </Button>
-                              </>
+                              </div>
                             ) : seller.verification_status === "verified" ? (
                               <Button
-                                size="sm"
                                 variant="destructive"
-                                onClick={() =>
-                                  handleStatusChange(seller.id, "suspended")
-                                }
+                                onClick={() => handleStatusChange(seller.id, "suspended")}
+                                className="w-full min-h-[44px] ux4g-label"
                               >
-                                <Ban className="h-4 w-4 mr-1" />
+                                <Ban className="h-4 w-4 mr-2" aria-hidden="true" />
                                 Suspend
                               </Button>
                             ) : seller.verification_status === "suspended" ? (
                               <Button
-                                size="sm"
                                 variant="default"
-                                onClick={() =>
-                                  handleStatusChange(seller.id, "verified")
-                                }
+                                onClick={() => handleStatusChange(seller.id, "verified")}
+                                className="w-full min-h-[44px] ux4g-label"
                               >
-                                <CheckCircle2 className="h-4 w-4 mr-1" />
+                                <CheckCircle2 className="h-4 w-4 mr-2" aria-hidden="true" />
                                 Unsuspend
                               </Button>
                             ) : null}
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </>
           )}
         </CardContent>
       </Card>

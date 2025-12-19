@@ -55,14 +55,65 @@ export function CommerceNavbar() {
 
   useEffect(() => {
     setMounted(true);
-    checkAuth();
+    
+    // Check session first (faster than getUser)
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          // Set basic info immediately from session
+          setIsAuthenticated(true);
+          setUserEmail(session.user.email || null);
+          setEmailVerified(session.user.email_confirmed_at !== null);
+          
+          // Fetch profile (which includes role)
+          getUserProfile(session.user.id).then((profile) => {
+            if (profile) {
+              setUserProfile(profile);
+              setUserRole(profile.role);
+            }
+          }).catch(() => {
+            // If profile fetch fails, still show user as authenticated
+            setUserRole(null);
+          });
+        } else {
+          setIsAuthenticated(false);
+          setUserRole(null);
+          setUserProfile(null);
+          setUserEmail(null);
+          setEmailVerified(false);
+        }
+      } catch {
+        setIsAuthenticated(false);
+        setUserRole(null);
+        setUserProfile(null);
+        setUserEmail(null);
+        setEmailVerified(false);
+      }
+    };
+
+    checkSession();
 
     // Listen for auth state changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-        await checkAuth();
+        if (session?.user) {
+          setIsAuthenticated(true);
+          setUserEmail(session.user.email || null);
+          setEmailVerified(session.user.email_confirmed_at !== null);
+          
+          // Fetch profile (which includes role)
+          getUserProfile(session.user.id).then((profile) => {
+            if (profile) {
+              setUserProfile(profile);
+              setUserRole(profile.role);
+            }
+          }).catch(() => {
+            setUserRole(null);
+          });
+        }
       } else if (event === "SIGNED_OUT") {
         setIsAuthenticated(false);
         setUserRole(null);
@@ -79,19 +130,18 @@ export function CommerceNavbar() {
 
   async function checkAuth() {
     try {
-      const user = await getCurrentUser();
-      if (user) {
+      // Use getSession instead of getUser for faster initial check
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
         setIsAuthenticated(true);
-        setUserEmail(user.email || null);
-        setEmailVerified(user.email_confirmed_at !== null);
+        setUserEmail(session.user.email || null);
+        setEmailVerified(session.user.email_confirmed_at !== null);
         
-        const profile = await getUserProfile(user.id);
+        // Fetch profile (which includes role)
+        const profile = await getUserProfile(session.user.id);
         if (profile) {
           setUserProfile(profile);
           setUserRole(profile.role);
-        } else {
-          const role = await getCurrentUserRole();
-          setUserRole(role);
         }
       } else {
         setIsAuthenticated(false);
@@ -124,9 +174,9 @@ export function CommerceNavbar() {
   const adminAuth = mounted && isAdminAuthenticated();
 
   return (
-    <>
+    <div className="sticky top-0 z-50">
       <GovernmentBanner />
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 vyapar-gentle-transition">
+      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 vyapar-gentle-transition">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4">
         {/* Logo - Left */}
         <Link href="/market" className="flex items-center gap-3 vyapar-gentle-transition" aria-label="VYAPAR Home">
@@ -417,6 +467,6 @@ export function CommerceNavbar() {
 
       <div className="h-1 w-full bg-[linear-gradient(90deg,rgba(255,153,51,0.35)_0%,rgba(231,76,60,0.65)_55%,rgba(19,136,8,0.35)_100%)] vyapar-gentle-transition" />
       </header>
-    </>
+    </div>
   );
 }

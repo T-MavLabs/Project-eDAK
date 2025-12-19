@@ -156,22 +156,22 @@ export default function SellerDashboardPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-8">
+    <div className="w-full overflow-x-hidden">
       {/* Header */}
-      <div className="mb-8 vyapar-fade-in">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight">Seller Dashboard</h1>
-            <p className="text-sm text-muted-foreground mt-1">Manage your products, orders, and business</p>
+      <div className="mb-6 sm:mb-8 vyapar-fade-in">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <h1 className="ux4g-headline break-words">Seller dashboard</h1>
+            <p className="ux4g-body text-muted-foreground mt-1 break-words">Manage your products, orders, and business</p>
           </div>
-          <Button asChild className="bg-primary hover:bg-primary/90 vyapar-gentle-transition">
-            <Link href="/seller/products/new">+ Add Product</Link>
+          <Button asChild className="bg-primary hover:bg-primary/90 vyapar-gentle-transition min-h-[44px] ux4g-label w-full sm:w-auto flex-shrink-0">
+            <Link href="/seller/products/new">+ Add product</Link>
           </Button>
         </div>
       </div>
 
       {/* Stats Grid - Information Dense */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Products</CardTitle>
@@ -223,55 +223,55 @@ export default function SellerDashboardPage() {
       </div>
 
       {/* Quick Actions - Structured Layout */}
-      <div className="grid gap-6 md:grid-cols-3 mb-8">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-8">
         <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition">
           <CardHeader>
-            <CardTitle className="text-lg">Products</CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">Manage your product catalog</p>
+            <CardTitle className="ux4g-title">Products</CardTitle>
+            <p className="ux4g-body text-muted-foreground mt-1">Manage your product catalog</p>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button asChild className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition">
-              <Link href="/seller/products">View All Products</Link>
+            <Button asChild className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/seller/products">View all products</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
-              <Link href="/seller/products/new">Add New Product</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/seller/products/new">Add new product</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
-              <Link href="/seller/inventory">Manage Inventory</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/seller/inventory">Manage inventory</Link>
             </Button>
           </CardContent>
         </Card>
         <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition" style={{ animationDelay: "100ms" }}>
           <CardHeader>
-            <CardTitle className="text-lg">Orders</CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">Track and fulfill orders</p>
+            <CardTitle className="ux4g-title">Orders</CardTitle>
+            <p className="ux4g-body text-muted-foreground mt-1">Track and fulfill orders</p>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button asChild className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition">
-              <Link href="/seller/orders">View All Orders</Link>
+            <Button asChild className="w-full bg-primary hover:bg-primary/90 vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/seller/orders">View all orders</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
-              <Link href="/seller/orders?status=placed">Pending Orders ({stats.pendingOrders})</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/seller/orders?status=placed">Pending orders ({stats.pendingOrders})</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
-              <Link href="/seller/returns">Returns & Refunds</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/seller/returns">Returns & refunds</Link>
             </Button>
           </CardContent>
         </Card>
         <Card className="vyapar-card vyapar-fade-in hover:shadow-lg vyapar-gentle-transition" style={{ animationDelay: "200ms" }}>
           <CardHeader>
-            <CardTitle className="text-lg">Business</CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">Analytics and payouts</p>
+            <CardTitle className="ux4g-title">Business</CardTitle>
+            <p className="ux4g-body text-muted-foreground mt-1">Analytics and payouts</p>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
-              <Link href="/seller/analytics">View Analytics</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/seller/analytics">View analytics</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
-              <Link href="/seller/payouts">Payouts & Earnings</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/seller/payouts">Payouts & earnings</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full vyapar-gentle-transition">
-              <Link href="/seller/settings">Account Settings</Link>
+            <Button asChild variant="outline" className="w-full vyapar-gentle-transition min-h-[44px] ux4g-label">
+              <Link href="/seller/settings">Account settings</Link>
             </Button>
           </CardContent>
         </Card>

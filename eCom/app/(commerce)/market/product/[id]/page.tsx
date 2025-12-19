@@ -20,12 +20,30 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
-    // Load on client to keep existing client-side UX (cart interactions unchanged).
-    queueMicrotask(() => setLoading(true));
+    // Start loading immediately without queueMicrotask delay
+    let cancelled = false;
+    setLoading(true);
+    
     fetchProductById(id)
-      .then((p) => setProduct(p))
-      .catch(() => setProduct(null))
-      .finally(() => setLoading(false));
+      .then((p) => {
+        if (!cancelled) {
+          setProduct(p);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setProduct(null);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   if (loading) {
@@ -71,19 +89,19 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-8">
+    <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-4 sm:py-8 overflow-x-hidden">
       {/* Breadcrumbs */}
-      <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground vyapar-fade-in">
-        <Link href="/market" className="hover:text-foreground vyapar-gentle-transition">Marketplace</Link>
-        <span>•</span>
-        <Link href={`/market?category=${encodeURIComponent(product.category)}`} className="hover:text-foreground vyapar-gentle-transition">{product.category}</Link>
-        <span>•</span>
-        <span className="text-foreground font-medium truncate">{product.name}</span>
-      </div>
+      <nav className="mb-4 sm:mb-6 flex items-center gap-1.5 sm:gap-2 ux4g-body-small text-muted-foreground vyapar-fade-in overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide" aria-label="Breadcrumb">
+        <Link href="/market" className="hover:text-foreground vyapar-gentle-transition ux4g-label inline-flex items-center whitespace-nowrap flex-shrink-0">Marketplace</Link>
+        <span className="text-muted-foreground/60 inline-flex items-center justify-center leading-none flex-shrink-0" aria-hidden="true">•</span>
+        <Link href={`/market?category=${encodeURIComponent(product.category)}`} className="hover:text-foreground vyapar-gentle-transition ux4g-label inline-flex items-center whitespace-nowrap flex-shrink-0 break-words">{product.category}</Link>
+        <span className="text-muted-foreground/60 inline-flex items-center justify-center leading-none flex-shrink-0" aria-hidden="true">•</span>
+        <span className="text-foreground font-medium ux4g-label inline-flex items-center min-w-0 break-words">{product.name}</span>
+      </nav>
 
-      <div className="grid gap-8 lg:grid-cols-2 vyapar-slide-up">
+      <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 vyapar-slide-up items-start">
         {/* Product Image - Amazon Style */}
-        <div className="space-y-4">
+        <div className="space-y-4 min-w-0 w-full">
           <Card className="overflow-hidden vyapar-card">
             <div className="relative aspect-square w-full bg-muted/30 overflow-hidden">
               <Image
@@ -101,30 +119,30 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
         </div>
 
         {/* Product Info - Right Side */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6 min-w-0 w-full">
           {/* Title and Category */}
-          <div>
-            <h1 className="text-2xl md:text-3xl font-semibold leading-tight mb-3">{product.name}</h1>
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <Badge variant="secondary" className="vyapar-chip">{product.category}</Badge>
-              <Badge variant="secondary" className="vyapar-chip gap-1.5">
-                <Truck className="h-3.5 w-3.5 text-primary" />
-                India Post Delivery
+          <div className="min-w-0">
+            <h1 className="ux4g-headline mb-3 break-words pr-2">{product.name}</h1>
+            <div className="flex flex-wrap items-center gap-2 mb-4 min-w-0">
+              <Badge variant="secondary" className="vyapar-chip ux4g-label flex-shrink-0">{product.category}</Badge>
+              <Badge variant="secondary" className="vyapar-chip gap-1.5 ux4g-label flex-shrink-0 max-w-full">
+                <Truck className="h-3.5 w-3.5 text-primary flex-shrink-0" aria-hidden="true" />
+                <span className="whitespace-nowrap">India Post Delivery</span>
               </Badge>
             </div>
           </div>
 
           {/* Price Section - Prominent */}
           <Card className="vyapar-card border-primary/20">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="space-y-3">
                 <div>
-                  <div className="text-sm text-muted-foreground mb-1">Price</div>
-                  <div className="text-4xl font-bold text-primary">₹{Number(product.price).toLocaleString("en-IN")}</div>
+                  <div className="ux4g-label text-muted-foreground mb-1">Price</div>
+                  <div className="ux4g-display text-primary break-words">₹{Number(product.price).toLocaleString("en-IN")}</div>
                 </div>
                 <div className="pt-3 border-t">
-                  <div className="text-sm text-muted-foreground">Sold by</div>
-                  <div className="mt-1 font-semibold">{product.seller_name}</div>
+                  <div className="ux4g-label text-muted-foreground">Sold by</div>
+                  <div className="mt-1 ux4g-label font-semibold break-words">{product.seller_name}</div>
                 </div>
               </div>
             </CardContent>
@@ -133,25 +151,25 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
           {/* Description */}
           {product.description && (
             <Card className="vyapar-card">
-              <CardHeader>
-                <CardTitle className="text-lg">Product Description</CardTitle>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="ux4g-title">Product description</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{product.description}</p>
+              <CardContent className="p-4 sm:p-6 pt-0">
+                <p className="ux4g-body text-muted-foreground leading-relaxed whitespace-pre-line break-words overflow-wrap-anywhere">{product.description}</p>
               </CardContent>
             </Card>
           )}
 
           {/* Delivery Info */}
           <Card className="vyapar-trust-badge vyapar-soft-shadow">
-            <CardContent className="p-5">
-              <div className="flex items-start gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary/10 text-primary flex-shrink-0">
-                  <ShieldCheck className="h-6 w-6" />
+            <CardContent className="p-4 sm:p-5">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-xl bg-primary/10 text-primary flex-shrink-0" aria-hidden="true">
+                  <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
-                <div>
-                  <div className="text-base font-semibold mb-1">Delivered by India Post</div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                <div className="min-w-0 flex-1 overflow-hidden">
+                  <div className="ux4g-title mb-1 break-words">Delivered by India Post</div>
+                  <p className="ux4g-body text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere">
                     Track your order in real-time. You'll receive an India Post tracking ID at checkout to follow your parcel from dispatch to delivery.
                   </p>
                 </div>
@@ -161,61 +179,61 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
 
           {/* Seller Info */}
           <Card className="vyapar-card bg-gradient-to-br from-secondary/30 to-background">
-            <CardHeader>
-              <div className="vyapar-kicker">About the Seller</div>
-              <CardTitle className="text-lg">{product.seller_name}</CardTitle>
+            <CardHeader className="p-4 sm:p-6">
+              <div className="vyapar-kicker ux4g-label">About the seller</div>
+              <CardTitle className="ux4g-title break-words">{product.seller_name}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
+              <p className="ux4g-body text-muted-foreground leading-relaxed break-words overflow-wrap-anywhere">
                 A verified Indian MSME seller building a sustainable livelihood through local craft and honest pricing.
                 Every purchase supports an MSME journey—one order at a time.
               </p>
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="rounded-lg border bg-white/80 p-3 vyapar-soft-shadow">
-                  <div className="vyapar-kicker text-xs">Made in</div>
-                  <div className="mt-1 text-sm font-semibold">India</div>
+                  <div className="vyapar-kicker ux4g-body-small">Made in</div>
+                  <div className="mt-1 ux4g-label font-semibold">India</div>
                 </div>
                 <div className="rounded-lg border bg-white/80 p-3 vyapar-soft-shadow">
-                  <div className="vyapar-kicker text-xs">Ships via</div>
-                  <div className="mt-1 text-sm font-semibold">India Post</div>
+                  <div className="vyapar-kicker ux4g-body-small">Ships via</div>
+                  <div className="mt-1 ux4g-label font-semibold">India Post</div>
                 </div>
                 <div className="rounded-lg border bg-white/80 p-3 vyapar-soft-shadow">
-                  <div className="vyapar-kicker text-xs">Support</div>
-                  <div className="mt-1 text-sm font-semibold">MSME-first</div>
+                  <div className="vyapar-kicker ux4g-body-small">Support</div>
+                  <div className="mt-1 ux4g-label font-semibold">MSME-first</div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Action Buttons - Sticky on mobile */}
-          <div className="sticky bottom-4 lg:static space-y-3">
-            <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="sticky bottom-0 left-0 right-0 lg:static space-y-3 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 lg:bg-transparent p-4 -mx-4 sm:mx-0 sm:p-0 border-t lg:border-t-0 lg:pt-0">
+            <div className="flex flex-col gap-3 sm:flex-row w-full">
               <Button
-                className="flex-1 bg-primary hover:bg-primary/90 h-12 text-base vyapar-gentle-transition"
+                className="flex-1 bg-primary hover:bg-primary/90 min-h-[44px] ux4g-label vyapar-gentle-transition w-full sm:w-auto"
                 onClick={() => {
                   addToCart(product.id, 1);
                   setAdded(true);
                   window.setTimeout(() => setAdded(false), 1400);
                 }}
               >
-                <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
+                <ShoppingCart className="mr-2 h-5 w-5 flex-shrink-0" aria-hidden="true" /> Add to cart
               </Button>
-              <Button asChild variant="outline" className="flex-1 h-12 text-base vyapar-gentle-transition">
-                <Link href="/market/checkout">Buy Now</Link>
+              <Button asChild variant="outline" className="flex-1 min-h-[44px] ux4g-label vyapar-gentle-transition w-full sm:w-auto">
+                <Link href="/market/checkout">Buy now</Link>
               </Button>
             </div>
             {added && (
-              <div className="rounded-lg border bg-green-50 border-green-200 p-3 text-sm text-green-700 vyapar-success">
+              <div className="rounded-lg border bg-green-50 border-green-200 p-3 ux4g-body-small text-green-700 vyapar-success break-words" role="alert">
                 ✓ Added to cart. You're supporting a local seller—ready when you are.
               </div>
             )}
-            <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
-              <div className="flex items-center gap-1.5">
-                <Truck className="h-3.5 w-3.5" />
-                <span>Free delivery on orders ₹999+</span>
+            <div className="flex items-center gap-2 sm:gap-4 ux4g-body-small text-muted-foreground pt-2 flex-wrap">
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <Truck className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
+                <span className="whitespace-nowrap">Free delivery on orders ₹999+</span>
               </div>
-              <div>•</div>
-              <div>Cash on Delivery available</div>
+              <span className="text-muted-foreground/60 flex-shrink-0" aria-hidden="true">•</span>
+              <div className="break-words min-w-0">Cash on delivery available</div>
             </div>
           </div>
         </div>

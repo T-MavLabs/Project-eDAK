@@ -184,39 +184,39 @@ function AdminProductsPageContent() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-10">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:py-10 overflow-x-hidden">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Product Moderation</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="ux4g-headline">Product moderation</h1>
+          <p className="ux4g-body text-muted-foreground mt-1">
             Review and approve products for the marketplace
           </p>
         </div>
-        <Button variant="outline" onClick={() => router.push("/admin")}>
-          Back to Dashboard
+        <Button variant="outline" onClick={() => router.push("/admin")} className="min-h-[44px] ux4g-label w-full sm:w-auto">
+          Back to dashboard
         </Button>
       </div>
 
       {/* Filters */}
       <Card className="mb-6">
-        <CardContent className="pt-6">
+        <CardContent className="pt-4 sm:pt-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-1 items-center gap-2">
-              <Search className="h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-1 items-center gap-2 min-w-0">
+              <Search className="h-4 w-4 text-muted-foreground flex-shrink-0" aria-hidden="true" />
               <Input
                 placeholder="Search by product name, category, or seller..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="max-w-md"
+                className="max-w-md min-w-0"
               />
             </div>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full md:w-[180px] min-h-[44px]">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Products</SelectItem>
-                <SelectItem value="pending_approval">Pending Approval</SelectItem>
+                <SelectItem value="all">All products</SelectItem>
+                <SelectItem value="pending_approval">Pending approval</SelectItem>
                 <SelectItem value="approved">Approved</SelectItem>
                 <SelectItem value="rejected">Rejected</SelectItem>
                 <SelectItem value="draft">Draft</SelectItem>
@@ -230,34 +230,135 @@ function AdminProductsPageContent() {
       {/* Products Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Products ({filteredProducts.length})</CardTitle>
+          <CardTitle className="ux4g-title">Products ({filteredProducts.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {filteredProducts.length === 0 ? (
-            <div className="py-8 text-center text-muted-foreground">
+            <div className="py-8 text-center ux4g-body text-muted-foreground">
               No products found
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Product</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Seller</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredProducts.map((product) => (
-                    <TableRow key={product.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden lg:block overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="ux4g-label">Product</TableHead>
+                      <TableHead className="ux4g-label">Category</TableHead>
+                      <TableHead className="ux4g-label">Price</TableHead>
+                      <TableHead className="ux4g-label">Seller</TableHead>
+                      <TableHead className="ux4g-label">Status</TableHead>
+                      <TableHead className="ux4g-label">Created</TableHead>
+                      <TableHead className="text-right ux4g-label">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredProducts.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableCell>
+                          <div className="flex items-center gap-3 min-w-0">
+                            {product.image_path ? (
+                              <div className="relative h-12 w-12 overflow-hidden rounded-md flex-shrink-0">
+                                <Image
+                                  src={getProductImageUrl(product.id, product.image_path)}
+                                  alt={product.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted flex-shrink-0">
+                                <Package className="h-6 w-6 text-muted-foreground" aria-hidden="true" />
+                              </div>
+                            )}
+                            <div className="min-w-0">
+                              <div className="ux4g-label font-medium break-words">{product.name}</div>
+                              <div className="ux4g-body-small text-muted-foreground line-clamp-1">
+                                {product.description}
+                              </div>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="capitalize ux4g-body">{product.category}</TableCell>
+                        <TableCell className="ux4g-label">₹{parseFloat(product.price).toLocaleString("en-IN")}</TableCell>
+                        <TableCell className="ux4g-body break-words">{product.seller_name}</TableCell>
+                        <TableCell>{getStatusBadge(product.status)}</TableCell>
+                        <TableCell className="ux4g-body-small text-muted-foreground">
+                          {new Date(product.created_at).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-2 flex-wrap">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              asChild
+                              className="min-h-[44px] ux4g-label"
+                            >
+                              <Link href={`/market/product/${product.id}`}>
+                                <Eye className="h-4 w-4 mr-1" aria-hidden="true" />
+                                View
+                              </Link>
+                            </Button>
+                            {product.status === "pending_approval" ||
+                            product.status === "draft" ? (
+                              <>
+                                <Button
+                                  size="sm"
+                                  variant="default"
+                                  onClick={() =>
+                                    handleStatusChange(product.id, "approved")
+                                  }
+                                  className="min-h-[44px] ux4g-label"
+                                >
+                                  <CheckCircle2 className="h-4 w-4 mr-1" aria-hidden="true" />
+                                  Approve
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => {
+                                    const reason = prompt("Rejection reason:");
+                                    if (reason) {
+                                      handleStatusChange(product.id, "rejected", reason);
+                                    }
+                                  }}
+                                  className="min-h-[44px] ux4g-label"
+                                >
+                                  <XCircle className="h-4 w-4 mr-1" aria-hidden="true" />
+                                  Reject
+                                </Button>
+                              </>
+                            ) : product.status === "approved" ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() =>
+                                  handleStatusChange(product.id, "archived")
+                                }
+                                className="min-h-[44px] ux4g-label"
+                              >
+                                <Archive className="h-4 w-4 mr-1" aria-hidden="true" />
+                                Archive
+                              </Button>
+                            ) : null}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="lg:hidden space-y-4">
+                {filteredProducts.map((product) => (
+                  <Card key={product.id}>
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="space-y-4">
+                        <div className="flex items-start gap-3">
                           {product.image_path ? (
-                            <div className="relative h-12 w-12 overflow-hidden rounded-md">
+                            <div className="relative h-16 w-16 overflow-hidden rounded-md flex-shrink-0">
                               <Image
                                 src={getProductImageUrl(product.id, product.image_path)}
                                 alt={product.name}
@@ -266,52 +367,56 @@ function AdminProductsPageContent() {
                               />
                             </div>
                           ) : (
-                            <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
-                              <Package className="h-6 w-6 text-muted-foreground" />
+                            <div className="flex h-16 w-16 items-center justify-center rounded-md bg-muted flex-shrink-0">
+                              <Package className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
                             </div>
                           )}
-                          <div>
-                            <div className="font-medium">{product.name}</div>
-                            <div className="text-xs text-muted-foreground line-clamp-1">
+                          <div className="min-w-0 flex-1">
+                            <div className="ux4g-title mb-1 break-words">{product.name}</div>
+                            <div className="ux4g-body-small text-muted-foreground line-clamp-2">
                               {product.description}
                             </div>
                           </div>
+                          {getStatusBadge(product.status)}
                         </div>
-                      </TableCell>
-                      <TableCell className="capitalize">{product.category}</TableCell>
-                      <TableCell>₹{parseFloat(product.price).toLocaleString("en-IN")}</TableCell>
-                      <TableCell>{product.seller_name}</TableCell>
-                      <TableCell>{getStatusBadge(product.status)}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {new Date(product.created_at).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            asChild
-                          >
+                        
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <div>
+                            <div className="ux4g-label text-muted-foreground mb-1">Category</div>
+                            <div className="ux4g-body capitalize">{product.category}</div>
+                          </div>
+                          <div>
+                            <div className="ux4g-label text-muted-foreground mb-1">Price</div>
+                            <div className="ux4g-label font-semibold">₹{parseFloat(product.price).toLocaleString("en-IN")}</div>
+                          </div>
+                          <div>
+                            <div className="ux4g-label text-muted-foreground mb-1">Seller</div>
+                            <div className="ux4g-body break-words">{product.seller_name}</div>
+                          </div>
+                          <div>
+                            <div className="ux4g-label text-muted-foreground mb-1">Created</div>
+                            <div className="ux4g-body-small">{new Date(product.created_at).toLocaleDateString()}</div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex flex-col gap-2 pt-2 border-t">
+                          <Button variant="outline" className="w-full min-h-[44px] ux4g-label" asChild>
                             <Link href={`/market/product/${product.id}`}>
-                              <Eye className="h-4 w-4 mr-1" />
-                              View
+                              <Eye className="h-4 w-4 mr-2" aria-hidden="true" />
+                              View product
                             </Link>
                           </Button>
-                          {product.status === "pending_approval" ||
-                          product.status === "draft" ? (
-                            <>
+                          {product.status === "pending_approval" || product.status === "draft" ? (
+                            <div className="grid grid-cols-2 gap-2">
                               <Button
-                                size="sm"
                                 variant="default"
-                                onClick={() =>
-                                  handleStatusChange(product.id, "approved")
-                                }
+                                onClick={() => handleStatusChange(product.id, "approved")}
+                                className="min-h-[44px] ux4g-label"
                               >
-                                <CheckCircle2 className="h-4 w-4 mr-1" />
+                                <CheckCircle2 className="h-4 w-4 mr-2" aria-hidden="true" />
                                 Approve
                               </Button>
                               <Button
-                                size="sm"
                                 variant="destructive"
                                 onClick={() => {
                                   const reason = prompt("Rejection reason:");
@@ -319,30 +424,29 @@ function AdminProductsPageContent() {
                                     handleStatusChange(product.id, "rejected", reason);
                                   }
                                 }}
+                                className="min-h-[44px] ux4g-label"
                               >
-                                <XCircle className="h-4 w-4 mr-1" />
+                                <XCircle className="h-4 w-4 mr-2" aria-hidden="true" />
                                 Reject
                               </Button>
-                            </>
+                            </div>
                           ) : product.status === "approved" ? (
                             <Button
-                              size="sm"
                               variant="outline"
-                              onClick={() =>
-                                handleStatusChange(product.id, "archived")
-                              }
+                              onClick={() => handleStatusChange(product.id, "archived")}
+                              className="w-full min-h-[44px] ux4g-label"
                             >
-                              <Archive className="h-4 w-4 mr-1" />
+                              <Archive className="h-4 w-4 mr-2" aria-hidden="true" />
                               Archive
                             </Button>
                           ) : null}
                         </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </>
           )}
         </CardContent>
       </Card>

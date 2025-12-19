@@ -47,9 +47,9 @@ export function CoreNavbar() {
   }
 
   return (
-    <>
+    <div className="sticky top-0 z-50">
       <GovernmentBanner />
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 transition-colors">
+      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 transition-colors">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-4">
           {/* Logo - Left */}
           <Link href="/" className="flex items-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-[#E74C3C] focus:ring-offset-2 rounded-md" aria-label="DAKSH Home">
@@ -171,6 +171,6 @@ export function CoreNavbar() {
 
         <div className="h-1 w-full bg-gradient-to-r from-[#FF9933] via-[#C60000] to-[#138808]" aria-hidden="true" />
     </header>
-    </>
+    </div>
   );
 }
