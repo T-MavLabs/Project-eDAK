@@ -54,7 +54,10 @@ export default function AdminDashboardPage() {
           pendingProducts: productsResult.count || 0,
           totalUsers: usersResult.count || 0,
           totalRevenue:
-            ordersResult.data?.reduce((sum, o) => sum + parseFloat(o.total_amount), 0) || 0,
+            (ordersResult.data as Array<{ total_amount: string | number }> | null)?.reduce(
+              (sum, o) => sum + parseFloat(String(o.total_amount || 0)),
+              0
+            ) || 0,
         });
       } catch (err) {
         console.error("Admin dashboard error:", err);

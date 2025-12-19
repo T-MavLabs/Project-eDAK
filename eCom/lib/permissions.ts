@@ -22,7 +22,7 @@ export async function canAccess(
     case "product":
       if (action === "read") return true; // Public read for approved products
       if (action === "write" || action === "delete") {
-        if (!resourceId) return role === "seller" || role === "admin";
+        if (!resourceId) return role === "seller";
         // Check if user owns the product
         const { data } = await supabase
           .from("products")
@@ -72,7 +72,8 @@ export async function canAccess(
       return false;
 
     case "admin":
-      return role === "admin";
+      // Admins already returned early, so if we reach here, user is not admin
+      return false;
 
     default:
       return false;
