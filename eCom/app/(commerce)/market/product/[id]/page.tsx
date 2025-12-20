@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { ArrowLeft, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
 
-import { addToCart } from "@/lib/mockOrders";
+import { addToCart, clearCart } from "@/lib/mockOrders";
 import { fetchProductById } from "@/supabase/queries";
 import { getProductImageUrl } from "@/supabase/storage";
 
@@ -15,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const router = useRouter();
   const [product, setProduct] = useState<Awaited<ReturnType<typeof fetchProductById>>>(null);
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
@@ -218,8 +220,22 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
               >
                 <ShoppingCart className="mr-2 h-5 w-5 flex-shrink-0" aria-hidden="true" /> Add to cart
               </Button>
-              <Button asChild variant="outline" className="flex-1 min-h-[44px] ux4g-label vyapar-gentle-transition w-full sm:w-auto">
-                <Link href="/market/checkout">Buy now</Link>
+              <Button
+                variant="outline"
+                className="flex-1 min-h-[44px] ux4g-label vyapar-gentle-transition w-full sm:w-auto"
+                onClick={() => {
+                  if (product) {
+                    // Clear cart and add only this product for Buy Now
+                    clearCart();
+                    addToCart(product.id, 1);
+                    // Use replace to avoid back button issues, and add small delay to ensure cart is updated
+                    setTimeout(() => {
+                      router.push("/market/checkout");
+                    }, 100);
+                  }
+                }}
+              >
+                Buy now
               </Button>
             </div>
             {added && (
