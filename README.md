@@ -2,8 +2,8 @@
 
 This repository contains **two clearly separated Next.js applications** (monorepo-style layout) to make the hackathon narrative unambiguous:
 
-- **`Backend/`**: **DAKSH – Delivery Analytics & Knowledge System for Shipment** (platform UI)
-- **`eCom/`**: **VYAPAR – Virtual Yet Accessible Postal Aggregated Retail** (client UI powered by India Post / DAKSH)
+- **`Backend/`**: **DAKSH – Delivery Analytics & Knowledge System for Shipment** (platform UI) - https://daksh-v1.netlify.app/
+- **`eCom/`**: **VYAPAR – Virtual Yet Accessible Postal Aggregated Retail** (client UI powered by India Post / DAKSH) - https://vyapar-v1.netlify.app/
 
 They are **logically + visually independent** and only interact via:
 
